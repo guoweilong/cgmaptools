@@ -1,0 +1,19 @@
+---
+title: ""
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+description: "A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations."
+documentclass: book
+output: bookdown::gitbook
+book_filename: "CGmapTools_documentation"
+---
+
+# What is CGmapTool
+
+DNA methylation is crucial for a wide variety of biological processes. With the development of high throughput methylome profiling methods, huge volumes of data are generated and in egent need of computational tools for data analysis. Though several tools have been proposed to fit this need, there is not a mainstream standard for bisulfite sequencing data storage and manipulation. What's more, the performence of available tools needs to be improved.
+
+We proposed **CGmapTool**, a bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations, in hope to set up a standard for bisulfite sequencing data related manipulation, including better data storage, extraction, visualization and improved performence in SNP calling. We also provide dozens of utilities and a seamless pipeline for bisulfite sequencing data analysis.
+
+```{r, echo=FALSE, out.width="80%", fig.align='center', fig.cap="Schematic diagram of CGmapTools"}
+knitr::include_graphics(path = "./cgmaptools_schematicDiagram.png")
+```

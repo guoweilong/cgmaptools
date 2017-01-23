@@ -1,0 +1,54 @@
+# Other Ultilities
+
+## findCCGG
+
+- **Description**: Get MspI cutting sites for RRBS.
+
+- **Usage**: `cgmaptools findCCGG -i <genome.fa> [-o <output>]`
+
+    ```
+    -i INFILE, --infile=INFILE
+    -i FILE     Genome sequence file in Fasta format
+    -o FILE     Name of the output file (standard output if not
+                specified).Format: chr cCgg_pos ccGg_pos (0-base)
+    ```
+
+- **Example**:
+  
+    The output file format:
+  
+    ```
+    chr1    4025    5652
+    chr1    8274    8431
+    ```
+
+## bed2fragreg
+
+- **Description**: Generate fragmented regions from BED file.
+
+- **Usage**: `cgmaptools bed2fragreg [-i <BED>] [-n <N>] [-F <50,50,..> -T <50,..>] [-o output]`
+
+    ```
+    -i FILE      BED format, STDIN if omitted
+    -F INT_list  List of region lengths in upstream of 5' end, Ex: 10,50. List
+                 is from 5'end->3'end
+    -T INT_list  List of region lengths in downstream of 3' end, Ex: 40,20. List
+                 is from 5'end->3'end
+    -n INT       Number of bins to be equally split [Default:1]
+    ```
+
+- **Example**:
+  
+    The input file format:
+  
+    ```
+    chr1   1000    2000   +
+    chr2   9000    8000   -
+    ```
+    
+    The output file format:
+    
+    ```
+    chr1   +   940  950  1000 1200 1400 1600 1800 1850
+    chr2   -   9060 9050 9000 8800 8600 8400 8200 8150
+    ```

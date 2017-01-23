@@ -1,0 +1,174 @@
+# Graphics
+
+## lollipop
+
+- **Description**: Plot local mC level for multiple samples.
+
+- **Usage**: `cgmaptools lollipop [options] file`
+
+    ```
+    -i INFILE, --infile=INFILE
+		input file
+  	-a ANNOTATION, --annotation=ANNOTATION
+  		[opt] sample name
+  	-o OUTFILE, --outfile=OUTFILE
+  		[opt] output file
+  	-f FORMAT, --format=FORMAT
+  		[opt] the format for output figure: pdf (default), png, eps
+  	-l LEFT, --left=LEFT
+  		[opt] Left-most position
+  	-r RIGHT, --right=RIGHT
+  		[opt] Right-most position
+  	-c CHR, --chr=CHR
+  		[opt] chromosome name
+  	-t TITLE, --title=TITLE
+  		[opt] text shown on title
+  	-w WIDTH, --width=WIDTH
+  		[opt] width (in inch). Default: 8.
+  	--height=HEIGHT
+  		[opt] height (in inch). Default: 8.
+  	-s SITE, --site=SITE
+  		[opt] file of site to be marked
+  	-b BED, --bed=BED
+  		[opt] BED file for region to be markered
+    ```
+
+- **Example**:
+
+    The input file format:
+    
+    > \>= 3 columns, 1st line is the header, using R color name or "NaN".
+    Can be output by CGmapFillIndex.py. Use STDIN if omitted.
+    
+    ```
+    chr   pos       E_vs_EMT	EMT_vs_M	E_vs_M
+    chr1	13116801	NaN	      NaN	      darkgreen
+    chr1	13116899	NaN	      red	      NaN
+    ```
+    
+    The bed file format:
+    
+    > the first 4 columns are required.
+    
+    ```
+    chr1  213941196  213942363  REGION-1
+    chr1  213942363  213943530  REGION-2
+    ```
+  
+## heatmap
+
+- **Description**: Plot methylation dynamics of target region for multiple samples [heatmap].
+
+- **Usage**: `cgmaptools heatmap [options]`
+
+    ```
+    -i INFILE, --infile=INFILE
+		input file
+  	-o OUTFILE, --outfile=OUTFILE
+  		[opt] output file name. [default: mCBinHeatmap.SysDate.pdf]
+  	-c, --cluster
+  		[opt] cluster samples by methylation in regions. [default: FALSE]
+  	-l COLORLOW, --colorLow=COLORLOW
+  		[opt] color used for the lowest methylation value. [default: cyan3]
+  	-m COLORMID, --colorMid=COLORMID
+  		[opt] color used for the middle methylation value. [default: null]
+  	-b COLORHIGH, --colorHigh=COLORHIGH
+  		[opt] color used for the highest methylation value. [default: coral2]
+  	-n COLORNUMBER, --colorNumber=COLORNUMBER
+  		[opt] desired number of color elements in the panel. [default: 10]
+  	-W WIDTH, --width=WIDTH
+  		[opt] width of figure (inch). [default: 7]
+  	-H HEIGHT, --height=HEIGHT
+  		[opt] height of figure (inch). [default: 7]
+  	-f FORMAT, --format=FORMAT
+  		[opt] format of output figure. Alternative: png. [default: pdf]
+  	-R RESOLUTION, --resolution=RESOLUTION
+  		[opt] Resolution in ppi. Only available for png format. [default: 300]
+    ```
+
+- **Example**:
+
+    The input file format:
+    
+    > The 1st line is the header. Each column contains methylation measurements of a sample.
+    
+    ```
+    Region  Sample1  Sample2 ...
+    Region1 0.1      0.1     ...
+    Region2 0.1      0.1     ...
+    ```
+
+## fragreg
+
+- **Description**: Plot methylation dynamics of target and flanking region for multiple samples.
+
+- **Usage**: `cgmaptools fragreg [options]`
+
+    ```
+    -i INFILE, --infile=INFILE
+		input file
+  	-r RATIO, --ratio=RATIO
+  		[opt] range ratio between target region and flanking region in plot. [default: 5]
+  	-o OUTFILE, --outfile=OUTFILE
+  		[opt] output file name. [default: FragRegView.SysDate.pdf]
+  	-W WIDTH, --width=WIDTH
+  		[opt] width of figure (inch). [default: 7]
+  	-H HEIGHT, --height=HEIGHT
+  		[opt] height of figure (inch). [default: 7]
+  	-f FORMAT, --format=FORMAT
+  		[opt] format of output figure. Alternative: png. [default: pdf]
+  	-R RESOLUTION, --resolution=RESOLUTION
+  		[opt] Resolution in ppi. Only available for png format. [default: 300]
+    ```
+
+- **Example**:
+
+    The input file format:
+    
+    > The 1st line is the header. Each row contains methylation measurements of a sample.
+    
+    ```
+    Sample  Up1  Up2  ...  Region1  Region2 ...  Down1  Down2  ...
+    Sample1 0.1  0.1  ...  0.2      0.2     ...  0.3    0.3    ...
+    Sample2 0.1  0.1  ...  0.2      0.2     ...  0.3    0.3    ...
+    ```
+    
+## tanghulu
+
+- **Description**: Show local mapped reads in Tanghulu shape.
+
+- **Usage**: `cgmaptools tanghulu [options] -r <ref> -b <bam> -l chr1:133-144`
+
+    ```
+    -r    Samtools indexed reference genome seqeunce, fasta format. eg. hg19.fa
+          - use samtools to index reference: samtools faidx <hg19.fa>
+    -b    Samtools indexed Bam file to view.
+          - use samtools to index bam file: samtools index <input.bam>
+    -l    Region in which to display DNA methylation.
+          - or specify a single position (eg. heterozygous SNP site), 
+            we will show allele specific methylation.
+    -s    Path to samtools eg. /home/user/bin/samtools
+          - by defualt, we try to search samtools in your system PATH.
+    -o    Output results to file [default: CirclePlot.Ctype.region.Date.pdf].
+    -t    C context. [default: CG]
+          - available context: C, CG, CH, CW, CC, CA, CT, CHG, CHH
+    -d    Ouput device. [default: pdf]
+          - alternative: png
+    -c    Seperate reads by chain. [default: OFF]
+          - specify this option to turn ON.
+    -v    Show vague allele linked reads. [ default: OFF]
+    -g    Genotype of heterozygous SNP site.
+          - This option provides two alleles of htSNP site. eg. AT
+          - The genotype information can be used to reduce vague alleles.
+          - This option is specific to display methylation in allele specific mode.
+    -D    Minimum number of reads (depth) covered in this region or allele linked. 
+          [default: 0|OFF]
+    -C    Minimum number of C (specified type) covered in this region or allele
+          linked. [default: 0|OFF]
+    -W    Width of graphics reigon in inches. [default: 4]
+    -H    Height of graphics reigon in inches. [default: 4]
+    -R    Resolution in ppi. [default: 300]
+          - only available for png device.
+    ```
+
+

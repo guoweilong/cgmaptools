@@ -1,0 +1,122 @@
+# Statistics
+
+## Coverage
+
+**Description**: A summary table of coverage and depth for cytosines.
+
+**Usage**: `CcoverageDepth.pl -i <in.CGmap|in.CGmap.gz> -d 1 -d 3 -d 5`
+
+**Options**:
+
+```
+  -i              CGmap format input file.
+
+  -o              Output stats results to specified file instead of [default: STDOUT].
+
+  -t              C context. [default: CG]
+                  available context: CG, CC, CA, CT
+
+  -d              Depth used to stat coverage. [default: 1, 3, 5]
+                  Note: this option can be assigned multiple times to specify multiple depth.
+
+  -p              Plot the coverage statistics using barplot to file. [default: OFF]
+
+  The following optons are only available when -p is specified.
+
+  -f              Format of output figure. [default: pdf]
+                  Alternative: png
+
+  -r              Resolution of figure in png format. [default: 300]
+                  Resolution in ppi. Only available for png format
+
+  -H              Height of figure. [default: 7]
+
+  -W              Width of figure. [default: 7]
+```
+
+**Output Example (table)**:
+
+```{r, echo=FALSE}
+library(knitr)
+library(pander)
+testCc.stats <- read.table("testCc.stats.out.txt", header = T, sep = ";", quote = "")
+names(testCc.stats) <- c("TotalCpGs(1X)", "TotalUnique(1X)", "MeanCov(1X)", "TotalCpGs(3X)", "TotalUnique(3X)", "MeanCov(3X)", "TotalCpGs(5X)", "TotalUnique(5X)", "MeanCov(5X)")
+pander(testCc.stats)
+```
+
+**Output Example (figure)**:
+
+```{r, echo=FALSE, out.width="70%", fig.align='center', fig.cap="Coverage and Depth"}
+knitr::include_graphics(path = "./testCc.png")
+```
+
+----
+
+**Description**: Get the distribution of methylation-effective coverages.
+
+**Usage**: `CGmapStatCov.py [-i <CGmap>]`
+
+**Options**:
+
+```
+  -h, --help            show this help message and exit
+  -i FILE               File name end with .CGmap or .CGmap.gz. If not
+                        specified, STDIN will be used.
+  -f FILE, --figure-type=FILE
+                        png, pdf, eps. Will not generate figure if not
+                        specified
+  -p STRING             Prefix for output figures
+```
+
+**Output Example (table)**:
+
+```{r, echo=FALSE}
+library(knitr)
+CGmapStatCov <- read.table("MultChr.CGmapStatCov.log", header = F, sep = ";", quote = "")
+#names(testCc.stats) <- c("TotalCpGs(1X)", "TotalUnique(1X)", "MeanCov(1X)", "TotalCpGs(3X)", "TotalUnique(3X)", "MeanCov(3X)", "TotalCpGs(5X)", "TotalUnique(5X)", "MeanCov(5X)")
+kable(CGmapStatCov, col.names=NULL)
+```
+
+**Output Example (figure)**:
+
+```{r, echo=FALSE, out.width="70%", fig.align='center', fig.cap="Coverage Distribution"}
+knitr::include_graphics(path = "./MultChr.MethEffectCove.png")
+```
+
+## Methylation
+
+**Description**: Generate a summary table of the methylation levels.
+
+**Usage**: `CGmapStatMeth.py [-i <CGmap>]`
+
+**Options**:
+
+```
+  -h, --help            show this help message and exit
+  -i FILE               File name end with .CGmap or .CGmap.gz. If not
+                        specified, STDIN will be used.
+  -f FILE, --figure-type=FILE
+                        png, pdf, eps. Will not generate figure if not
+                        specified
+  -p STRING             Prefix for output figures
+```
+
+**Output Example (table)**:
+
+```
+MethStat        context       C       CG      CHG	    CHH	    CA      CC      CT      CH      CW
+mean_mC         global        0.0798  0.3719  0.0465  0.0403  0.0891  0.0071  0.0241  0.0419  0.0559
+sd_mCbyChr      global        0.0078  0.0341  0.0163  0.0110  0.0252  0.0049  0.0076  0.0096  0.0148
+count_C         global        10000   1147    2332    6521    3090    2539    3224    8853    6314
+contrib_mC      global        1.0000  0.5348  0.1360  0.3292  0.3452  0.0228  0.0973  0.4652  0.4424
+quant_mC        [0]	          8266    471     2012    5783	  2422	  2421	  2952	  7795	  5374
+quant_mC        (0.00 ,0.20]	705     182     155     368     272     97      154     523     426
+mean_mC_byChr   chr1          0.0840  0.4181  0.0340  0.0412  0.0794  0.0065  0.0251  0.0393  0.0513
+mean_mC_byChr   chr10         0.0917  0.4106  0.0758  0.0421  0.0968  0.0097  0.0349  0.0502  0.0655
+```
+
+**Output Example (figure)**:
+
+```{r, echo=FALSE, out.width="70%", fig.align='center', fig.cap="Methylation Distribution"}
+knitr::include_graphics(path = "./MultChr.MethContri.png")
+```

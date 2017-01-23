@@ -1,0 +1,27 @@
+# Visualization
+
+## Lollipop Plot
+
+## Gourd Plot
+
+## Line Plot
+
+### Methylation in Fragmented Region
+
+### Methylation along Chromosomes
+
+### Coverage along Chromosomes
+
+## Heat map
+
+### Methylation in Regions (Tiles based)
+
+## Bar plot
+
+### Average Methylation Level of Samples
+
+### Distribution of Methylation Levels
+
+## Pie Chart
+
+### Methylation contributions by Context

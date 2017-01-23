@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="" />
+  
+  <meta name="twitter:description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations." />
+  
+
+
+
+<meta name="date" content="2016-12-16">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="methylation-analysis.html">
+<link rel="next" href="graphics.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<h3 style="text-align:center;font-family:'Times New Roman'">
+  CGmapTools Documentation
+</h3>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="what-is-cgmaptool.html"><a href="what-is-cgmaptool.html"><i class="fa fa-check"></i><b>1</b> What is CGmapTool</a></li>
+<li class="chapter" data-level="2" data-path="new-file-format.html"><a href="new-file-format.html"><i class="fa fa-check"></i><b>2</b> New File Format</a><ul>
+<li class="chapter" data-level="2.1" data-path="new-file-format.html"><a href="new-file-format.html#atcgmap-format"><i class="fa fa-check"></i><b>2.1</b> ATCGmap Format</a></li>
+<li class="chapter" data-level="2.2" data-path="new-file-format.html"><a href="new-file-format.html#cgmap-format"><i class="fa fa-check"></i><b>2.2</b> CGmap Format</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="file-manipulation.html"><a href="file-manipulation.html"><i class="fa fa-check"></i><b>3</b> File Manipulation</a><ul>
+<li class="chapter" data-level="3.1" data-path="file-manipulation.html"><a href="file-manipulation.html#convert"><i class="fa fa-check"></i><b>3.1</b> convert</a></li>
+<li class="chapter" data-level="3.2" data-path="file-manipulation.html"><a href="file-manipulation.html#fetch"><i class="fa fa-check"></i><b>3.2</b> fetch</a></li>
+<li class="chapter" data-level="3.3" data-path="file-manipulation.html"><a href="file-manipulation.html#refill"><i class="fa fa-check"></i><b>3.3</b> refill</a></li>
+<li class="chapter" data-level="3.4" data-path="file-manipulation.html"><a href="file-manipulation.html#intersect"><i class="fa fa-check"></i><b>3.4</b> intersect</a></li>
+<li class="chapter" data-level="3.5" data-path="file-manipulation.html"><a href="file-manipulation.html#merge2"><i class="fa fa-check"></i><b>3.5</b> merge2</a></li>
+<li class="chapter" data-level="3.6" data-path="file-manipulation.html"><a href="file-manipulation.html#mergelist"><i class="fa fa-check"></i><b>3.6</b> mergelist</a></li>
+<li class="chapter" data-level="3.7" data-path="file-manipulation.html"><a href="file-manipulation.html#sort"><i class="fa fa-check"></i><b>3.7</b> sort</a></li>
+<li class="chapter" data-level="3.8" data-path="file-manipulation.html"><a href="file-manipulation.html#split"><i class="fa fa-check"></i><b>3.8</b> split</a></li>
+<li class="chapter" data-level="3.9" data-path="file-manipulation.html"><a href="file-manipulation.html#select"><i class="fa fa-check"></i><b>3.9</b> select</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="snp-calling.html"><a href="snp-calling.html"><i class="fa fa-check"></i><b>4</b> SNP calling</a></li>
+<li class="chapter" data-level="5" data-path="methylation-analysis.html"><a href="methylation-analysis.html"><i class="fa fa-check"></i><b>5</b> Methylation Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="methylation-analysis.html"><a href="methylation-analysis.html#dms"><i class="fa fa-check"></i><b>5.1</b> dms</a></li>
+<li class="chapter" data-level="5.2" data-path="methylation-analysis.html"><a href="methylation-analysis.html#dmr"><i class="fa fa-check"></i><b>5.2</b> dmr</a></li>
+<li class="chapter" data-level="5.3" data-path="methylation-analysis.html"><a href="methylation-analysis.html#asm"><i class="fa fa-check"></i><b>5.3</b> asm</a></li>
+<li class="chapter" data-level="5.4" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mbed"><i class="fa fa-check"></i><b>5.4</b> mbed</a></li>
+<li class="chapter" data-level="5.5" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mbin"><i class="fa fa-check"></i><b>5.5</b> mbin</a></li>
+<li class="chapter" data-level="5.6" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mmbin"><i class="fa fa-check"></i><b>5.6</b> mmbin</a></li>
+<li class="chapter" data-level="5.7" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mfg"><i class="fa fa-check"></i><b>5.7</b> mfg</a></li>
+<li class="chapter" data-level="5.8" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mstat"><i class="fa fa-check"></i><b>5.8</b> mstat</a></li>
+<li class="chapter" data-level="5.9" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mtr"><i class="fa fa-check"></i><b>5.9</b> mtr</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="coverage-analysis.html"><a href="coverage-analysis.html"><i class="fa fa-check"></i><b>6</b> Coverage Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="coverage-analysis.html"><a href="coverage-analysis.html#oac"><i class="fa fa-check"></i><b>6.1</b> oac</a></li>
+<li class="chapter" data-level="6.2" data-path="coverage-analysis.html"><a href="coverage-analysis.html#mec"><i class="fa fa-check"></i><b>6.2</b> mec</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="graphics.html"><a href="graphics.html"><i class="fa fa-check"></i><b>7</b> Graphics</a><ul>
+<li class="chapter" data-level="7.1" data-path="graphics.html"><a href="graphics.html#lollipop"><i class="fa fa-check"></i><b>7.1</b> lollipop</a></li>
+<li class="chapter" data-level="7.2" data-path="graphics.html"><a href="graphics.html#heatmap"><i class="fa fa-check"></i><b>7.2</b> heatmap</a></li>
+<li class="chapter" data-level="7.3" data-path="graphics.html"><a href="graphics.html#fragreg"><i class="fa fa-check"></i><b>7.3</b> fragreg</a></li>
+<li class="chapter" data-level="7.4" data-path="graphics.html"><a href="graphics.html#tanghulu"><i class="fa fa-check"></i><b>7.4</b> tanghulu</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="other-ultilities.html"><a href="other-ultilities.html"><i class="fa fa-check"></i><b>8</b> Other Ultilities</a><ul>
+<li class="chapter" data-level="8.1" data-path="other-ultilities.html"><a href="other-ultilities.html#findccgg"><i class="fa fa-check"></i><b>8.1</b> findCCGG</a></li>
+<li class="chapter" data-level="8.2" data-path="other-ultilities.html"><a href="other-ultilities.html#bed2fragreg"><i class="fa fa-check"></i><b>8.2</b> bed2fragreg</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="coverage-analysis" class="section level1">
+<h1><span class="header-section-number">6</span> Coverage Analysis</h1>
+<div id="oac" class="section level2">
+<h2><span class="header-section-number">6.1</span> oac</h2>
+<ul>
+<li><p><strong>Description</strong>: Overall coverage (for ATCGmap).</p></li>
+<li><p><strong>Usage</strong>: <code>cgmaptools oac &lt;command&gt; [options]</code></p></li>
+<li><p><strong>Commands</strong>:</p>
+<p><strong>bin</strong>: Overall coverage in bins.</p>
+<p>Usage: <code>cgmaptools oac bin  [-i &lt;ATCGmap&gt;] [-B 5000000]</code></p>
+<pre><code>-i FILE               File name end with .ATCGmap or .ATCGmap.gz. If not
+                      specified, STDIN will be used.
+-B BIN_SIZE           Define the size of bins [Default: 5000000]
+-f FILE, --figure-type=FILE
+                      png, pdf, eps. Will not generate figure if not
+                      specified
+-p STRING             Prefix for output figures
+-t STRING, --title=STRING
+                      title in the output figures</code></pre>
+<p><strong>stat</strong>: Get the distribution of overall coverages.</p>
+<p>Usage: <code>cgmaptools oac stat [-i &lt;ATCGmap&gt;]</code></p>
+<pre><code>-i FILE               File name end with .ATCGmap or .ATCGmap.gz. If not
+                      specified, STDIN will be used.
+-f FILE, --figure-type=FILE
+                      png, pdf, eps. Will not generate figure if not
+                      specified
+-p STRING             Prefix for output figures</code></pre></li>
+<li><p><strong>Example</strong>:</p>
+<p>The output format of <code>bin</code>:</p>
+<pre><code>chr1    1       5000    29.0000
+chr1    5001    10000   30.0396
+chr2    1       5000    35.0755
+chr2    5001    10000   40.0027
+chr3    1       5000    na</code></pre>
+<p>The output format of <code>stat</code>:</p>
+<pre><code>OverAllCov      global  47.0395
+OverAllCov      chr1    45.3157
+OverAllCov      chr10   47.7380
+CovAndCount     1       1567
+CovAndCount     2       655
+CovAndCount     3       380</code></pre></li>
+</ul>
+</div>
+<div id="mec" class="section level2">
+<h2><span class="header-section-number">6.2</span> mec</h2>
+<ul>
+<li><p><strong>Description</strong>: Methylation effective coverage (for CGmap).</p></li>
+<li><p><strong>Usage</strong>: <code>cgmaptools mec &lt;command&gt; [options]</code></p></li>
+<li><p><strong>Commands</strong>:</p>
+<p><strong>bin</strong>: Generate the methylation-effective coverage in Bins.</p>
+<p>Usage: <code>cgmaptools mec bin [-i &lt;CGmap&gt;] [-B 5000000]</code></p>
+<pre><code>-i FILE               File name end with .CGmap or .CGmap.gz. If not
+                      specified, STDIN will be used.
+-B BIN_SIZE           Define the size of bins [Default: 5000000]
+-f FILE, --figure-type=FILE
+                      png, pdf, eps. Will not generate figure if not
+                      specified
+-p STRING             Prefix for output figures
+-t STRING, --title=STRING
+                      title in the output figures</code></pre>
+<p><strong>stat</strong>: Get the distribution of methylation-effective coverages.</p>
+<p>Usage: <code>cgmaptools mec stat [-i &lt;CGmap&gt;]</code></p>
+<pre><code>-i FILE               File name end with .CGmap or .CGmap.gz. If not
+                      specified, STDIN will be used.
+-f FILE, --figure-type=FILE
+                      png, pdf, eps. Will not generate figure if not
+                      specified
+-p STRING             Prefix for output figures</code></pre></li>
+<li><p><strong>Example</strong>:</p>
+<p>The output format of <code>bin</code>:</p>
+<pre><code>chr1    1       5000    29.0000
+chr1    5001    10000   30.0396
+chr2    1       5000    35.0755
+chr2    5001    10000   40.0027
+chr3    1       5000    na</code></pre>
+<p>The output format of <code>stat</code>:</p>
+<pre><code>OverAllCov      global  47.0395
+OverAllCov      chr1    45.3157
+OverAllCov      chr10   47.7380
+CovAndCount     1       1567
+CovAndCount     2       655
+CovAndCount     3       380</code></pre></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="methylation-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="graphics.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 4
+},
+"edit": null,
+"download": ["_main.pdf", "_main.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": true
+});
+});
+</script>
+
+</body>
+
+</html>

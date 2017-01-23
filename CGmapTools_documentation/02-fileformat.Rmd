@@ -1,0 +1,29 @@
+# New File Format
+
+To facilitate high throughput data manipulation and reduce storage usage, several file format have been proposed and generaly accepted as the standard. Due to these great efforts (e.g. SAM/BAM and VCF), data analysis and tool development become more easier and highly efficient. However, when it comes to bisulfite sequencing data, currently, available tools possess their own tool specific data format. In consequence, integrating results from several tools leads to extra efforts in unifying data format and developing custermized tools, which is time comsuming and error prone. 
+
+As one of the features of CGmapTools, we defined ATCGmap and CGmap file format to simplify downstream DNA methylation analysis and in hope to standardize the storage format of bisulfite sequencing data.
+
+## ATCGmap Format
+
+After alignment of sequencing reads to the reference genome, all the detail information about read coverage and methylation level of a cytosine site are stored in BAM/SAM format files though requiring further interpretation. A well defined file format called [**pileup**](http://samtools.sourceforge.net/pileup.shtml) summarized the information of mapped reads covered on each nucleotide along the reference genome. But the pileup file does not designed for bisulfte sequencing data, which lacks DNA methylation estimation of cytosines.
+
+Here, we defined ATCGmap file format to integrate both mapping and coverage of non-cytosine and cytosine sites with estimated DNA methylation in a single file.
+
+```{r, echo=FALSE, results='asis'}
+library(knitr)
+atcgmap.format <- read.table("atcgmap.format.txt", header = T, sep = ";", quote = "")
+names(atcgmap.format) <- c("Col", "Field", "Type", "Regexp/Range", "Brief description")
+kable(atcgmap.format)
+```
+
+## CGmap Format
+
+In cases we only want to retain DNA methylation on cytonsines to save storage usage, we defined another file format called **CGmap** which provides sequence context and estimated DNA methylation level of any covered cytosines on the reference genome.
+
+```{r, echo=FALSE, results='asis'}
+cgmap.format <- read.table("cgmap.format.txt", header = T, sep = ";", quote = "")
+names(cgmap.format) <- c("Col", "Field", "Type", "Regexp/Range", "Brief description")
+kable(cgmap.format)
+```
+

@@ -1,0 +1,59 @@
+# SNP Calling
+
+Bisulfite sequencing data contains information of both methylation and genome sequences. In addition to DNA methylation analysis, we can also call variants using bisulfite data. Due to bisulfite coversion and PCR amplification during library preparation, the unmethylated cytosines on the DNA fragments would be converted to thymines. Thus, it's difficult to distinguish thymine produced by bisulfite coversion with the real thymine allele.
+
+In recent years, few tools are adapted to bisulfite data for SNP calling. The main idea is removing vague reads that may contain unmethylated cytosines for a given positoin. Consequently, the rest reads can be regarded as reads generated from a normal genome DNA without bisulfite treatment and can be used to call variants using regular methods without consideration of bisulfite conversion.
+
+However, removing the vague reads leads to information lost in most cases making variant calling less confident, especially when the sequencing depth is low. To solve this problem, we proposed two independent methods called BinomWC (based on binomial) and BayesWC (based on bayesian), taking vague reads into consideration. 
+
+## Binomial Test
+
+## Bayesian Inference
+
+Assuming the underlying genome is diploid, the posterior probability of inferred genotypes would be:
+$$Pr(g|O)=\frac{Pr(O|g)*\pi(g)}{(O)}$$
+where
+$$O = \left\{A_w^\#, T_w^\#, C_w^\#, G_w^\#, A_c^\#, T_c^\#, C_c^\#, G_c^\#\right\}$$
+and
+$$\begin{align}
+&G\in GENO^{homo}\cup GENO^{hete} \\
+&GENO^{homo}=\left\{A, T, C, G\right\} \\
+&GENO^{hete}=\left\{AT, AC, AG, TC, TG, CG\right\}
+\end{align}$$
+
+The prior probability
+$$\begin{align}
+&\pi(g|g \in GENO^{homo}) = \frac{1}{16} \\
+&\pi(g|g \in GENO^{hete}) = \frac{1}{8}
+\end{align}$$
+
+```
+Usage: SNVFromATCGmap.py [-i <ATCGmap>  -o <output> -l <INT> -p <float> -e <float> -m <STRING> -a]
+
+Description: Find the SNPs from ATCGmap file.
+Output format example:
+#chr    nuc     pos     ATCG_watson     ATCG_crick      predicted_nuc   p_value
+chr1    G       4752    17, 0, 0, 69    0, 0, 0, 0      A,G     9.3e-07
+chr1    A       4770    40, 0, 0, 29    0, 0, 0, 0      A,G     0.0e+00
+chr1    T       8454    0, 39, 0, 0     0, 0, 0, 0      T/C     1.00e-01
+
+
+Options:
+  -h, --help            show this help message and exit
+  -i FILE               ATCGmap format, STDIN if not specified
+  -v FILE, --vcf=FILE   VCF format file for output
+  -e ERROR_RATE, --error_rate=ERROR_RATE
+                        Error rate for calling a nucleotide [Default: 0.05]
+  -p P_VALUE, --p_value=P_VALUE
+                        P value cut-off for Binomial test [Default: 0.001]
+  -l LEAST_COV          The least coverage [Default: 5]
+  -m MODE, --mode=MODE  Mode for calling SNP [Default: binom]
+                        binom: binomial,  separate strands
+                        bayes: bayesian mode
+  -a, --all_nt          Show all sites with enough coverage (-l). Only show
+                        SNP sites if not specified.
+  --dynamicP            Use Dynamic P value for BayesWC if specified.
+  -o OUTFILE            STDOUT if not specified
+```
+
+

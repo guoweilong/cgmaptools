@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="" />
+  
+  <meta name="twitter:description" content="A bisulfite sequencing analysis toolset with enhanced features on SNV calling and allele specific methylations and visualizations." />
+  
+
+
+
+<meta name="date" content="2016-12-16">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="what-is-cgmaptool.html">
+<link rel="next" href="file-manipulation.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<h3 style="text-align:center;font-family:'Times New Roman'">
+  CGmapTools Documentation
+</h3>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="what-is-cgmaptool.html"><a href="what-is-cgmaptool.html"><i class="fa fa-check"></i><b>1</b> What is CGmapTool</a></li>
+<li class="chapter" data-level="2" data-path="new-file-format.html"><a href="new-file-format.html"><i class="fa fa-check"></i><b>2</b> New File Format</a><ul>
+<li class="chapter" data-level="2.1" data-path="new-file-format.html"><a href="new-file-format.html#atcgmap-format"><i class="fa fa-check"></i><b>2.1</b> ATCGmap Format</a></li>
+<li class="chapter" data-level="2.2" data-path="new-file-format.html"><a href="new-file-format.html#cgmap-format"><i class="fa fa-check"></i><b>2.2</b> CGmap Format</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="file-manipulation.html"><a href="file-manipulation.html"><i class="fa fa-check"></i><b>3</b> File Manipulation</a><ul>
+<li class="chapter" data-level="3.1" data-path="file-manipulation.html"><a href="file-manipulation.html#convert"><i class="fa fa-check"></i><b>3.1</b> convert</a></li>
+<li class="chapter" data-level="3.2" data-path="file-manipulation.html"><a href="file-manipulation.html#fetch"><i class="fa fa-check"></i><b>3.2</b> fetch</a></li>
+<li class="chapter" data-level="3.3" data-path="file-manipulation.html"><a href="file-manipulation.html#refill"><i class="fa fa-check"></i><b>3.3</b> refill</a></li>
+<li class="chapter" data-level="3.4" data-path="file-manipulation.html"><a href="file-manipulation.html#intersect"><i class="fa fa-check"></i><b>3.4</b> intersect</a></li>
+<li class="chapter" data-level="3.5" data-path="file-manipulation.html"><a href="file-manipulation.html#merge2"><i class="fa fa-check"></i><b>3.5</b> merge2</a></li>
+<li class="chapter" data-level="3.6" data-path="file-manipulation.html"><a href="file-manipulation.html#mergelist"><i class="fa fa-check"></i><b>3.6</b> mergelist</a></li>
+<li class="chapter" data-level="3.7" data-path="file-manipulation.html"><a href="file-manipulation.html#sort"><i class="fa fa-check"></i><b>3.7</b> sort</a></li>
+<li class="chapter" data-level="3.8" data-path="file-manipulation.html"><a href="file-manipulation.html#split"><i class="fa fa-check"></i><b>3.8</b> split</a></li>
+<li class="chapter" data-level="3.9" data-path="file-manipulation.html"><a href="file-manipulation.html#select"><i class="fa fa-check"></i><b>3.9</b> select</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="snp-calling.html"><a href="snp-calling.html"><i class="fa fa-check"></i><b>4</b> SNP calling</a></li>
+<li class="chapter" data-level="5" data-path="methylation-analysis.html"><a href="methylation-analysis.html"><i class="fa fa-check"></i><b>5</b> Methylation Analysis</a><ul>
+<li class="chapter" data-level="5.1" data-path="methylation-analysis.html"><a href="methylation-analysis.html#dms"><i class="fa fa-check"></i><b>5.1</b> dms</a></li>
+<li class="chapter" data-level="5.2" data-path="methylation-analysis.html"><a href="methylation-analysis.html#dmr"><i class="fa fa-check"></i><b>5.2</b> dmr</a></li>
+<li class="chapter" data-level="5.3" data-path="methylation-analysis.html"><a href="methylation-analysis.html#asm"><i class="fa fa-check"></i><b>5.3</b> asm</a></li>
+<li class="chapter" data-level="5.4" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mbed"><i class="fa fa-check"></i><b>5.4</b> mbed</a></li>
+<li class="chapter" data-level="5.5" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mbin"><i class="fa fa-check"></i><b>5.5</b> mbin</a></li>
+<li class="chapter" data-level="5.6" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mmbin"><i class="fa fa-check"></i><b>5.6</b> mmbin</a></li>
+<li class="chapter" data-level="5.7" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mfg"><i class="fa fa-check"></i><b>5.7</b> mfg</a></li>
+<li class="chapter" data-level="5.8" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mstat"><i class="fa fa-check"></i><b>5.8</b> mstat</a></li>
+<li class="chapter" data-level="5.9" data-path="methylation-analysis.html"><a href="methylation-analysis.html#mtr"><i class="fa fa-check"></i><b>5.9</b> mtr</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="coverage-analysis.html"><a href="coverage-analysis.html"><i class="fa fa-check"></i><b>6</b> Coverage Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="coverage-analysis.html"><a href="coverage-analysis.html#oac"><i class="fa fa-check"></i><b>6.1</b> oac</a></li>
+<li class="chapter" data-level="6.2" data-path="coverage-analysis.html"><a href="coverage-analysis.html#mec"><i class="fa fa-check"></i><b>6.2</b> mec</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="graphics.html"><a href="graphics.html"><i class="fa fa-check"></i><b>7</b> Graphics</a><ul>
+<li class="chapter" data-level="7.1" data-path="graphics.html"><a href="graphics.html#lollipop"><i class="fa fa-check"></i><b>7.1</b> lollipop</a></li>
+<li class="chapter" data-level="7.2" data-path="graphics.html"><a href="graphics.html#heatmap"><i class="fa fa-check"></i><b>7.2</b> heatmap</a></li>
+<li class="chapter" data-level="7.3" data-path="graphics.html"><a href="graphics.html#fragreg"><i class="fa fa-check"></i><b>7.3</b> fragreg</a></li>
+<li class="chapter" data-level="7.4" data-path="graphics.html"><a href="graphics.html#tanghulu"><i class="fa fa-check"></i><b>7.4</b> tanghulu</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="other-ultilities.html"><a href="other-ultilities.html"><i class="fa fa-check"></i><b>8</b> Other Ultilities</a><ul>
+<li class="chapter" data-level="8.1" data-path="other-ultilities.html"><a href="other-ultilities.html#findccgg"><i class="fa fa-check"></i><b>8.1</b> findCCGG</a></li>
+<li class="chapter" data-level="8.2" data-path="other-ultilities.html"><a href="other-ultilities.html#bed2fragreg"><i class="fa fa-check"></i><b>8.2</b> bed2fragreg</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="new-file-format" class="section level1">
+<h1><span class="header-section-number">2</span> New File Format</h1>
+<p>To facilitate high throughput data manipulation and reduce storage usage, several file format have been proposed and generaly accepted as the standard. Due to these great efforts (e.g. SAM/BAM and VCF), data analysis and tool development become more easier and highly efficient. However, when it comes to bisulfite sequencing data, currently, available tools possess their own tool specific data format. In consequence, integrating results from several tools leads to extra efforts in unifying data format and developing custermized tools, which is time comsuming and error prone.</p>
+<p>As one of the features of CGmapTools, we defined ATCGmap and CGmap file format to simplify downstream DNA methylation analysis and in hope to standardize the storage format of bisulfite sequencing data.</p>
+<div id="atcgmap-format" class="section level2">
+<h2><span class="header-section-number">2.1</span> ATCGmap Format</h2>
+<p>After alignment of sequencing reads to the reference genome, all the detail information about read coverage and methylation level of a cytosine site are stored in BAM/SAM format files though requiring further interpretation. A well defined file format called <a href="http://samtools.sourceforge.net/pileup.shtml"><strong>pileup</strong></a> summarized the information of mapped reads covered on each nucleotide along the reference genome. But the pileup file does not designed for bisulfte sequencing data, which lacks DNA methylation estimation of cytosines.</p>
+<p>Here, we defined ATCGmap file format to integrate both mapping and coverage of non-cytosine and cytosine sites with estimated DNA methylation in a single file.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Col</th>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Regexp/Range</th>
+<th align="left">Brief description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">CHR</td>
+<td align="left">String</td>
+<td align="left">[!-?A-~]{1,118}</td>
+<td align="left">Query template NAME</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">NUC</td>
+<td align="left">Char</td>
+<td align="left">[ATCGN-]</td>
+<td align="left">The nucleotide on reference genome</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">POS</td>
+<td align="left">Int</td>
+<td align="left">[0,232-1]</td>
+<td align="left">1-based leftmost mapping position</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">CONT</td>
+<td align="left">String</td>
+<td align="left">{“–”, &quot;CG“,”CHG“,”CHH“}</td>
+<td align="left">Context</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">DINUC</td>
+<td align="left">String</td>
+<td align="left">{“–”, “CA”, “CT”, “CC”, “CG”}</td>
+<td align="left">Dinucleotide context</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">WA</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Watson strand support Adenine</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">WT</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Watson strand support Thymine</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">WC</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Watson strand support Cytosine</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">WG</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Watson strand support Guanine</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">WN</td>
+<td align="left">Int</td>
+<td align="left">[0,26-1]</td>
+<td align="left">Counts of reads on Watson strand support None</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">CA</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Crick strand support Adenine</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">CT</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Crick strand support Thymine</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">CC</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Crick strand support Cytosine</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">CG</td>
+<td align="left">Int</td>
+<td align="left">[0,214-1]</td>
+<td align="left">Counts of reads on Crick strand support Guanine</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">CN</td>
+<td align="left">Int</td>
+<td align="left">[0,26-1]</td>
+<td align="left">Counts of reads on Crick strand support None</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="left">METH</td>
+<td align="left">Float</td>
+<td align="left">[0,1] or “na”</td>
+<td align="left">Methylation level or “Not Available”</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cgmap-format" class="section level2">
+<h2><span class="header-section-number">2.2</span> CGmap Format</h2>
+<p>In cases we only want to retain DNA methylation on cytonsines to save storage usage, we defined another file format called <strong>CGmap</strong> which provides sequence context and estimated DNA methylation level of any covered cytosines on the reference genome.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Col</th>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Regexp/Range</th>
+<th align="left">Brief description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">CHR</td>
+<td align="left">String</td>
+<td align="left">[!-?A-~]{1,118}</td>
+<td align="left">Query template NAME</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">NUC</td>
+<td align="left">Char</td>
+<td align="left">[ATCGN-]</td>
+<td align="left">The nucleotide on reference genome</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">POS</td>
+<td align="left">Int</td>
+<td align="left">[0,2<sup>32</sup>-1]</td>
+<td align="left">1-based leftmost mapping position</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">CONT</td>
+<td align="left">String</td>
+<td align="left">{“–”, “CG”, “CHG”, “CHH”}</td>
+<td align="left">Context</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">DINUC</td>
+<td align="left">String</td>
+<td align="left">{“–”, “CA”, “CT”, “CC”, “CG”}</td>
+<td align="left">Dinucleotide context</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">METH</td>
+<td align="left">Float</td>
+<td align="left">[0,1] or “na”</td>
+<td align="left">Methylation level or “Not Available”</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">MC</td>
+<td align="left">Int</td>
+<td align="left">[0,2<sup>12</sup>-1]</td>
+<td align="left">Counts of reads support methylated Cytosine</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">NC</td>
+<td align="left">Int</td>
+<td align="left">[0,2<sup>12</sup>-1]</td>
+<td align="left">Counts of reads support all Cytosine</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="what-is-cgmaptool.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="file-manipulation.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 4
+},
+"edit": null,
+"download": ["_main.pdf", "_main.epub"],
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": true
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+# Manipulation and Analysis
+
+## Input: ATCGmap or CGmap
+
+### Sort
+
+### Merge
+
+### Intersect
+
+### Split by Chromosomes
+
+### Filter Context
+
+## Input: ATCGmap
+
+### Fetch Region
+
+### SNP Calling
+
+### Coverage in Tiles
+
+### Coverage Statistics
+
+## Input: CGmap
+
+### Coverage Analysis
+
+#### Coverage in Tiles
+
+#### Coverage Statistics
+
+### Methylation Analysis (Single base resolution)
+
+#### Methylation Statistics
+
+#### Reomove
+
+#### Differential Methylation
+
+#### Join
+
+### Methylation Analysis (Tiles based)
+
+#### Single CGmap
+
+#### Multiple CGmaps
+
+### Methylation Analysis (Regions)
+
+#### Mean mC in All Region
+
+#### Mean mC in Each Region
+
+#### Mean mC in Fragmented Region
+
+#### Differential Methylation
+
+#### Exclude by Region

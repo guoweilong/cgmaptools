@@ -1,0 +1,115 @@
+# Utilities
+
+## Fetch
+
+**Description**: Extract sites in specified regions from ATCGbz or CGbz files. It's also an utility to convert ATCGbz (CGbz) file to ATCGmap (CGmap) format.
+
+**Usage**: `FetchRegion -b <ATCGbz|CGbz> -C <CHR> -L <LeftPos> -R <RightPos>`
+
+**Options**:
+
+```
+  -V, --version          output program version
+  -h, --help             output help information
+  -b, <arg>              input ATCGbz or CGbz file
+  -C, --CHR <arg>        specify the chromosome name
+  -L, --leftPos <arg>    the left position
+  -R, --rightPos <arg>   the right position
+```
+
+## Sort
+
+**Description**: Sort the input files by chromosome and position. The order of chromosomes would be: "chr1 chr2 ... chr11 chr11_random ... chr21 ... chrM chrX chrY".
+
+**Usage**: `Sort_chr_pos.py [-i <input>] [-c 1] [-p 3] [-o output]`
+
+**Options**:
+
+```
+  -h, --help         show this help message and exit
+  -i FILE            File name end with .CGmap or .CGmap.gz. If not specified,
+                     STDIN will be used.
+  -c INT, --chr=INT  The column of chromosome [default: 1]
+  -p INT, --pos=INT  The column of position [default: 2]
+  -o OUTFILE         To standard output if not specified
+```
+
+## Merge
+
+**Description**: Merge two ATCGmap[.gz] (CGmap[.gz]) files together
+
+**Usage**:	`ATCGmapMerge -1 <ATCGmap> -2 <ATCGmap>`
+
+**Options**:
+
+```
+  -1	Input, 1st ATCGmap file
+  -2	Input, 2nd ATCGmap file
+Output to STDOUT in ATCGmap format
+Tips: Two input files should have the same order of chromosomes
+```
+
+## Intersect
+
+**Description**: Get the intersection of two CGmap files.
+
+**Usage**: `CGmapIntersect.py [-1 <CGmap_1>] -2 <CGmap_2> [-o <output>]`
+
+**Options**:
+
+```
+  -h, --help     show this help message and exit
+  -1 CGmap File  File name, end with .CGmap or .CGmap.gz.
+  -2 CGmap File  standard input if not specified
+  -o OUTFILE     To standard output if not specified. Compressed output if end
+                 with .gz
+```
+
+**Output Format**:
+
+```
+    Chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10
+When 1st CGmap file is:
+    Chr1  C  3541  CG  CG  0.8  4  5
+,and 2nd CGmap file is:
+    Chr1  C  3541  CG  CG  0.4  4  10
+```
+
+## Split
+
+**Description**: Split the files by each chromosomes. Program can also be applied to ATCGmap file.
+
+**Usage**: `CGmapSplitByChr.py -i <CGmap> -p <prefix[.chr.]> -s <[.chr.]suffix>`
+
+**Options**:
+
+```
+  -h, --help  show this help message and exit
+  -i FILE     Input file name end with .CGmap or .CGmap.gz, use STDIN when not
+              specified
+  -p STRING   The prefix for output file
+  -s STRING   The suffix for output file (gzipped if end with 'gz').
+```
+
+## Fill
+
+**Description**: Fill the CG/CHG/CHH and CA/CC/CT/CG context. Other fields will not be affected. Can be applied to ATCGmap file as well.
+
+```
+Index Ex:
+   Chr1    C       3541    -       -       0.0     0       1
+Output Ex:
+   Chr1    C       3541    CG      CG      0.0     0       1
+```
+
+**Usage**: `CGmapFillContext.py [-i <CGmap>] -g <genome.fa> [-o output]`
+
+**Options**:
+
+```
+  -h, --help    show this help message and exit
+  -i STRING     Input CGmap file (CGmap or CGmap.gz)
+  -g STRING     genome file, FASTA format (gzipped if end with '.gz')
+  -o STRING     Output file name (gzipped if end with '.gz')
+  -0, --0-base  0-based genome if specified [Default: 1-based]
+```

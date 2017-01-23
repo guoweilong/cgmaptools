@@ -1,0 +1,32 @@
+# SNP calling
+
+Bisulfite sequencing data contains information of both methylation and genome sequences. In addition to DNA methylation analysis, we can also call variants using bisulfite data. Due to bisulfite coversion and PCR amplification during library preparation, the unmethylated cytosines on the DNA fragments would be converted to thymines. Thus, it's difficult to distinguish thymine produced by bisulfite coversion with the real thymine allele.
+
+In recent years, few tools are adapted to bisulfite data for SNP calling. The main idea is removing vague reads that may contain unmethylated cytosines for a given positoin. Consequently, the rest reads can be regarded as reads generated from a normal genome DNA without bisulfite treatment and can be used to call variants using regular methods without consideration of bisulfite conversion.
+
+However, removing the vague reads leads to information lost in most cases making variant calling less confident, especially when the sequencing depth is low. To solve this problem, we proposed two independent methods called BinomWC (based on binomial) and BayesWC (based on bayesian), taking vague reads into consideration. 
+
+- **Usage**: `cgmaptools snv [-i <ATCGmap>] [-o <output> -v <VCF>]`
+
+    ```
+    -i FILE               ATCGmap format, STDIN if not specified
+    -v FILE, --vcf=FILE   VCF format file for output
+    -a, --all_nt          Show all sites with enough coverage (-l). Only show
+                          SNP sites if not specified.
+    -o OUTFILE            STDOUT if not specified
+    -m MODE, --mode=MODE  Mode for calling SNP [Default: binom]
+                          binom: binomial,  separate strands
+                          bayes: bayesian mode
+    --bayes-e=BAYES_ER    (BayesWC mode) Error rate for calling a nucleotide
+                          [Default: 0.05]
+    --bayes-p=BAYES_PV    (BayesWC mode) P value as cut-off [Default: 0.001]
+    --bayes-dynamicP      (BayesWC mode) Use dynamic p-value for different
+                          coverages install of specific p-value. (Recomended)
+                          "--bayes-p" will be ignored if "--bayes-dynamicP" is
+                          specified.
+    --binom-e=BINOM_ER    (BinomWC mode) Error rate for calling a nucleotide
+                          [Default: 0.05]
+    --binom-p=BINOM_PV    (BinomWC mode) P value as cut-off [Default: 0.01]
+    --binom-cov=BINOM_COV
+                          (BinomWC mode) The coverage checkpoint [Default: 10]
+    ```

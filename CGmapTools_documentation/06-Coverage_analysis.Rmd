@@ -1,0 +1,122 @@
+# Coverage Analysis
+
+## oac
+
+- **Description**: Overall coverage (for ATCGmap).
+
+- **Usage**: `cgmaptools oac <command> [options]`
+
+- **Commands**:
+
+    **bin**: Overall coverage in bins.
+    
+    Usage: `cgmaptools oac bin  [-i <ATCGmap>] [-B 5000000]`
+    
+    ```
+    -i FILE               File name end with .ATCGmap or .ATCGmap.gz. If not
+                          specified, STDIN will be used.
+    -B BIN_SIZE           Define the size of bins [Default: 5000000]
+    -f FILE, --figure-type=FILE
+                          png, pdf, eps. Will not generate figure if not
+                          specified
+    -p STRING             Prefix for output figures
+    -t STRING, --title=STRING
+                          title in the output figures
+    ```
+    
+    **stat**: Get the distribution of overall coverages.
+    
+    Usage: `cgmaptools oac stat [-i <ATCGmap>]`
+    
+    ```
+    -i FILE               File name end with .ATCGmap or .ATCGmap.gz. If not
+                          specified, STDIN will be used.
+    -f FILE, --figure-type=FILE
+                          png, pdf, eps. Will not generate figure if not
+                          specified
+    -p STRING             Prefix for output figures
+    ```
+
+- **Example**:
+
+    The output format of `bin`:
+    
+    ```
+    chr1    1       5000    29.0000
+    chr1    5001    10000   30.0396
+    chr2    1       5000    35.0755
+    chr2    5001    10000   40.0027
+    chr3    1       5000    na
+    ```
+
+    The output format of `stat`:
+    
+    ```
+    OverAllCov      global  47.0395
+    OverAllCov      chr1    45.3157
+    OverAllCov      chr10   47.7380
+    CovAndCount     1       1567
+    CovAndCount     2       655
+    CovAndCount     3       380
+    ```
+
+## mec
+
+- **Description**: Methylation effective coverage (for CGmap).
+
+- **Usage**: `cgmaptools mec <command> [options]`
+
+- **Commands**:
+
+    **bin**: Generate the methylation-effective coverage in Bins.
+    
+    Usage: `cgmaptools mec bin [-i <CGmap>] [-B 5000000]`
+    
+    ```
+    -i FILE               File name end with .CGmap or .CGmap.gz. If not
+                          specified, STDIN will be used.
+    -B BIN_SIZE           Define the size of bins [Default: 5000000]
+    -f FILE, --figure-type=FILE
+                          png, pdf, eps. Will not generate figure if not
+                          specified
+    -p STRING             Prefix for output figures
+    -t STRING, --title=STRING
+                          title in the output figures
+    ```
+    
+    **stat**: Get the distribution of methylation-effective coverages.
+    
+    Usage: `cgmaptools mec stat [-i <CGmap>]`
+    
+    ```
+    -i FILE               File name end with .CGmap or .CGmap.gz. If not
+                          specified, STDIN will be used.
+    -f FILE, --figure-type=FILE
+                          png, pdf, eps. Will not generate figure if not
+                          specified
+    -p STRING             Prefix for output figures
+    ```
+
+- **Example**:
+
+    The output format of `bin`:
+    
+    ```
+    chr1    1       5000    29.0000
+    chr1    5001    10000   30.0396
+    chr2    1       5000    35.0755
+    chr2    5001    10000   40.0027
+    chr3    1       5000    na
+    ```
+
+    The output format of `stat`:
+    
+    ```
+    OverAllCov      global  47.0395
+    OverAllCov      chr1    45.3157
+    OverAllCov      chr10   47.7380
+    CovAndCount     1       1567
+    CovAndCount     2       655
+    CovAndCount     3       380
+    ```
+    

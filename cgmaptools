@@ -1,0 +1,282 @@
+#!/usr/bin/env python
+
+"""
+    cgmaptools
+
+    Copyright (C) Weilong Guo & Ping Zhu
+    Contact: Weilong Guo <guoweilong@126.com>
+             Ping Zhu <pingzhu.work@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+"""
+
+import sys, os
+
+#os.system(sys.argv[0])
+
+#print sys.argv[0]
+#print sys.argv[1]
+#print sys.argv[-1]
+DIR=os.path.dirname(sys.argv[0])
+#print DIR
+
+import subprocess
+
+#subprocess.call(["ls", "-l", "/etc/resolv.conf"])
+
+
+argv_len = len(sys.argv)
+
+def PrintVersion() :
+   print("Version:  0.0.1")
+#
+
+if (argv_len) == 1  or sys.argv[1] in ["-h", "-H", "--help"]:
+   print("Program : cgmaptools (Tools for analysis in CGmap/ATCGmap format)")
+   PrintVersion()
+   print("Usage:    cgmaptools <command> [options]")
+   print("Commands:")
+   print("  -- File manipulation")
+   print("     convert     + data format conversion tools")
+   print("     fetch       + fetch a region by random accessing")
+   print("     refill        refill the missing columns")
+   print("     intersect     intersect two files")
+   print("     merge2      + merge two files into one")
+   print("     mergelist   + merge a list of files")
+   print("     sort          sort lines by chromosome and position")
+   print("     split       + split file by chromosomes")
+   print("     select      + select lines by region/site")
+   print("  -- SNV analysis")
+   print("     snv           snv analysis")
+   print("  -- Methylation analysis")
+   print("     dms           differentially methylated site analysis")
+   print("     dmr           differentially methylated region analysis")
+   print("     asm           allele-specific methylation analysis")
+   print("     mbed          average methylation level in regions")
+   print("     mbin        * single sample, mC levels in bins")
+   print("     mmbin         multiple samples, mC levels in bins")
+   print("     mfg           methlation levels across fragmented region")
+   print("     mstat       * methyaltion statistic")
+   print("     mtr           methylation level to each region")
+   print("  -- Coverage analysis")
+   print("     oac        +* overall coverage (for ATCGmap)")
+   print("     mec        +* methylation effective coverage (for CGmap)")
+   print("  -- Graph related functions")
+   print("     lollipop    * show local mC levels as lollipop bars")
+   print("     heatmap     * global mC distribution for multiple samples")
+   print("     fragreg     * show mC profile across fragmented regions")
+   print("     tanghulu    * show local mapped reads in Tanghulu shape")
+   print("  -- Other Utils")
+   print("     findCCGG      get MspI cutting sites for RRBS")
+   print("     bed2fragreg   get fragmented region based on region")
+   print("Note: ")
+   print("  Commands support figures generation are marked with \"*\" ")
+   print("  Commands contain sub-commands are marked with \"+\" ")
+   print("Authors:")
+   print("  GUO, Weilong; guoweilong@126.com;  http://guoweilong.github.io")
+   print("  ZHU, Ping; pingzhu.work@gmail.com; http://perry-zhu.github.io")
+   print("")
+else :
+   code1 = sys.argv[1]
+   # -- File manipulation
+   if code1 == "convert" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools convert <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     bam2cgmap        BAM     => CGmap & ATCGmap")
+         print("     atcgmap2atcgbz   ATCGmap => ATCGbz")
+         print("     atcgbz2atcgmap   ATCGbz  => ATCGmap")
+         print("     atcgmap2cgmap    ATCGmap => CGmap")
+         print("     cgmap2cgbz       CGamp   => CGbz")
+         print("     cgbz2cgmap       CGbz    => CGmap")
+         print("     cgmap2wig        CGmap   => WIG")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "bam2cgmap" :
+            subprocess.call([DIR + "/bin/CGmapFromBAM"]+ sys.argv[3:])
+         elif code2 == "cgmap2wig" :
+            subprocess.call([DIR + "/bin/CGmapToWig"]+ sys.argv[3:])
+         elif code2 == "atcgbz2atcgmap" :
+            subprocess.call([DIR + "/bin/ATCGbzToATCGmap"]+ sys.argv[3:])
+         elif code2 == "atcgmap2atcgbz" :
+            subprocess.call([DIR + "/bin/ATCGmapToATCGbz"]+ sys.argv[3:])
+         elif code2 == "cgbz2cgmap" :
+            subprocess.call([DIR + "/bin/CGbzToCGmap"]+ sys.argv[3:])
+         elif code2 == "cgmap2cgbz" :
+            subprocess.call([DIR + "/bin/CGmapToCGbz"]+ sys.argv[3:])
+         elif code2 == "atcgmap2cgmap" :
+            subprocess.call([DIR + "/bin/ATCGmapToCGmapWig"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools convert -h\" for more information.")
+         #
+      #
+   elif code1 == "fetch" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools fetch <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     atcgbz      fetch lines from ATCGbz")
+         print("     cgbz        fetch lines from CGbz")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "atcgbz" :
+            subprocess.call([DIR + "/bin/ATCGbzFetchRegion"]+ sys.argv[3:])
+         elif code2 == "cgbz" :
+            subprocess.call([DIR + "/bin/CGbzFetchRegion"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools fetch -h\" for more information.")
+         #
+      #
+   elif code1 == "refill" :
+      subprocess.call([DIR + "/bin/CGmapFillContext"]+ sys.argv[2:])
+   elif code1 == "intersect" :
+      subprocess.call([DIR + "/bin/CGmapIntersect"]+ sys.argv[2:])
+   elif code1 == "merge2" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools merge2 <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     atcgmap      merge two ATCGmap files into one")
+         print("     cgmap        merge two CGmap files into one")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "atcgmap" :
+            subprocess.call([DIR + "/bin/ATCGmapMerge"]+ sys.argv[3:])
+         elif code2 == "cgmap" :
+            subprocess.call([DIR + "/bin/CGmapMerge"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools merge2 -h\" for more information.")
+         #
+      #
+   elif code1 == "mergelist" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools mergelist <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     tomatrix   mC levels matrix from multiple files")
+         print("     tosingle   merge list of input files into one")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "tomatrix" :
+            subprocess.call([DIR + "/bin/CGmapFillIndex"]+ sys.argv[3:])
+         elif code2 == "tosingle" :
+            subprocess.call([DIR + "/bin/MergeListOfCGmap"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools mergelist -h\" for more information.")
+         #
+      #
+   elif code1 == "sort" :
+      subprocess.call([DIR + "/bin/Sort_chr_pos"]+ sys.argv[2:])
+   elif code1 == "split" :
+      subprocess.call([DIR + "/bin/CGmapSplitByChr"]+ sys.argv[2:])
+   elif code1 == "select" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools select <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     region     select or exclude liens by region lists")
+         print("     site       select or exclude lines by site list")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "region" :
+            subprocess.call([DIR + "/bin/CGmapSelectByRegion"]+ sys.argv[3:])
+         elif code2 == "site" :
+            subprocess.call([DIR + "/bin/CGmapSelectBySite"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools select -h\" for more information.")
+         #
+      #
+   # -- SNV analysis
+   elif code1 == "snv" :
+      subprocess.call([DIR + "/bin/SNVFromATCGmap"]+ sys.argv[2:])
+   # -- Methylation analysis
+   elif code1 == "dms" :
+      subprocess.call([DIR + "/bin/CGmapInterDiffSite"]+ sys.argv[2:])
+   elif code1 == "dmr" :
+      subprocess.call([DIR + "/bin/CGmapInterDiffReg"]+ sys.argv[2:])
+   elif code1 == "asm" :
+      subprocess.call([DIR + "/bin/ASM"]+ sys.argv[2:])
+   elif code1 == "mbed" :
+      subprocess.call([DIR + "/bin/CGmapMethInBed"]+ sys.argv[2:])
+   elif code1 == "mbin" :
+      subprocess.call([DIR + "/bin/CGmapMethInBins"]+ sys.argv[2:])
+   elif code1 == "mmbin" :
+      subprocess.call([DIR + "/bin/CGmapsMethInBins"]+ sys.argv[2:])
+   elif code1 == "mfg" :
+      subprocess.call([DIR + "/bin/CGmapMethInFragReg"]+ sys.argv[2:])
+   elif code1 == "mstat" :
+      subprocess.call([DIR + "/bin/CGmapStatMeth"]+ sys.argv[2:])
+   elif code1 == "mtr" :
+      subprocess.call([DIR + "/bin/CGmapToRegion"]+ sys.argv[2:])
+   # -- Coverage analysis
+   elif code1 == "oac" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools oac <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     bin      * overall coverage in bins")
+         print("     stat     * overall coverage statistics globally")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "bin" :
+            subprocess.call([DIR + "/bin/ATCGmapCovInBins"]+ sys.argv[3:])
+         elif code2 == "stat" :
+            subprocess.call([DIR + "/bin/ATCGmapStatCov"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools oac -h\" for more information.")
+         #
+      #
+   elif code1 == "mec" :
+      if (argv_len) == 2 or sys.argv[2] in ["-h", "-H", "--help"]:
+         print("Usage:    cgmaptools mec <command> [options]")
+         PrintVersion()
+         print("Commands:")
+         print("     bin      * methylation effective coverage in bins")
+         print("     stat     * methylation effective coverage statistics globally")
+      else :
+         code2 = sys.argv[2]
+         if code2 == "bin" :
+            subprocess.call([DIR + "/bin/CGmapCovInBins"]+ sys.argv[3:])
+         elif code2 == "stat" :
+            subprocess.call([DIR + "/bin/CGmapStatCov"]+ sys.argv[3:])
+         else :
+            print("Wrong parameter. Enter \"cgmaptools mec -h\" for more information.")
+         #
+      #
+   # -- Graph related funtion
+   elif code1 == "lollipop" :
+      subprocess.call([DIR + "/bin/mCLollipop"]+ sys.argv[2:])
+   elif code1 == "heatmap" :
+      subprocess.call([DIR + "/bin/mCBinHeatmap"]+ sys.argv[2:])
+   elif code1 == "fragreg" :
+      subprocess.call([DIR + "/bin/mCFragRegView"]+ sys.argv[2:])
+   elif code1 == "tanghulu" :
+      subprocess.call([DIR + "/bin/mCTanghulu"]+ sys.argv[2:])
+   # -- other utilities
+   elif code1 == "findCCGG" :
+      subprocess.call([DIR + "/bin/FindCCGG"]+ sys.argv[2:])
+   elif code1 == "bed2fragreg" :
+      subprocess.call([DIR + "/bin/FragRegFromBED"]+ sys.argv[2:])
+   else :
+      print("Wrong parameter. Enter \"cgmaptools -h\" for more information.")
+   #
+#
+
+

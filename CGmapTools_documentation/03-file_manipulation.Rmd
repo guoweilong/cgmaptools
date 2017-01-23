@@ -1,0 +1,242 @@
+# File Manipulation
+
+CGmapTool provides multiple utilities to manipulate files in ATCGmap and CGmap format or compressed ATCGbz/CGbz format.
+
+**Usage**: `cgmaptools <convert|fetch|refill|intersect|merge2|mergelist|sort|split|select|> [options]`
+
+
+## convert
+
+- **Description**: File format coversion.
+
+- **Usage**: `cgmaptools convert <command> [options]`
+
+- **Commands**: 
+
+| Commands | From | To |
+| :--------: | :----: | :--: |
+| bam2cgmap | BAM  |CGmap & ATCGmap|
+| atcgmap2atcgbz | ATCGmap| ATCGbz |
+| atcgbz2atcgmap | ATCGbz | ATCGmap|
+| atcgmap2cgmap| ATCGmap| CGmap |
+| cgmap2cgbz | CGamp| CGbz |
+| cgbz2cgmap |CGbz| CGmap |
+| cgmap2wig  | CGmap| WIG |
+
+- **Example**:
+
+    \#1 The commands below will covert bam file to cgmap format.
+    
+    `cgmaptools convert bam2cgmap -b <BAM> -g <genome.fa> -o <prefix>`
+    
+    \#2 This command will convert cgmap to wig format.
+    
+    `cgmaptools convert cgmap2wig [-i <CGmap>] [-w <wig>] [-c <INT> -b <float>]`
+
+> Note: please refer to the help message for usage details using `-h` option.
+
+## fetch
+
+- **Description**: Fastly acess methylation data in specified region.
+
+- **Usage**: `cgmaptools fetch <command> [options]`
+
+- **Commands**:
+
+    **atcgbz**: fetch lines from ATCGbz file.
+    
+    Usage: `cgmaptools fetch atcgbz -b <ATCGbz> -C <CHR> -L <LeftPos> -R <RightPos>`
+    
+    ```
+    -b, --ATCGbz <arg>     input ATCGbz file  
+    -C, --CHR <arg>        specify the chromosome name  
+    -L, --leftPos <arg>    the left position  
+    -R, --rightPos <arg>   the right position
+    ```
+    
+    **cgbz**: fetch lines from CGbz file.
+    
+    Usage: `cgmaptools fetch cgbz -b <CGbz> -C <CHR> -L <LeftPos> -R <RightPos>`
+    
+    ```
+    -b, --CGbz <arg>       intput CGbz file
+    -C, --CHR <arg>        specify the chromosome name
+    -L, --leftPos <arg>    the left position
+    -R, --rightPos <arg>   the right position
+    ```
+
+## refill
+
+- **Description**: Fill the CG/CHG/CHH and CA/CC/CT/CG context to CGmap or ATCGmap files. Other fields will not be affected.
+
+- **Usage**: `cgmaptools refill [-i <CGmap>] -g <genome.fa> [-o output]`
+    
+    ```
+    -i STRING     Input CGmap file (CGmap or CGmap.gz)
+    -g STRING     genome file, FASTA format (gzipped if end with '.gz')
+    -o STRING     Output file name (gzipped if end with '.gz')
+    -0, --0-base  0-based genome if specified [Default: 1-based]
+    ```
+
+- **Example**:
+
+    The input CGmap file, which is lacking C context on the 3rd and 4th columns:
+    
+    ```
+    Chr1    C       3541    -       -       0.0     0       1
+    ```
+    After `refill` processing, the CGmap file would be as below, added C context information:
+    
+    ```
+    Chr1    C       3541    CG      CG      0.0     0       1
+    ```
+
+## intersect
+
+- **Description**: Get the intersection of two CGmap files.
+
+- **Usage**: `cgmaptools intersect [-1 <CGmap_1>] -2 <CGmap_2> [-o <output>]`
+    
+    ```
+    -1 CGmap File  File name, end with .CGmap or .CGmap.gz.
+    -2 CGmap File  standard input if not specified
+    -o OUTFILE     To standard output if not specified. Compressed output if end
+                   with .gz
+    ```
+
+- **Example**: 
+
+    Suppose you have two CGmap file from two samples, the first one is:
+    ```
+    Chr1  C  3541  CG  CG  0.8  4  5
+    ```
+    and the second CGmap file is:
+    ```
+    Chr1  C  3541  CG  CG  0.4  4  10
+    ```
+    After intersction, the output contains sites covered in both CGmap files. And the last three columns of the output are extracted from the second CGmap file:
+    ```
+    Chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10
+    ```
+
+## merge2
+
+- **Description**: Merge two CGmap or ATCGmap files together.
+
+- **Usage**: `cgmaptools merge2 <command> [options]`
+  
+- **Commands**:
+
+    **atcgmap**: merge two ATCGmap files into one.
+    
+    Usage: `cgmaptools merge2 atcgmap -1 <ATCGmap> -2 <ATCGmap>`
+    
+    ```
+    -1	Input, 1st ATCGmap file
+    -2	Input, 2nd ATCGmap file
+    Output to STDOUT in ATCGmap format
+    Tips: Two input files should have the same order of chromosomes
+    ```
+    
+    **cgmap**: merge two CGmap files into one.
+    
+    Usage: `cgmaptools merge2 cgmap -1 <CGmap_1> -2 <CGmap_2> [-o <output>]`
+    
+    ```
+    -1 FILE     File name end with .CGmap or .CGmap.gz
+    -2 FILE     If not specified, STDIN will be used.
+    -o OUTFILE  CGmap, output file. Use STDOUT if omitted (gzipped if end with
+                '.gz').
+    ```
+    
+## mergelist
+
+- **Description**: merge a list of files.
+
+- **Usage**: `cgmaptools mergelist <command> [options]`
+  
+- **Commands**:
+
+    **tomatrix**: Fill methylation levels according to the Index file for CGmap files in list.
+    
+    Usage: `cgmaptools mergelist tomatrix  [-i <index>] -f <IN1,IN2,..> -t <tag1,tag2,..> [-o output]`
+    
+    ```
+    -i FILE     TXT file, index file, use STDIN if omitted
+    -f STRING   List of (input) CGmap files (CGmap or CGmap.gz)
+    -t STRING   List of tags, same order with '-f'
+    -c INT      minimum coverage [default: 1]
+    -C INT      maximum coverage [default: 200]
+    -o STRING   Output file name (gzipped if end with '.gz')
+    ```
+    
+    **tosingle**: merge list of input files into one.
+    
+    Usage: `cgmaptools mergelist tosingle -i f1,f2,..,fn [-o <output>]`
+    
+    ```
+    -i FILE     List of input files; gzipped file ends with '.gz'
+    -f FILE     cgmap or atcgmap [Default: cgmap]
+    -o OUTFILE  To standard output if not specified; gzipped file if end with
+                '.gz'
+    ```
+
+## sort
+
+- **Description**: Sort the input files by chromosome and position.
+
+- **Usage**: `cgmaptools sort [-i <input>] [-c 1] [-p 3] [-o output]`
+
+    ```
+    -i FILE            File name end with .CGmap or .CGmap.gz. 
+                       If not specified, STDIN will be used.
+    -c INT, --chr=INT  The column of chromosome [default: 1]
+    -p INT, --pos=INT  The column of position [default: 2]
+    -o OUTFILE         To standard output if not specified
+    ```
+    
+## split
+
+- **Description**: Split the files by each chromosomes.
+
+- **Usage**: `cgmaptools split -i <input> -p <prefix[.chr.]> -s <[.chr.]suffix>`
+
+    ```
+    -i FILE     Input file, CGmap or ATCGmap foramt, use STDIN when not specified.
+                (gzipped if end with 'gz').
+    -p STRING   The prefix for output file
+    -s STRING   The suffix for output file (gzipped if end with 'gz').
+    ```
+
+## select
+
+- **Description**: Split the files by each chromosomes.
+
+- **Usage**: `cgmaptools select <command> [options]`
+
+- **Commands**:
+
+    **region**: Lines in input CGmap/ATCGmap be selected/excluded by BED file. Strand is NOT considered. Output to STDOUT in same format with input.
+    
+    Usage: `cgmaptools select region [-i <CGmap/ATCGmap>] -r <BED> [-R]`
+    
+    ```
+    -i  Input, CGmap/ATCGmap file; use STDIN if not specified
+        Please use "gunzip -c <input>.gz " and pipe as input for gzipped file.
+        Ex: chr12	G	19898796	...
+    -r  Input, Region file, BED file to store regions
+        At least 3 columns are required
+        Ex: chr12 19898766 19898966 XX XXX XXX
+    -R  [optional] Reverse selection. Sites in region file will be excluded when specified
+    ```
+    
+    **site**: Select lines from input CGmap/ATCGmap in index or reverse.
+    
+    Usage: `cgmaptools select site -i <index> [-f <CGmap/ATCGmap>] [-r] [-o output]`
+    
+    ```
+    -i FILE     Name of Index file required (gzipped if end with '.gz').
+    -r          reverse selected, remove site in index if specified
+    -f STRING   Input CGmap/ATCGmap files. Use STDIN if not specified
+    -o STRING   CGmap, Output file name (gzipped if end with '.gz').
+    ```

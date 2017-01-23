@@ -1,0 +1,67 @@
+# Allele Specific Methylation
+
+In a diploid mammalian genome, DNA methylation is generally symmetric on two parental alleles. Typical exceptions are genoimc imprinting and X chromosome inactivation in female embryos. Besides, allele specific methylation exists along the genome and may potentially have crucial roles in regulating gene expression.
+
+Here, accompanied with SNP calling, we present a newly developed tool implementing analysis of allele specific methylation, searching for both allele specific sites and also regions depending on your needs. 
+
+Aftering SNP calling, we assign mapped reads to the parental genome according to the heterozygous SNPs (htSNPs), as each of the two different allele is inherited from one of the parents. Next, using linkage information, we can evaluate the methylation difference between two groups of cytonsines that linked to the htSNPs, repectively.
+
+```
+NAME
+        ASM -- Allele specific methylated region/site calling
+               Fisher exact test for site calling.
+               Students' t-test for region calling.
+
+SYNOPSIS
+        asm.pl [options] -r <ref.fa> -b <input.bam> -l <snp.vcf>
+
+        -r              Samtools indexed reference genome seqeunce, fasta format. eg. hg19.fa
+                        eg. using samtools to index reference: samtools faidx hg19.fa
+
+        -b              Samtools indexed Bam file to view.
+                        eg. using samtools to index bam file: samtools index <input.bam>
+
+        -l              SNPs in vcf file format.
+
+        The following options are available:
+
+        -s              Path to samtools eg. /home/user/bin/samtools
+                        By defualt, we try to search samtools in your system,
+                        and errors occur if we can not find it.
+                        Better to set the path yourself.
+
+        -o              Output results to specified file. [default: STDOUT]
+
+        -t              C context. [default: CG]
+                        available context: C, CG, CH, CW, CC, CA, CT, CHG, CHH
+
+        -m              Specify calling mode. [default: asr]
+                        alternative: ass
+                        asr: allele specific methylated region
+                        ass: allele specific methylated site
+
+        -d              Minimum number of read for each allele linked site to call ass. [default: 3]
+                        *ass specific.
+
+        -n              Minimum number of C site each allele linked to call asr. [default: 2]
+                        *asr specific.
+
+        -D              Minimum read depth for C site to call methylation level when calling asr. [default: 1]
+                        *asr specific.
+
+        -L              Low methylation level threshold. [default: 0.2]
+                        The allele linked region[or site] with low methylation level should be no greater than this threshold.
+
+        -H              High methylation level threshold. [default: 0.8]
+                        The allele linked region[or site] with high methylation level should be no less than this threshold.
+
+        -q              Adjusted p value using Benjamini & Hochberg (1995) ("BH" or its alias "fdr"). [default: 0.05]
+
+        -h              Help message.
+```
+
+**Example (figure)**:
+
+```{r, echo=FALSE, out.width="60%", fig.align='center', fig.cap="Allele specific methylation"}
+knitr::include_graphics(path = "./asm_example.png")
+```
