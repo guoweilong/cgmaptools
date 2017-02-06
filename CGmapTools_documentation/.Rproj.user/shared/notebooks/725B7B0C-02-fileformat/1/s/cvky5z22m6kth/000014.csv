@@ -1,5 +1,0 @@
-"0","atcgmap.format <- read.csv(""atcgmap.format.csv"")
-"
-"2","Error in read.table(file = file, header = header, sep = sep, quote = quote,  : 
-  more columns than column names
-"

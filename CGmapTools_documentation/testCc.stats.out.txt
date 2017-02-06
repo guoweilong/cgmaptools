@@ -1,2 +1,0 @@
-TotalCpGs(1X);TotalUnique(1X);MeanCov(1X);TotalCpGs(3X);TotalUnique(3X);MeanCov(3X);TotalCpGs(5X);TotalUnique(5X);MeanCov(5X)
-1926;180;10.70;1850;123;15.04;1797;108;16.64
