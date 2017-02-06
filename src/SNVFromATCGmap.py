@@ -484,14 +484,14 @@ def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
     CHR = CHR.replace("chr", "").replace("CHR", "").replace("Chr", "")
     ID = "."
     vague = False
-    genotype = GN.replace('T/C', 'R').replace('A/G', 'Y')
+    genotype = GN.replace('T/C', 'Y').replace('A/G', 'R')
     ALT_lst = genotype.split(",")
     if 'R' in ALT_lst :
         vague = True
-        GU='T/C'
+        GU='A/G'
     elif 'Y' in ALT_lst :
         vague = True
-        GU='A/G'
+        GU='T/C'
     #
     ALT_lst.remove(REF) if REF in ALT_lst else None
     #print ALT_lst
