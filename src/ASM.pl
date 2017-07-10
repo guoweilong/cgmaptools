@@ -141,22 +141,22 @@ my %Ctype_support = (
 my $SNP_effective_linked;
 
 ## SNPs
-my $format_column;
+my $format_column = 8;
 open IN,"$vcf" or die ("No such file $vcf.\n");
 while(<IN>){
     chomp;
     next if (/^##/); # skip meta description
 
-    if (/^#CHR/) { # header line
-        my @line = split /\s+/,$_;
-        foreach my $i (0..$#line){
-            if ( $line[$i] eq "FORMAT" ){
-                $format_column = $i;
-                last;
-            }
-        }
-        next;
-    }
+    #if (/^#CHR/) { # header line
+    #    my @line = split /\s+/,$_;
+    #    foreach my $i (0..$#line){
+    #        if ( $line[$i] eq "FORMAT" ){
+    #            $format_column = $i;
+    #            last;
+    #        }
+    #    }
+    #    next;
+    #}
 
     ## data lines
     my @a = split /\s+/,$_;
@@ -169,7 +169,7 @@ while(<IN>){
     my @alleles = ($ref); # 0 allele is reference 
     my $indel_flag = 0; # indel flag
     foreach my $nt ( split /,/,$alt){
-        if ( length($nt) != 1){ # scan indel
+        if ( length($nt) != 1 or $nt !~ /[ATCG]/){ # scan indel or unresolved sites
             $indel_flag = 1;
             last;
         }
@@ -178,7 +178,7 @@ while(<IN>){
     next if ( $indel_flag == 1 ); # only retian SNP site
 
     # genotype
-    my @gt_index = (split /[:|\/]/,$gt)[0..1];
+    my @gt_index = (split /[:|\/|=]/,$gt)[0..1];
     my ($allele1, $allele2) = ( uc $alleles[ $gt_index[0] ], uc $alleles[ $gt_index[1] ] );
     next if ( $allele1 eq $allele2 ); # only retain heterozygous SNP site (htSNP)
 
