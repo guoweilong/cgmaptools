@@ -154,7 +154,7 @@ def main():
     parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
                                                                   "Will not generate figure if not specified",
                       default=None, metavar="FILE")
-    parser.add_option("-H", dest="fig_height", default=1, metavar="FLOAT",
+    parser.add_option("-H", dest="fig_height", default=4, metavar="FLOAT",
                       help="Scale ratio for the Height of figure [Default: %default]")
     parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
                       default=8, metavar="FLOAT")

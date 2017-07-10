@@ -110,7 +110,7 @@ if(mid.color == ""){
 high.color <- arguments$high.color
 num.color <- arguments$num.color
 
-data <- read.table(file = infile, header = T, stringsAsFactors = F)
+data <- read.table(file = infile, header = T, stringsAsFactors = F, check.names = FALSE)
 row.names(data) <- data[,1]
 data[,1] <- NULL
 
