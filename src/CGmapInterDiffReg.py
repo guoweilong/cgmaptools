@@ -110,7 +110,9 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
                 mean_1 = average(lst_1)
                 mean_2 = average(lst_2)
                 [Tstat, PV] = ttest_ind( lst_1, lst_2 )
-                print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f" % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2) )
+                N_site = len(lst_1)
+                print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
+                       % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
             # start a new fragment
             lst_1 = [ float(methyl_1) ]
             lst_2 = [ float(methyl_2) ]
@@ -128,7 +130,9 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
         mean_1 = average(lst_1)
         mean_2 = average(lst_2)
         [Tstat, PV] = ttest_ind( lst_1, lst_2 )
-        print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f" % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2) )
+        N_site = len(lst_1)
+        print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
+               % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
     #
     if IN is not sys.stdin:
         IN.close()
@@ -143,13 +147,14 @@ def main():
             "Description: \n" \
             "  Get the differentially methylated sites by Fisher's exact test.\n" \
             "Author:       Guo, Weilong; guoweilong@126.com; \n" \
-            "Last Updated: 2017-01-20\n" \
+            "Last Updated: 2017-08-12\n" \
             "Input Format, same as the output of CGmapIntersect.py:\n" \
             "   chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10\n" \
             "Output Format, Ex:\n" \
-            "   chr1	1004572	1004574	inf	    0.00e+00	0.1100	0.0000\n" \
-            "   chr1	1009552	1009566	-0.2774	8.08e-01	0.0200	0.0300\n" \
-            "   chr1	1063405	1063498	0.1435	8.93e-01	0.6333	0.5733\n"
+            "  #chr	    start	end	    t	    pv	        mC_A	mC_B    N_site\n" \
+            "   chr1	1004572	1004574	inf	    0.00e+00	0.1100	0.0000  20\n" \
+            "   chr1	1009552	1009566	-0.2774	8.08e-01	0.0200	0.0300  15\n" \
+            "   chr1	1063405	1063498	0.1435	8.93e-01	0.6333	0.5733  5\n"
     #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmapInter", help="File name for CGmapInter, STDIN if omitted", metavar="FILE")
