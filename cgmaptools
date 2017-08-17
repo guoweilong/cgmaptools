@@ -107,6 +107,7 @@ else :
          print("     cgmap2cgbz       CGamp   => CGbz")
          print("     cgbz2cgmap       CGbz    => CGmap")
          print("     cgmap2wig        CGmap   => WIG")
+         print("     bismakr2cgmap    Bismark => CGmap")
       else :
          code2 = sys.argv[2]
          if code2 == "bam2cgmap" :
@@ -123,6 +124,8 @@ else :
             subprocess.call([DIR + "/bin/CGmapToCGbz"]+ sys.argv[3:])
          elif code2 == "atcgmap2cgmap" :
             subprocess.call([DIR + "/bin/ATCGmapToCGmapWig"]+ sys.argv[3:])
+         elif code2 == "bismark2cgmap" :
+            subprocess.call([DIR + "/bin/BismarkToCGmap"]+ sys.argv[3:])
          else :
             print("Wrong parameter. Enter \"cgmaptools convert -h\" for more information.")
          #
