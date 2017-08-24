@@ -144,7 +144,8 @@ AllCases  = {
     "A,A/G" : ["A", "A,G", "G,A"],
     "T,A/G" : ["T,A", "T,G", "A,T", "G,T"],
     "C,A/G" : ["C,A", "C,G", "A,C", "G,C"],
-    "G,A/G" : ["G", "G,A", "A,G"]
+    "G,A/G" : ["G", "G,A", "A,G"],
+    "N" : []
 }
 
 UniqCases  = {
@@ -173,7 +174,8 @@ UniqCases  = {
     "A,A/G" : ["A", "A,G"],
     "T,A/G" : ["T,G", "A,T"],
     "C,A/G" : ["A,C", "C,G"],
-    "G,A/G" : ["G", "A,G"]
+    "G,A/G" : ["G", "A,G"],
+    "N" : []
 }
 
 #
