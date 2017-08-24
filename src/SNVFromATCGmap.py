@@ -654,7 +654,7 @@ def main():
             "      (aka SNVFromATCGmap)\n" \
             "Description: Predict the SNV from ATCGmap file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last update: 2016-12-07\n" \
+            "Last update: 2017-08-24\n" \
             "Output format example:\n" \
             "   #chr  nuc  pos    ATCG_watson  ATCG_crick  predicted_nuc  p_value\n" \
             "   chr1  G    4752   17,0,0,69    0,0,0,0     A,G            9.3e-07\n" \

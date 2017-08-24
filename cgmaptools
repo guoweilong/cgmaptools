@@ -44,7 +44,7 @@ import subprocess
 argv_len = len(sys.argv)
 
 def PrintVersion() :
-   print("Version:  0.0.2")
+   print("Version:  0.0.3")
 #
 
 if (argv_len) == 1  or sys.argv[1] in ["-h", "-H", "--help"]:
