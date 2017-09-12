@@ -33,7 +33,7 @@ option_list <- list(
   make_option(c("-i", "--infile"), dest = "infile", default = "",
               help="input file"),
   make_option(c("-a", "--annotation"), dest = "annofile", default = "",
-              help="[opt] sample name"),
+              help="[opt] annotation file name, refFlat format"),
   make_option(c("-o", "--outfile"), dest = "outfile", default = "",
               help = "[opt] output file"),
   make_option(c("-f", "--format"), dest = "format", default = "pdf",
@@ -44,43 +44,52 @@ option_list <- list(
               help = "[opt] Right-most position"),
   make_option(c("-c", "--chr"), dest = "chr", default = "",
               help = "[opt] chromosome name"),
-  make_option(c("-t", "--title"), dest = "title", default = "", 
-              help = "[opt] text shown on title"),
-  make_option(c("-w", "--width"), dest = "fig_width", default = 8, 
-              help = "[opt] width (in inch). Default: 8."),
-  make_option(c("--height"), dest = "fig_height", default = 8, 
-              help = "[opt] height (in inch). Default: 8."),
   make_option(c("-s", "--site"), dest = "sitefile", default = "", 
               help = "[opt] file of site to be marked"),
   make_option(c("-b", "--bed"), dest = "bedfile", default = "", 
-              help = "[opt] BED file for region to be markered")
+              help = "[opt] BED file for region to be markered"),
+  make_option(c("-t", "--title"), dest = "title", default = "",
+              help = "[opt] text shown on title"),
+  make_option(c("-w", "--width"), dest = "fig_width", default = 8,
+              help = "[opt] width (in inch). Default: 8."),
+  make_option(c("--height"), dest = "fig_height", default = 8,
+              help = "[opt] height (in inch). Default: 8.")
 )
 #
 parser <- OptionParser(usage = "cgmaptools lollipop [options] file",
      option_list=option_list, description = "      (aka mCLollipop) \
 Description: Plot local mC level for multiple samples \
 Contact:     Guo, Weilong; guoweilong@126.com\
-Last Update: 2016-12-07 \
+Last Update: 2017-09-12 \
 Example: \
-  %prog [-i input] -o gene.png \
--Input Format: \
-    >= 3 columns, 1st line is the header, using R color name or \"NaN\". \
+    mCLollipop [-i input] -o gene.png \
+-Input Format (-i)\
     Can be output by \"cgmaptools mergelist tomatrix\". Use STDIN if omitted.\
-  Example: \
-   chr     pos     tag1    tag2    tag3\
-   Chr1    111403  0.30    nan     0.80\
-   Chr1    111406  0.66    0.40    0.60\
--Site File foramt \
-  Example: \
-    chr  pos  E_vs_EMT	EMT_vs_M	E_vs_M\
-    chr1	13116801	NaN	NaN	darkgreen\
-    chr1	13116899	NaN	red	NaN\
--BED File Format:\
-    the first 4 columns are required\
-  Example: \
-    chr1  213941196  213942363  REGION-1 \
-    chr1  213942363  213943530  REGION-2 \
-              "
+    The 1st line (header line) is required.\
+    Example: \
+       chr     pos     tag1    tag2    tag3\
+       Chr1    111403  0.30    nan     0.80\
+       Chr1    111406  0.66    0.40    0.60\
+-Site File (-s)\
+    >= 3 columns, the 1st line (header line) is required, using R color name or \"NaN\". \
+    To show specific sites (such as DMS, SNV) at the bottom as triangles. \
+    Example: \
+        chr   pos       A_vs_B  B_vs_C  A_vs_C\
+        chr1  13116801  NaN     NaN     darkgreen\
+        chr1  13116899  NaN     red     NaN\
+-Region File (-b)\
+    the first 4 columns are required.\
+    To show specific region (such as DMR, Repeats) at the bottom as blocks. \
+    Example: \
+        chr1  213941196  213942363  hyper-DMR \
+        chr1  213942363  213943530  hypo-DMR \
+    #   chr   left       right      region-description
+-annotation file (-a), refFlat Format:\
+    To show the structure of genes/transcripts. One-line in annotation, one-track in figure. \
+    Example: \
+        GeneA   TransA  chr2  +	     1000      2000       1100    1950     3     1100,1500,1700,  1200,1580,1950,\
+    #   GeneID  TrandID ChrID Strand TransLeft TransRight CDSLeft CDSRight nExon ExonLefts        ExonRights\
+    "
 )
 #
 arguments <- parse_args(parser)
