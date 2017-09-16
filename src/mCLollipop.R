@@ -27,6 +27,14 @@
 
 # Guo, Weilong; guoweilong@126.com; 2015-05-07
 
+is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+if(!is.installed("optparse")){
+  warning("Detect package \"optparse\" is not installed in your R enviroment.")
+  warning("Trying to install the \"optparse\" package.")
+  warning("If failed, please try to install it mannually.")
+  install.packages("optparse")
+}
+
 # Argument
 suppressPackageStartupMessages(library("optparse"))
 option_list <- list(
@@ -60,7 +68,7 @@ parser <- OptionParser(usage = "cgmaptools lollipop [options] file",
      option_list=option_list, description = "      (aka mCLollipop) \
 Description: Plot local mC level for multiple samples \
 Contact:     Guo, Weilong; guoweilong@126.com\
-Last Update: 2017-09-12 \
+Last Update: 2017-09-16 \
 Example: \
     mCLollipop [-i input] -o gene.png \
 -Input Format (-i)\

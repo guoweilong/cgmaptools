@@ -23,6 +23,21 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+
+is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+if(!is.installed("RColorBrewer")){
+  warning("Detect package \"RColorBrewer\" is not installed in your R enviroment.")
+  warning("Trying to install the \"RColorBrewer\" package.")
+  warning("If failed, please try to install it mannually.")
+  install.packages("RColorBrewer")
+}
+if(!is.installed("optparse")){
+  warning("Detect package \"optparse\" is not installed in your R enviroment.")
+  warning("Trying to install the \"optparse\" package.")
+  warning("If failed, please try to install it mannually.")
+  install.packages("optparse")
+}
+
 ## libraries
 suppressPackageStartupMessages(library(RColorBrewer))
 suppressPackageStartupMessages(library(optparse))
@@ -49,7 +64,7 @@ parser <- OptionParser(usage = "cgmaptools fragreg [options]",
                        option_list=option_list, description = "      (aka mCFragRegView) \
 Description: Plot methylation dynamics of target and flanking region for multiple samples \
 Contact:     Zhu, Ping; pingzhu.work@gmail.com\
-Last update: 2016-12-07\
+Last update: 2017-09-16\
 Example: \
   FragRegView.R -i input -r 5 -o genebody.pdf \
 -Input File Format: \

@@ -26,9 +26,19 @@
 
 
 is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+if(!is.installed("optparse")){
+  warning("Detect package \"optparse\" is not installed in your R enviroment.")
+  warning("Trying to install the \"optparse\" package.")
+  warning("If failed, please try to install it mannually.")
+  install.packages("optparse")
+}
 if(!is.installed("gplots")){
+  warning("Detect package \"gplots\" is not installed in your R enviroment.")
+  warning("Trying to install the \"gplots\" package.")
+  warning("If failed, please try to install it mannually.")
   install.packages("gplots")
 }
+
 ## libraries
 suppressPackageStartupMessages(library(gplots))
 suppressPackageStartupMessages(library(optparse))
@@ -65,7 +75,7 @@ parser <- OptionParser(usage = "cgmaptools heatmap [options]",
                        option_list=option_list, description = "      (aka mCBinHeatmap)\
 Description: Plot methylation dynamics of target region for multiple samples [heatmap]\
 Contact:     Zhu, Ping; pingzhu.work@gmail.com\
-Last update: 2016-12-07\
+Last update: 2017-09-16\
 Example: \
   mCBinHeatmap.R -i input -m white -o chr1.xxx-xxx.pdf \
   -Input File Format: \
