@@ -166,7 +166,11 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     #
     contrib_mC = [i*j for i,j in zip(mean_mC, count_C)]
     contrib_mC_sum = contrib_mC[0]
-    contrib_mC = [i/contrib_mC_sum for i in contrib_mC]
+    if contrib_mC_sum not in [0, float('nan')] :
+        contrib_mC = [i/contrib_mC_sum for i in contrib_mC]
+    else :
+        contrib_mC = [float('nan') for i in contrib_mC]
+    #
     # -----------------
     # stat summary for BulkMethyl
     print "\t".join(["MethStat", "context"] + context_lst)
