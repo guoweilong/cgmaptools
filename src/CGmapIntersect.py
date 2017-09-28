@@ -76,7 +76,7 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
         else :
             IN_1 = open(fn1, 'r')
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn1
+        sys.stderr.write("[Error] File %s cannot be open." % fn1)
         exit(-1)
 
     try:
@@ -88,24 +88,27 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
         else :
             IN_2 = sys.stdin
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn2
+        sys.stderr.write("[Error] File %s cannot be open." % fn2)
         exit(-1)
-
+    #
     line_1 = IN_1.readline()
     line_2 = IN_2.readline()
-
+    #
     while line_1 and line_2 :
         try :
             chr_1, nuc_1, pos_1, pattern_1, dinuc_1, methyl_1, NmC_1, NC_1 = line_1.strip().split()
         except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn1)
-            exit(-1)
+            sys.stderr.write("[Error] File [ %s ] may have wrong number of columns." % fn1)
+            #exit(-1)
+            line_1 = IN_1.readline()
+            continue
         #
         try :
             chr_2, nuc_2, pos_2, pattern_2, dinuc_2, methyl_2, NmC_2, NC_2 = line_2.strip().split()
         except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn2)
-            exit(-1)
+            sys.stderr.write("[Error] File [ %s ] may have wrong number of columns." % fn2)
+            line_2 = IN_2.readline()
+            continue
         #
         if chr_1 < chr_2 :
             line_1 = IN_1.readline()
@@ -118,7 +121,7 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
                 line_2 = IN_2.readline()
             else :
                 if nuc_1 != nuc_2 or pattern_1 != pattern_2 or dinuc_1 != dinuc_2 :
-                    sys.stderr.write("Warning: Inconsistent information:")
+                    sys.stderr.write("[Warning] Inconsistent information:")
                     sys.stderr.write("%s | %s" % (line_1, line_2) )
                 #
                 if CheckCtx( pattern_1, dinuc_1, ctx) :
@@ -143,8 +146,8 @@ def main():
             "      (aka CGmapIntersect)\n" \
             "Description: \n" \
             "    Get the intersection of two CGmap files." \
-            "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-08-18\n" \
+            "Contact: Guo, Weilong; guoweilong@126.com\n" \
+            "Last Update: 2017-09-28\n" \
             "Output Format:\n" \
             "    Chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10\n" \
             "When 1st CGmap file is:\n" \

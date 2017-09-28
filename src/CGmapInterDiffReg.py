@@ -96,7 +96,15 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
     pre_chr = ""
     #
     for line in IN:
-        chr, nuc, pos, pattern, dinuc, methyl_1, NmC_1, NC_1, methyl_2, NmC_2, NC_2 = line.strip().split()
+        if len(line) == 0 :
+            continue
+        #
+        try:
+            chr, nuc, pos, pattern, dinuc, methyl_1, NmC_1, NC_1, methyl_2, NmC_2, NC_2 = line.strip().split()
+        except ValueError:
+            sys.stderr.write("An invalid line is skipped: %s" % line)
+            continue
+        #
         NmC_1, NC_1, NmC_2, NC_2 = [int(NmC_1), int(NC_1), int(NmC_2), int(NC_2)]
         # Coverage not valid
         if (NC_1 < minCov or NC_2 < minCov) or (NC_1 > maxCov or NC_2 > maxCov) or ((NmC_1+NmC_2)==0) :
@@ -145,16 +153,16 @@ def main():
     usage = "Usage: cgmaptools dmr [-i <CGmapInter>] [-m 5 -M 100] [-o output]\n" \
             "      (aka CGmapInterDiffReg)\n" \
             "Description: \n" \
-            "  Get the differentially methylated sites by Fisher's exact test.\n" \
-            "Author:       Guo, Weilong; guoweilong@126.com; \n" \
-            "Last Updated: 2017-08-12\n" \
+            "  Get the differentially methylated regions using dynamic fragment strategy.\n" \
+            "Author:  Guo, Weilong; guoweilong@126.com; \n" \
+            "Last Updated: 2017-09-28\n" \
             "Input Format, same as the output of CGmapIntersect.py:\n" \
             "   chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10\n" \
             "Output Format, Ex:\n" \
-            "  #chr	    start	end	    t	    pv	        mC_A	mC_B    N_site\n" \
-            "   chr1	1004572	1004574	inf	    0.00e+00	0.1100	0.0000  20\n" \
-            "   chr1	1009552	1009566	-0.2774	8.08e-01	0.0200	0.0300  15\n" \
-            "   chr1	1063405	1063498	0.1435	8.93e-01	0.6333	0.5733  5\n"
+            "  #chr	    start   end	    t       pv          mC_A    mC_B    N_site\n" \
+            "   chr1    1004572 1004574 inf     0.00e+00    0.1100	0.0000  20\n" \
+            "   chr1    1009552 1009566 -0.2774 8.08e-01    0.0200	0.0300  15\n" \
+            "   chr1    1063405 1063498 0.1435  8.93e-01    0.6333	0.5733  5\n"
     #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmapInter", help="File name for CGmapInter, STDIN if omitted", metavar="FILE")
