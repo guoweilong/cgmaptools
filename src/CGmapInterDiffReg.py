@@ -182,6 +182,7 @@ def main():
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
+        #
     #
     minCov = int(options.minCov)
     maxCov = int(options.maxCov)
@@ -191,7 +192,8 @@ def main():
     #
     CGmapInterDiffRegion (options.CGmapInter, minCov, maxCov, minStep, maxStep, minNSite)
     #
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

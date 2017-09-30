@@ -26,8 +26,8 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import sys
-import os
-import os.path
+#import os
+#import os.path
 
 
 import gzip
@@ -52,8 +52,10 @@ def ATCGmapCovInBins (fn, step, filetype = 'png', prefix = '', title = '',
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         else :
             IN = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", fn
         exit(-1)
@@ -82,6 +84,7 @@ def ATCGmapCovInBins (fn, step, filetype = 'png', prefix = '', title = '',
                 if preChr != "" :
                     print("%s\t%d\t%d\tna" % (preChr, posL, posR))
                     cov_list.append(float('nan'))
+                #
             else :
                 chr_end_list.append(len(cov_list))
                 mean_cov = average(bin_list)
@@ -94,6 +97,7 @@ def ATCGmapCovInBins (fn, step, filetype = 'png', prefix = '', title = '',
             posL = 1
             posR = step
             preChr = chr
+        #
         if pos <= posR :
             bin_list.append(COV)
         else :
@@ -166,22 +170,26 @@ def main():
             "   chr2    1       5000    35.0755\n" \
             "   chr2    5001    10000   40.0027\n" \
             "   chr3    1       5000    na"
+    #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="ATCGmap", help="File name end with .ATCGmap or .ATCGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
-
+    parser.add_option("-i", dest="ATCGmap",
+                      help="File name end with .ATCGmap or .ATCGmap.gz. "
+                           "If not specified, STDIN will be used.", metavar="FILE")
     parser.add_option("-B", dest="bin_size", default=5000000,
                       help="Define the size of bins [Default: %default]")
-    parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
-                                                                  "Will not generate figure if not specified",
+    parser.add_option("-f", "--figure-type", dest="FigType",
+                      help="png, pdf, eps. Will not generate figure if not specified",
                       default=None, metavar="FILE")
     parser.add_option("-H", dest="fig_height", default=4, metavar="FLOAT",
                       help="Height of figure in inch [Default: %default]")
-    parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
+    parser.add_option("-W", dest="fig_width",
+                      help="Width of figure in inch [Default: %default]",
                       default=8, metavar="FLOAT")
-    parser.add_option("-p", dest="prefix", help="Prefix for output figures",
+    parser.add_option("-p", dest="prefix",
+                      help="Prefix for output figures",
                       default="", metavar="STRING")
-    parser.add_option("-t", "--title", dest="title", help="title in the output figures",
+    parser.add_option("-t", "--title", dest="title",
+                      help="title in the output figures",
                       default="", metavar="STRING")
     #
     (options, args) = parser.parse_args()

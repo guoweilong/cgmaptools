@@ -58,34 +58,37 @@ def CGmapToWig (CGmap_fn, WIG_fn, coverage=1, base=0):
                 CGmap = gzip.open(CGmap_fn, "rb")
             else :
                 CGmap = open(CGmap_fn, 'r')
+            #
         else :
             CGmap = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
         exit(-1)
-
+    #
     try:
         if WIG_fn is not None:
             if WIG_fn.endswith(".gz") :
                 WIG = gzip.open(WIG_fn, "wb")
             else :
                 WIG = open(WIG_fn, 'w')
+            #
         else :
             WIG = sys.stdout
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", WIG_fn
         exit(-1)
-
+    #
     cur_chr = ""
-
     line = CGmap.readline()
-
     while line:
         try :
             chr, nuc, pos, pattern, dinuc, methyl, un_C, all_C = line.strip().split()
         except ValueError :
             print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % CGmap_fn)
             exit(-1)
+        #
         if cur_chr != chr :
             cur_chr = chr
             WIG.write("variableStep chrom=" + chr + "\n")
@@ -95,16 +98,18 @@ def CGmapToWig (CGmap_fn, WIG_fn, coverage=1, base=0):
                 WIG.write("%s\t%.2f\n" % (pos, methyl) )
             elif nuc == "G":
                 WIG.write("%s\t-%.2f\n" % (pos, methyl) ) # Negative value for Minus strand
-
+            #
+        #
         line = CGmap.readline()
-
+    #
     # End for reading files
     if WIG is not sys.stdout  :
         WIG.close()
-
+    #
     if CGmap is not sys.stdin:
         CGmap.close()
-
+    #
+#
 
 from optparse import OptionParser
 
@@ -115,20 +120,27 @@ def main():
             "Description: Generate WIG file from CGmap.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
             "Last Update: 2016-12-07"
+    #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmap", default=None, help="Input file name end with .CGmap or .CGmap.gz, "
-                                                 "use STDIN when not specified", metavar="FILE")
-    parser.add_option("-w", dest="WIG", default=None, help="Output, use STDOUT if omitted "
-                                                           "(gzipped if end with \'.gz\')", metavar="FILE")
-
-    parser.add_option("-c", dest="coverage", default=1, help="The minimum coverage of the sites [default: %default]", metavar="INT")
-    parser.add_option("-b", dest="base", default=0, help="The base for adding to distinguish '0' and 'Nan' [default: %default]", metavar="FLOAT")
-
+    parser.add_option("-i", dest="CGmap", default=None,
+                      help="Input file name end with .CGmap or .CGmap.gz, "
+                           "use STDIN when not specified", metavar="FILE")
+    parser.add_option("-w", dest="WIG", default=None,
+                      help="Output, use STDOUT if omitted (gzipped if end with \'.gz\')",
+                      metavar="FILE")
+    parser.add_option("-c", dest="coverage", default=1,
+                      help="The minimum coverage of the sites [default: %default]",
+                      metavar="INT")
+    parser.add_option("-b", dest="base", default=0,
+                      help="The base for adding to distinguish '0' and 'Nan' [default: %default]",
+                      metavar="FLOAT")
+    #
     (options, args) = parser.parse_args()
-
+    #
     CGmapToWig(options.CGmap, options.WIG, options.coverage, options.base )
-
+    #
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

@@ -145,6 +145,7 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
                 while posR < pos :
                     if reg_id >= len(meth_DB[ chr_idx[preChr] ]) :
                         meth_DB[chr_idx[preChr]].append([float('nan') for i in range(N_file)])
+                    #
                     meth_DB[chr_idx[preChr]][reg_id][fn_id] = average(bin_list)
                     bin_list = []
                     posL = posR+1

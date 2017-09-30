@@ -182,6 +182,7 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     for i in xrange(NQuant) :
         print "\t".join(["quant_mC ", "(%.2f,%.2f]"%(float(i)/NQuant, float(i+1)/NQuant)]
                         + ["%d"%(j[i+1]) for j in quant_mC])
+        #
     for chr in chr_lst :
         print "\t".join(["mean_mC_byChr", chr] + ["%.4f"%(sum_mC_byChr[chr][i]/count_mC_byChr[chr][i])
                                         if count_mC_byChr[chr][i]>0 else "NaN" for i in xrange( len(context_lst) ) ])
@@ -244,9 +245,9 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
         plt.clf()
     #
 #
-
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools mstat [-i <CGmap>]  \n" \
@@ -266,26 +267,31 @@ def main():
             "   mean_mC_byChr   chr10   0.0917  0.4106  0.0758  0.0421  0.0968  0.0097  0.0349  0.0502  0.0655"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmap", help="File name end with .CGmap or .CGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
+    parser.add_option("-i", dest="CGmap",
+                      help="File name end with .CGmap or .CGmap.gz. "
+                           "If not specified, STDIN will be used.", metavar="FILE")
     parser.add_option("-c", dest="coverage", default=10,
                       help="The minimum coverage for site selection [Default: %default]")
-    parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
-                                                                 "Will not generate figure if not specified",
+    parser.add_option("-f", "--figure-type", dest="FigType",
+                      help="png, pdf, eps. Will not generate figure if not specified",
                       default = None, metavar="FILE")
     parser.add_option("-H", dest="fig_height", default=3, metavar="FLOAT",
                       help="Height of figure in inch [Default: %default]")
-    parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
+    parser.add_option("-W", dest="fig_width",
+                      help="Width of figure in inch [Default: %default]",
                       default=8, metavar="FLOAT")
-    parser.add_option("-p", dest="prefix", help="Prefix for output figures",
+    parser.add_option("-p", dest="prefix",
+                      help="Prefix for output figures",
                       default = "", metavar="STRING")
-    parser.add_option("-t", "--title", dest="title", help="title in the output figures",
+    parser.add_option("-t", "--title", dest="title",
+                      help="title in the output figures",
                       default="", metavar="STRING")
     #
     (options, args) = parser.parse_args()
     CGmapStatMeth(options.CGmap, int(options.coverage), options.FigType,
                   options.prefix, options.title,
                    float(options.fig_height), float(options.fig_width))
+    #
 #
 
 # ===========================================

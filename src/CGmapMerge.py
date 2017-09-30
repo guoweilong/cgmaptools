@@ -44,17 +44,21 @@ def MergeCGmap (fn1, fn2):
             IN_1 = gzip.open(fn1, 'rb')
         else :
             IN_1 = open(fn1, 'r')
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", fn1
         exit(-1)
+    #
     try:
         if fn2 :
             if fn2.endswith(".gz") :
                 IN_2 = gzip.open(fn2, 'rb')
             else :
                 IN_2 = open(fn2, 'r')
+            #
         else :
             IN_2 = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", fn2
         exit(-1)
@@ -73,6 +77,7 @@ def MergeCGmap (fn1, fn2):
             elif chr_1 != chr_pre :
                 print line_2.strip()
                 line_2 = IN_2.readline()
+            #
         else : # chr_1 == chr_2
             chr_pre = chr_1
             if int(pos_1) < int(pos_2) :
@@ -85,13 +90,15 @@ def MergeCGmap (fn1, fn2):
                 if nuc_1 != nuc_2 or pattern_1 != pattern_2 or dinuc_1 != dinuc_2 :
                     sys.stderr.write("Warning: Inconsistent information:")
                     sys.stderr.write("%s | %s" % (line_1, line_2) )
-
+                #
                 NmC = int(NmC_1) + int(NmC_2)
                 NC = int(NC_1) + int(NC_2)
                 methyl = float(NmC)/NC
                 print "\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1, "%.2f" % methyl, "%d" % NmC, "%d" % NC])
                 line_1 = IN_1.readline()
                 line_2 = IN_2.readline()
+            #
+        #
     #
     # End for reading files
     while line_1 :
@@ -126,25 +133,25 @@ def main():
     parser.add_option("-o", dest="outfile", default=None,
                       help="CGmap, output file. Use STDOUT if omitted "
                            "(gzipped if end with \'.gz\').")
-
+    #
     (options, args) = parser.parse_args()
-    
+    #
     if (options.CGmap_1 is None) :
         parser.print_help()
         exit(-1)
-
+    #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
-
-
+        #
+    #
     MergeCGmap(options.CGmap_1, options.CGmap_2)
-
+#
 
 
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

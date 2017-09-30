@@ -26,8 +26,8 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import sys
-import os
-import os.path
+#import os
+#import os.path
 
 """
 Chr1    C       3541    CG      CG      0.0     0       1
@@ -58,8 +58,10 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         else :
             IN = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", fn
         exit(-1)
@@ -188,12 +190,13 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
         #
         if prefix != "" :
             prefix = prefix + "."
+        #
         plt.savefig(prefix + "MethInBins."+filetype, format=filetype)
         plt.clf()
     #
 #
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools mbin [-i <CGmap>] [-c 10 --CXY 5 -B 5000000] \n" \
@@ -209,27 +212,31 @@ def main():
             "   chr3    1       5000    na"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmap", help="File name end with .CGmap or .CGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
+    parser.add_option("-i", dest="CGmap",
+                      help= "File name end with .CGmap or .CGmap.gz. "
+                            "If not specified, STDIN will be used.", metavar="FILE")
     parser.add_option("-B", dest="bin_size", default=5000000,
-                      help="Define the size of bins [Default: %default]")
+                      help= "Define the size of bins [Default: %default]")
     parser.add_option("-c", dest="coverage", default=10,
-                      help="The minimum coverage for site selection [Default: %default]")
+                      help= "The minimum coverage for site selection [Default: %default]")
     parser.add_option("-C", "--context", dest="context", default="",
-                      help="specific context: CG, CH, CHG, CHH, CA, CC, CT, CW \
+                      help= "specific context: CG, CH, CHG, CHH, CA, CC, CT, CW \
                             use all sites if not specified")
     parser.add_option("--cXY", dest="coverageXY", default=10,
-                      help="Coverage for chrX/Y should be half that of autosome for male [Default: same with -c]")
-    parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
-                                                                  "Will not generate figure if not specified",
+                      help= "Coverage for chrX/Y should be half that of autosome for male [Default: same with -c]")
+    parser.add_option("-f", "--figure-type", dest="FigType",
+                      help="png, pdf, eps. Will not generate figure if not specified",
                       default=None)
     parser.add_option("-H", dest="fig_height", default=4, metavar="FLOAT",
                       help="Height of figure in inch [Default: %default]")
-    parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
+    parser.add_option("-W", dest="fig_width",
+                      help="Width of figure in inch [Default: %default]",
                       default=8, metavar="FLOAT")
-    parser.add_option("-p", dest="prefix", help="Prefix for output figures",
+    parser.add_option("-p", dest="prefix",
+                      help="Prefix for output figures",
                       default="", metavar="STRING")
-    parser.add_option("-t", "--title", dest="title", help="title in the output figures",
+    parser.add_option("-t", "--title", dest="title",
+                      help="title in the output figures",
                       default="", metavar="STRING")
     #
     (options, args) = parser.parse_args()

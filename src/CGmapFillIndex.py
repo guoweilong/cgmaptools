@@ -50,8 +50,10 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
                 INDEX = gzip.open(index, 'rb')
             else :
                 INDEX = open(index, 'r')
+            #
         else :
              INDEX = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", index
         exit(-1)
@@ -84,6 +86,7 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
                 INPUT = gzip.open(fn, 'rb')
             else :
                 INPUT = open(fn, 'r')
+            #
         except IOError :
             print "\n[Error]:\n\t File cannot be open: ", CGmap_lst[i]
             exit(-1)
@@ -128,13 +131,18 @@ def main():
             "   Chr1    111406  0.66    0.40    0.60"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="index", help="TXT file, index file, use STDIN if omitted", metavar="FILE")
-    parser.add_option("-f", dest="CGmap_list", help="List of (input) CGmap files (CGmap or CGmap.gz)", metavar="STRING")
+    parser.add_option("-i", dest="index",
+                      help="TXT file, index file, use STDIN if omitted", metavar="FILE")
+    parser.add_option("-f", dest="CGmap_list",
+                      help="List of (input) CGmap files (CGmap or CGmap.gz)", metavar="STRING")
     parser.add_option("-t", dest="tag_list",  metavar="STRING",
                       help="List of tags, same order with \'-f\' ", default="")
-    parser.add_option("-c", dest="min_Cov", help="minimum coverage [default: %default]", metavar="INT", default=1)
-    parser.add_option("-C", dest="max_Cov", help="maximum coverage [default: %default]", metavar="INT", default=200)
-    parser.add_option("-o", dest="outfile", help="Output file name (gzipped if end with \'.gz\')", metavar="STRING")
+    parser.add_option("-c", dest="min_Cov",
+                      help="minimum coverage [default: %default]", metavar="INT", default=1)
+    parser.add_option("-C", dest="max_Cov",
+                      help="maximum coverage [default: %default]", metavar="INT", default=200)
+    parser.add_option("-o", dest="outfile",
+                      help="Output file name (gzipped if end with \'.gz\')", metavar="STRING")
     (options, args) = parser.parse_args()
     #
     if (options.index is None or options.CGmap_list is None or options.tag_list is None) :
@@ -154,4 +162,4 @@ def main():
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

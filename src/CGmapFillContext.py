@@ -55,7 +55,7 @@ def read_genome (fasta_file) :
         Iterates over all sequences in a fasta file. One at a time,
         without reading the whole file into the main memory.
     """
-
+    #
     try :
         INPUT = (gzip.open if fasta_file.endswith('.gz') else open)(fasta_file)
     except IOError:
@@ -69,6 +69,7 @@ def read_genome (fasta_file) :
             if chr != "" and seq_list != [] :
                 genome[chr]="".join(seq_list)
                 seq_list=[]
+            #
             chr = line[1:].strip()
             print >> sys.stderr, "# Reading " + chr
         else:
@@ -85,10 +86,10 @@ def read_genome (fasta_file) :
         genome_len[chr] = len(genome[chr])
         print >> sys.stderr, "# %s\t%d" % (chr, genome_len[chr])
     #
-
+#
 bc_dict = {'A':'T', 'C':'G', 'G':'C', 'T':'A', 'N':'N',
            'a':'t', 'c':'g', 'g':'c', 't':'a', 'n':'n'}
-
+#
 def bc ( ch ) :
     if ch in bc_dict :
         return bc_dict[ch]
@@ -134,12 +135,14 @@ def CGmapFillContext(CGmapF, genomeF, base=1) :
             else :
                 continue
                 # warning : not CGmap file
+            #
             #print trimer
             dimer=trimer[0:2]
             #print trimer + "\t" + dimer
             if trimer[0] != "C" :
                 sys.stderr.write( "# [warning] Wrong NUC: %s\t%s\t%s\t%s\n" % (chr, nuc, pos, trimer) )
                 continue
+            #
             try :
                 if dimer == "CG" :
                     pattern = "CG"
@@ -152,9 +155,12 @@ def CGmapFillContext(CGmapF, genomeF, base=1) :
                 tokens[4] = dimer
             except IndexError :
                 continue
+            #
             print "\t".join(tokens)
         else :
             print "\t".join(tokens)
+        #
+    #
     IN.close()
 #
 
@@ -174,31 +180,33 @@ def main():
             "   Chr1    C       3541    -       -       0.0     0       1\n" \
             "Output Ex:\n" \
             "   Chr1    C       3541    CG      CG      0.0     0       1"
-
+    #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmap", help="Input CGmap file (CGmap or CGmap.gz)", metavar="STRING", default=None)
     parser.add_option("-g", dest="genome", help="genome file, FASTA format (gzipped if end with \'.gz\')", metavar="STRING")
     parser.add_option("-o", dest="outfile", help="Output file name (gzipped if end with \'.gz\')", metavar="STRING")
     parser.add_option("-0", "--0-base", dest="base0", action="store_true", help="0-based genome if specified [Default: 1-based]", default=False)
     (options, args) = parser.parse_args()
-    
+    #
     if ( options.genome is None) :
         parser.print_help()
         exit(-1)
-
+    #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
+        #
     if options.base0 :
         base = 0
     else :
         base = 1
+    #
     CGmapFillContext(options.CGmap, options.genome, base)
-
+#
 
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

@@ -32,7 +32,7 @@ import re
 
 import gzip
 
-
+#
 def Get_key (str) :
     # This function should be consistent with the one in Sort_chr_pos.py
     match = re.match(r"^chr(\d+)", str, re.I)
@@ -42,7 +42,7 @@ def Get_key (str) :
         chr = str
     return [chr, str]
     #re.match(r"^chr(\d+)", "chr019_random").group(1)
-
+#
 def CGmapToRegion (CGmap_fn, region_fn):
     try:
         if CGmap_fn :
@@ -50,8 +50,10 @@ def CGmapToRegion (CGmap_fn, region_fn):
                 CGMAP = gzip.open(CGmap_fn, 'rb')
             else :
                 CGMAP = open(CGmap_fn, 'r')
+            #
         else :
             CGMAP = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
         exit(-1)
@@ -92,6 +94,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
         except ValueError :
             print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % region_fn)
             exit(-1)
+        #
         #print chr_r, pos_r1, pos_r2
         key_c = Get_key(chr_c)
         key_r = Get_key(chr_r)
@@ -102,6 +105,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
                 print "%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC)
             else :
                 print "%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC)
+            #
             # init
             mC = 0
             count = 0
@@ -117,6 +121,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
                     print "%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC)
                 else :
                     print "%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC)
+                #
                 # init
                 mC = 0
                 count = 0
@@ -167,10 +172,14 @@ def main():
             "      This script would not distinguish CG/CHG/CHH contexts."
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmapFile", help="File name end with .CGmap or .CGmap.gz. "
-                                                   "If not specified, STDIN will be used.", metavar="FILE")
-    parser.add_option("-r", dest="regionFile", help="Filename for region file, support *.gz", metavar="FILE")
-    parser.add_option("-o", dest="outfile", default=None, help="To standard output if not specified.\n")
+    parser.add_option("-i", dest="CGmapFile",
+                      help="File name end with .CGmap or .CGmap.gz. "
+                           "If not specified, STDIN will be used.",
+                      metavar="FILE")
+    parser.add_option("-r", dest="regionFile",
+                      help="Filename for region file, support *.gz", metavar="FILE")
+    parser.add_option("-o", dest="outfile", default=None,
+                      help="To standard output if not specified.\n")
     #
     (options, args) = parser.parse_args()
     #
@@ -186,8 +195,8 @@ def main():
         #
     #
     CGmapToRegion(options.CGmapFile, options.regionFile)
+    #
 #
-
 
 # ===========================================
 if __name__ == "__main__":

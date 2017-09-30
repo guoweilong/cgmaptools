@@ -37,15 +37,17 @@ def binomialCoeff(n, k):
     result = 1
     for i in range(1, k+1):
         result = result * (n-i+1) / i
+    #
     return result
-
+#
 def dbinom(n, k, prob):
     return binomialCoeff(n, k) * (prob ** k) * ((1-prob) ** (n-k))
-
+#
 def qbinom(p, size, prob, lower_tail = True):
     '''Binomial quantiles'''
     if not lower_tail :
         prob = 1 - prob
+    #
     sum = 0
     for i in xrange(size) :
         p_binom = dbinom(size, i, prob)
@@ -54,8 +56,11 @@ def qbinom(p, size, prob, lower_tail = True):
                 return size - i
             else :
                 return i
+            #
         else :
             sum += p_binom
+        #
+    #
     if not lower_tail :
         return 0
     else :
@@ -65,7 +70,7 @@ def qbinom(p, size, prob, lower_tail = True):
 
 # binomial quantile calculation
 Dict_qbnom = dict()
-
+#
 # Note : Error will raise if X is too large, for example: >1000
 def GetQbnom(p_value, X, prob, low_tail=False) :
     if p_value >=1 :
@@ -77,12 +82,15 @@ def GetQbnom(p_value, X, prob, low_tail=False) :
         X = 1000
     if X not in Dict_qbnom :
         Dict_qbnom[X] = qbinom(p_value, X, prob, low_tail)
+    #
     return Dict_qbnom[X]
+    #
 #
 
 def MatMult(a,b):
     zip_a = zip(*a)
     return [[sum(ele_b*ele_a for ele_b, ele_a in zip(row_b, col_a)) for col_a in zip_a] for row_b in b]
+#
 # Example :
 #x = [[1,2,3],[4,5,6],[7,8,9],[10,11,12]]
 #  1  4  7  10
@@ -111,11 +119,11 @@ chr1    C       4663    CHH     CA      0       20      0       0       0       
 """
 
 
-
+#
 Dict      = {"A":0, "T":1, "C":2, "G":3, "N":4, "T/C":5, "A/G":6}
 RevDict   = ["A", "T", "C", "G", "N", "T/C", "A/G"]
 VagueDict = {"A":6, "T":5, "C":5, "G":6, "N":4}
-
+#
 
 
 AllCases  = {
@@ -204,10 +212,12 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
     if SUM_W >= least_cov :
         WVS = [VW[0], VW[1], VW[2]+VW[1], VW[3]]
         WD_lst = [i for i in range(len(WVS)) if WVS[i] >= LIMIT_W]
+    #
     LIMIT_C = GetQbnom(p_value, SUM_C, error_rate, False)
     if SUM_C >= least_cov :
         CVS = [VC[0], VC[1], VC[2], VC[3]+VC[0]]
         CD_lst = [i for i in range(len(CVS)) if CVS[i] >= LIMIT_C]
+    #
     # Step 3 : Get the intersection
     if WD_lst != [] :
         if CD_lst != [] :
@@ -217,8 +227,10 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
             if 1 in D_lst :
                 D_lst.remove(1) # remove T
                 D_lst.append(5) # add T/C
+            #
             if 2 in D_lst and W_C < LIMIT_W :
                 D_lst.remove(2)
+            #
             if (2 in D_lst) and (5 in D_lst) and len(D_lst)>2 :
                 D_lst.remove(5)
             #
@@ -229,8 +241,10 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
             if 0 in D_lst :
                 D_lst.remove(0) # remove A
                 D_lst.append(6) # add A/G
+            #
             if 3 in D_lst and C_G < LIMIT_C :
                 D_lst.remove(3)
+            #
             if (3 in D_lst) and (4 in D_lst) and len(D_lst)>2 :
                 D_lst.remove(6)
             #
@@ -252,11 +266,15 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
                         CD_lst = [i for i in range(len(CVS)) if CVS[i] >= LIMIT_C]
                         if CD_lst != []:
                             WildcardNuc.remove(5)
+                        #
+                    #
                     if 6 in WildcardNuc:  # A/G
                         WVS = [VW[0], VW[1], VW[1] + VW[2], VW[3]]
                         WD_lst = [i for i in range(len(WVS)) if WVS[i] >= LIMIT_W]
                         if WD_lst != []:
                             WildcardNuc.remove(6)
+                        #
+                    #
                     D_lst = SingleNuc + WildcardNuc
                     #
                 #
@@ -540,6 +558,7 @@ def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
     #
     if '/' in GN and REF in AllCases[GN] :
         FILTER = "Vague"
+    #
     GENOME = ":".join(["%s"%GT, "%d"%GQ, "%d"%DP])
     return "\t".join([CHR, POS, ID, REF, ALT, "%s"%QUAL, FILTER, INFO, "GT:GQ:DP", GENOME])
 #
@@ -626,6 +645,7 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
                                  NUC, "%.2e" % (1-prob_pre) ] )
                 if vcffile:
                     VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
+                #
             elif NUC != "-" :
                 #
                 if (NUC in AllCases) :
@@ -633,8 +653,10 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
                         print "\t".join([chr, nuc, pos,
                                         "%d,%d,%d,%d"%(W_A, W_T, W_C, W_G), "%d,%d,%d,%d"%(C_A, C_T, C_C, C_G),
                                          NUC, "%.1e" % (1-prob_pre) ] )
+                        #
                         if vcffile :
                             VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
+                        #
                     #
                 else :
                     sys.stderr.write( "[Warning] %s not found in genotypes\n" %  NUC )
@@ -664,13 +686,16 @@ def main():
             "   chr1  T    8454   0,39,0,0     0,0,0,0     T/C            1.00e-01\n"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="infile", help="ATCGmap format, STDIN if not specified",
+    parser.add_option("-i", dest="infile",
+                      help="ATCGmap format, STDIN if not specified",
                       metavar="FILE", default=None)
-    parser.add_option("-v", "--vcf", dest="vcffile", help="VCF format file for output",
+    parser.add_option("-v", "--vcf", dest="vcffile",
+                      help="VCF format file for output",
                       metavar="FILE", default=None)
     parser.add_option("-a", "--all_nt", action="store_true", dest="showall", default = False,
                       help = 'Show all sites with enough coverage (-l). Only show SNP sites if not specified.')
-    parser.add_option("-o", dest="outfile", default=None, help="STDOUT if not specified")
+    parser.add_option("-o", dest="outfile", default=None,
+                      help="STDOUT if not specified")
     parser.add_option("-m", "--mode", dest="mode",
                       help="Mode for calling SNP [Default: %default]\
                             binom: binomial,  separate strands\
@@ -699,7 +724,7 @@ def main():
                       type="int", default=10)
     (options, args) = parser.parse_args()
     #
-
+    #
     if (options.outfile is not None) :
         sys.stdout = open(options.outfile, 'w')
     #
@@ -735,8 +760,8 @@ def main():
     SNVFromATCGmap( options.infile, options.vcffile, options.showall,
                     options.mode)
     #
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

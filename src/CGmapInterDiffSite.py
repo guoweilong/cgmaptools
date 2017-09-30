@@ -67,28 +67,33 @@ def CGmapInterDiff (fn, MIN=0, MAX=100, method="chisq"):
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         except IOError:
             print "\n[Error]\n\tFile cannot be open: ", fn
             exit(-1)
-
+        #
+    #
     for line in IN:
         chr, nuc, pos, pattern, dinuc, methyl_1, NmC_1, NC_1, methyl_2, NmC_2, NC_2 = line.strip().split()
         NmC_1, NC_1, NmC_2, NC_2 = [int(NmC_1), int(NC_1), int(NmC_2), int(NC_2)]
         if (NC_1 < MIN or NC_2 < MIN) or (NC_1 > MAX or NC_2 > MAX) or ((NmC_1+NmC_2)==0) :
             continue
+        #
         if method == "chisq" :
             pv = chi2( [ [NmC_1, NC_1], [NmC_2, NC_2] ], correction=False )[1]
         elif method == "fisher" :
             oddsratio, pv = fisher_exact([[NmC_1, NC_1-NmC_1], [NmC_2, NC_2-NmC_2]])
         else :
             pv = 1
+        #
         print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2e" % (chr, nuc, pos, pattern, dinuc, methyl_1, methyl_2, pv)
-
+    #
     if IN is not sys.stdin:
         IN.close()
-
+    #
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools dms [-i <CGmapInter>] [-m 5 -M 100] [-o output]\n" \
@@ -103,7 +108,7 @@ def main():
             "   chr1	C	4654	CG	CG	0.92	1.00	8.40e-01\n" \
             "   chr1	C	4658	CHH	CC	0.50	0.00	3.68e-04\n" \
             "   chr1	G	8376	CG	CG	0.62	0.64	9.35e-01"
-
+    #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmapInter", help="File name for CGmapInter, STDIN if omitted", metavar="FILE")
     parser.add_option("-m", "--min", dest="min", help="min coverage [default : %default]", metavar="INT", default=0)
@@ -113,20 +118,21 @@ def main():
     parser.add_option("-t", "--test-method", dest="method", help="chisq, fisher [default : %default]", metavar="STRING",
                       default="chisq")
     (options, args) = parser.parse_args()
-    
+    #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
-
+        #
+    #
     if options.method not in ["chisq", "fisher"] :
         print "\n[Error]\n\tUnknown method : %s", options.method
         exit(-1)
-
+    #
     CGmapInterDiff(options.CGmapInter, int(options.min), int(options.max), options.method)
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

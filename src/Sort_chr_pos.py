@@ -103,14 +103,19 @@ def main():
             "Description: Sort the input files by chromosome and position.\n" \
             "     The order of chromosomes would be :\n" \
             "     \"chr1 chr2 ... chr11 chr11_random ... chr21 ... chrM chrX chrY\""
+    #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="input", help="File name end with .CGmap or .CGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
-    parser.add_option("-c", "--chr", dest="chr_col", help="The column of chromosome [default: %default]",
+    parser.add_option("-i", dest="input",
+                      help="File name end with .CGmap or .CGmap.gz. "
+                           "If not specified, STDIN will be used.", metavar="FILE")
+    parser.add_option("-c", "--chr", dest="chr_col",
+                      help="The column of chromosome [default: %default]",
                       default=1, metavar="INT")
-    parser.add_option("-p", "--pos", dest="pos_col", help="The column of position [default: %default]",
+    parser.add_option("-p", "--pos", dest="pos_col",
+                      help="The column of position [default: %default]",
                       default=2, metavar="INT")
-    parser.add_option("-o", dest="outfile", default=None, help="To standard output if not specified")
+    parser.add_option("-o", dest="outfile", default=None,
+                      help="To standard output if not specified")
     #
     (options, args) = parser.parse_args()
     #
@@ -123,6 +128,7 @@ def main():
     #
     #
     SortMap(options.input, options.chr_col, options.pos_col)
+    #
 #
 
 # ===========================================

@@ -28,9 +28,9 @@ DEALINGS IN THE SOFTWARE.
 # Start from 2015-05-22
 
 import sys
-import os
-import os.path
-import re
+#import os
+#import os.path
+#import re
 
 """ CGmap file
 chr1    G   3000851 CHH CC  0.1 1   10
@@ -38,9 +38,9 @@ chr1    C   3001624 CHG CA  0.0 0   9
 chr1    C   3001631 CG  CG  1.0 5   5
 """
 
-
+#
 import gzip
-
+#
 def CGmapSplitByChr (CGmap_fn, output_prefix, output_suffix):
     try:
         if CGmap_fn :
@@ -53,7 +53,7 @@ def CGmapSplitByChr (CGmap_fn, output_prefix, output_suffix):
             CGmap = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
+        sys.stderr.write( "[Error] file %s cannot be open." % CGmap_fn)
         exit(-1)
     #
     line = CGmap.readline()
@@ -75,10 +75,13 @@ def CGmapSplitByChr (CGmap_fn, output_prefix, output_suffix):
                 OUT = gzip.open (output_prefix + "." + chr + "." + output_suffix, "wb")
             else :
                 OUT = open (output_prefix + "." + chr + "." + output_suffix, "w")
+            #
             OUT.write(line)
         else :
             OUT.write(line)
+        #
         line = CGmap.readline()
+        #
     #
     if CGmap is not sys.stdin:
         CGmap.close()
@@ -109,8 +112,8 @@ def main():
     (options, args) = parser.parse_args()
     #
     CGmapSplitByChr(options.CGmap, options.output_prefix, options.output_suffix )
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

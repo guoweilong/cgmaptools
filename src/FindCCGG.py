@@ -57,19 +57,22 @@ def read_fasta (fasta_file) :
         if line[0] == '>':
             if chrome_id is not None:
                 yield chrome_id, ''.join(chrome_seq)
-
+            #
             chrome_id = sanitize_seq_id.sub('_', line.split()[0][1:])
             if chrome_id in seen_ids:
                 error('Found identical sequence ids (id: %s) in the fasta file: %s.'
                       ' Please, make sure that all sequence ids are unique and '
                       ' contain only alphanumeric characters: A-Za-z0-9_' % (chrome_id, fasta_file))
+            #
             seen_ids.add(chrome_id)
             chrome_seq = []
         else:
             chrome_seq.append(sanitize.sub('N', line.strip().upper()))
+        #
+    #
     yield chrome_id, ''.join(chrome_seq)
     INPUT.close()
-
+#
 
 def FindCCGG ( FastaFn, outputFn ):
     # the input fasta filename appended
@@ -83,6 +86,7 @@ def FindCCGG ( FastaFn, outputFn ):
             OUT = gzip.open(outputFn, 'wb')
         else :
             OUT = open(outputFn, 'w')
+        #
     else :
         OUT = sys.stdout
     #

@@ -207,14 +207,16 @@ def main():
             "   CovAndCount     3       380"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmap", help="File name end with .CGmap or .CGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
-    parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
-                                                                  "Will not generate figure if not specified",
+    parser.add_option("-i", dest="CGmap",
+                      help="File name end with .CGmap or .CGmap.gz. "
+                            "If not specified, STDIN will be used.", metavar="FILE")
+    parser.add_option("-f", "--figure-type", dest="FigType",
+                      help="png, pdf, eps. Will not generate figure if not specified",
                       default=None, metavar="FILE")
     parser.add_option("-H", dest="fig_height", default=4, metavar="FLOAT",
                       help="Scale factor for the Height of figure [Default: %default]")
-    parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
+    parser.add_option("-W", dest="fig_width",
+                      help="Width of figure in inch [Default: %default]",
                       default=11, metavar="FLOAT")
     parser.add_option("-p", dest="prefix", help="Prefix for output figures",
                       default="", metavar="STRING")  #

@@ -26,9 +26,9 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import sys
-import os
-import os.path
-import re
+#import os
+#import os.path
+#import re
 
 import gzip
 
@@ -66,7 +66,6 @@ def CheckCtx(context, dinuc, option_ctx) :
             return False
         #
     return False
-
 #
 
 def CGmapIntersect (fn1, fn2, ctx = ""):
@@ -78,7 +77,7 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
     except IOError:
         sys.stderr.write("[Error] File %s cannot be open." % fn1)
         exit(-1)
-
+    #
     try:
         if fn2 :
             if fn2.endswith('.gz') :
@@ -137,9 +136,10 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
     IN_1.close()
     if IN_2 is not sys.stdin:
         IN_2.close()
-
+    #
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools intersect [-1 <CGmap_1>] -2 <CGmap_2> [-o <output>]\n" \
@@ -154,7 +154,7 @@ def main():
             "    Chr1  C  3541  CG  CG  0.8  4  5\n" \
             ",and 2nd CGmap file is:\n" \
             "    Chr1  C  3541  CG  CG  0.4  4  10"
-
+    #
     parser = OptionParser(usage)
     parser.add_option("-1", dest="CGmap_1", help="File name, end with .CGmap or .CGmap.gz. ", metavar="CGmap File")
     parser.add_option("-2", dest="CGmap_2", help="standard input if not specified", metavar="CGmap File")
@@ -164,21 +164,22 @@ def main():
                       help="specific context: CG, CH, CHG, CHH, CA, CC, CT, CW \
                             use all sites if not specified")
     (options, args) = parser.parse_args()
-    
+    #
     if (options.CGmap_1 is None) :
         parser.print_help()
         exit(-1)
-
+    #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
-
+        #
+    #
     CGmapIntersect(options.CGmap_1, options.CGmap_2, options.context)
-
+#
 
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

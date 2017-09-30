@@ -62,8 +62,10 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
                 ATCGmap = gzip.open(ATCGmap_fn, "rb")
             else :
                 ATCGmap = open(ATCGmap_fn, 'r')
+            #
         else :
             ATCGmap = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", ATCGmap_fn
         exit(-1)
@@ -81,48 +83,56 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
                 WIG = gzip.open(WIG_fn, "wb")
             else :
                 WIG = open(WIG_fn, 'w')
+            #
         except IOError:
             print "\n[Error]:\n\t File cannot be open: ", WIG_fn
             exit(-1)
-
+        #
+    #
     cur_chr = ""
-
+    #
     line = ATCGmap.readline()
-
+    #
     while line:
         try :
             chr, nuc, pos, pattern, dinuc, WA, WT, WC, WG, WN, CA, CT, CC, CG, CN, methyl = line.strip().split()
         except ValueError :
             print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % ATCGmap_fn)
             exit(-1)
-
+        #
         if cur_chr != chr :
             cur_chr = chr
             if WIG_fn is not None :
                 WIG.write("variableStep chrom=" + chr + "\n")
+            #
+        #
         if methyl != "na" :
             if nuc == "C" :
                 print("\t".join([chr, nuc, pos, pattern, dinuc, methyl, WC, "%d" % (int(WT)+int(WC)) ]))
                 if WIG_fn :
                     WIG.write(pos + " " + methyl + "\n")
+                #
             elif nuc == "G":
                 print("\t".join([chr, nuc, pos, pattern, dinuc, methyl, CG, "%d" % (int(CG)+int(CA)) ]))
                 if WIG_fn :
                     WIG.write(pos + " -" + methyl + "\n") # Negative value for Minus strand
-
+                #
+            #
+        #
         line = ATCGmap.readline()
-
+        #
+    #
     # End for reading files
-
+    #
     if WIG_fn is not None :
         WIG.close()
-
+    #
     if ATCGmap is not sys.stdin:
         ATCGmap.close()
-
-
+    #
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools convert atcgmap2cgmap [-i <ATCGmap>] [-c <CGmap>] [-w <wig>]\n" \
@@ -139,13 +149,13 @@ def main():
                             "use STOUT if not specified",  metavar="FILE")
     parser.add_option("-w", dest="WIG", default=None, help="Output, gzip if end with \".gz\"",
                       metavar="FILE")
-
+    #
     (options, args) = parser.parse_args()
-
+    #
     ATCGmapToCGmapWig(options.ATCGmap, options.CGmap, options.WIG)
     #
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

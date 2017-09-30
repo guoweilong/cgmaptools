@@ -33,7 +33,7 @@ import sys
 def error(msg):
     print >> sys.stderr, 'ERROR: %s' % msg
     exit(1)
-
+#
 from optparse import OptionParser
 
 # ===========================================
@@ -50,6 +50,7 @@ def main():
             "Output Ex:\n" \
             "   chr1   +   940  950  1000 1200 1400 1600 1800 1850\n" \
             "   chr2   -   9060 9050 9000 8800 8600 8400 8200 8150\n"
+    #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="infile", help="BED format, STDIN if omitted", metavar="FILE")
     parser.add_option("-F", dest="FiveMerEnd",
@@ -65,7 +66,7 @@ def main():
     parser.add_option("-o", dest="outfile", default=None,
                       help="To standard output if omitted. Compressed output if end with .gz")
     (options, args) = parser.parse_args()
-
+    #
     if (options.infile is None) :
         INPUT = sys.stdin
     else :
@@ -74,6 +75,7 @@ def main():
                 INPUT =  gzip.open(options.infile, 'rb')
             else :
                 INPUT =  open(options.infile, 'r')
+            #
         except IOError:
             print "[Error] Cannot find input file : %s !" % options.infile
             exit(-1)
@@ -84,22 +86,26 @@ def main():
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
+        #
     #
     # FiveMerEND
     if options.FiveMerEnd == "" :
         FiveMerLst=[]
     else :
         FiveMerLst=[int(i) for i in options.FiveMerEnd.split(",")]
+    #
     FiveMerPos = []
     pos_tmp = 0
     for i in FiveMerLst[::-1] :
         pos_tmp += i
         FiveMerPos = [pos_tmp] + FiveMerPos
+    #
     # ThreeMerEND
     if options.ThreeMerEnd == "" :
         ThreeMerLst=[]
     else :
         ThreeMerLst=[int(i) for i in options.ThreeMerEnd.split(",")]
+    #
     ThreeMerPos = []
     pos_tmp = 0
     for i in ThreeMerLst:
@@ -124,6 +130,7 @@ def main():
             RightEnd_regions = [ (Right+i) for i in ThreeMerPos ]
             print "\t".join([chr, strand]) + "\t" + \
                   "\t".join( str(i) for i in (LeftEnd_regions + body_regions + RightEnd_regions) )
+            #
         else :
             body_regions = [(Left+(Right-Left)*i/nbins) for i in xrange(nbins+1)]
             LeftEnd_regions = [ (Left-i) for i in ThreeMerPos ]
@@ -133,12 +140,11 @@ def main():
             #
         #
     #
-
     if options.infile is not None :
         INPUT.close()
     #
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

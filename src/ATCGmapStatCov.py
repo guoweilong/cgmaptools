@@ -35,11 +35,11 @@ import datetime
 from math import fsum
 def average(x):
     return fsum(x)/float(len(x)) if x else 0
-
+#
 def logm(message):
     log_message = "[%s] %s" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message)
     print log_message
-
+#
 def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     try:
         if fn :
@@ -47,8 +47,10 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         else :
             IN = sys.stdin
+        #
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", fn
         exit(-1)
@@ -81,6 +83,7 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
             ChrCovDict[chr_idx][COV] = 1
         #
         line = IN.readline()
+        #
     #
     if IN is not sys.stdin:
         IN.close()
@@ -147,18 +150,21 @@ def main():
             "   CovAndCount     1       1567\n" \
             "   CovAndCount     2       655\n" \
             "   CovAndCount     3       380"
-
+    #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="ATCGmap", help="File name end with .ATCGmap or .ATCGmap.gz. "
-                                               "If not specified, STDIN will be used.", metavar="FILE")
-    parser.add_option("-f", "--figure-type", dest="FigType", help="png, pdf, eps. "
-                                                                  "Will not generate figure if not specified",
+    parser.add_option("-i", dest="ATCGmap",
+                      help= "File name end with .ATCGmap or .ATCGmap.gz. "
+                            "If not specified, STDIN will be used.", metavar="FILE")
+    parser.add_option("-f", "--figure-type", dest="FigType",
+                      help="png, pdf, eps. Will not generate figure if not specified",
                       default=None, metavar="FILE")
     parser.add_option("-H", dest="fig_height", default=4, metavar="FLOAT",
                       help="Scale ratio for the Height of figure [Default: %default]")
-    parser.add_option("-W", dest="fig_width", help="Width of figure in inch [Default: %default]",
+    parser.add_option("-W", dest="fig_width",
+                      help="Width of figure in inch [Default: %default]",
                       default=8, metavar="FLOAT")
-    parser.add_option("-p", dest="prefix", help="Prefix for output figures",
+    parser.add_option("-p", dest="prefix",
+                      help="Prefix for output figures",
                       default="", metavar="STRING")  #
     #
     (options, args) = parser.parse_args()

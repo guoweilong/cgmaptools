@@ -79,9 +79,9 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         exit(-1)
     #
     cur_chr = ""
-
+    #
     line = BismarkF.readline()
-
+    #
     while line:
         try :
             chr, pos, strand, NmC, NnC, pattern, trinuc = line.strip().split()
@@ -99,7 +99,7 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         ratio = float(NmC)/AllC
         CGmapF.write("%s\t%s\t%s\t%s\t%s\t%.2f\t%s\t%d\n" % (chr, nuc, pos, pattern, dinuc, ratio, NmC, AllC))
         line = BismarkF.readline()
-
+    #
     # End for reading files
     if CGmapF is not sys.stdout  :
         CGmapF.close()
@@ -123,12 +123,12 @@ def main():
                             "use STDIN when not specified", metavar="FILE")
     parser.add_option("-o", "--CGmap", dest="CGmap", default=None, help="Output in CGmap format, "
                             "use STDOUT if omitted (gzipped if end with \'.gz\')", metavar="FILE")
-
+    #
     (options, args) = parser.parse_args()
-
+    #
     BismarkCGmap(options.Bismark, options.CGmap)
-
+#
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

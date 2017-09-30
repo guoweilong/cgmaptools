@@ -26,8 +26,8 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import sys
-import os
-import os.path
+#import os
+#import os.path
 import re
 
 """
@@ -51,6 +51,7 @@ def MergeListOfATCGmap (fn_lst):
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         except IOError :
             print("\n[Error]:\n\t File cannot be open: %s" % fn )
             exit(-1)
@@ -61,6 +62,7 @@ def MergeListOfATCGmap (fn_lst):
             except ValueError :
                 print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
                 exit(-1)
+            #
             index = chr + "\t" + pos
             [WA, WT, WC, WG, WN, CA, CT, CC, CG, CN] = [int(WA), int(WT), int(WC), int(WG), int(WN), int(CA), int(CT), int(CC), int(CG), int(CN)]
             if index not in Methylome :
@@ -80,6 +82,7 @@ def MergeListOfATCGmap (fn_lst):
             chr = int(match.group(1))
         else :
             chr = tokens[0]
+        #
         pos = int(tokens[1])
         return [chr, tokens[0], pos]
         #re.match(r"^chr(\d+)", "chr019_random").group(1)
@@ -114,6 +117,7 @@ def MergeListOfCGmap (fn_lst):
                 IN = gzip.open(fn, 'rb')
             else :
                 IN = open(fn, 'r')
+            #
         except IOError :
             print("\n[Error]:\n\t File cannot be open: %s" % fn )
             exit(-1)
@@ -124,6 +128,7 @@ def MergeListOfCGmap (fn_lst):
             except ValueError :
                 print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
                 exit(-1)
+            #
             index = chr + "\t" + pos
             [MC, NC] = [int(MC), int(NC)]
             if index not in Methylome :
@@ -142,6 +147,7 @@ def MergeListOfCGmap (fn_lst):
             chr = int(match.group(1))
         else :
             chr = tokens[0]
+        #
         pos = int(tokens[1])
         return [chr, tokens[0], pos]
     #
@@ -202,4 +208,4 @@ def main():
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#

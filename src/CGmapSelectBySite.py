@@ -27,9 +27,9 @@ DEALINGS IN THE SOFTWARE.
 
 
 import sys
-import os
-import os.path
-import re
+#import os
+#import os.path
+#import re
 
 
 """
@@ -50,14 +50,16 @@ def CGmapInIndex(index, CGmap, reverse) :
     except IOError:
         print "\n[Error]:\n\t File cannot be open: ", index
         exit(-1)
+    #
     # Initialization
     Site_lst = []
     for line in INDEX :
         # chr10   100005504
         pos = line.strip()
         Site_lst.append(pos)
+    #
     INDEX.close()
-
+    #
     # chr1    C       4654    CG      CG      0.846153846154  11      13
     try :
         with (gzip.open(CGmap, 'rb') if CGmap.endswith(".gz") else open(CGmap, 'r')  )  if CGmap else sys.stdin as IN:
@@ -75,15 +77,17 @@ def CGmapInIndex(index, CGmap, reverse) :
                     #
                 #
             #
+        #
         if CGmap :
             IN.close()
+        #
     except IOError :
         print "\n[Error]:\n\t File cannot be open: ", CGmap
         exit(-1)
-
-
+    #
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools select site -i <index> [-f <CGmap/ATCGmap>] [-r] [-o output]\n" \
@@ -94,29 +98,35 @@ def main():
             "Index format example:\n" \
             "   chr10   100504\n" \
             "   chr10   103664"
-
+    #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="index", help="Name of Index file required "
-                                               "(gzipped if end with \'.gz\').", metavar="FILE")
-    parser.add_option("-r", action="store_true", dest="reverse", help="reverse selected, remove site in index if specified", default = False)
-    parser.add_option("-f", dest="infile", help="Input CGmap/ATCGmap files. Use STDIN if not specified", metavar="STRING")
-    parser.add_option("-o", dest="outfile", help="CGmap, Output file name (gzipped if end with \'.gz\').", metavar="STRING")
+    parser.add_option("-i", dest="index",
+                      help= "Name of Index file required "
+                            "(gzipped if end with \'.gz\').", metavar="FILE")
+    parser.add_option("-r", action="store_true", dest="reverse",
+                      help= "reverse selected, remove site in index if specified", default = False)
+    parser.add_option("-f", dest="infile",
+                      help= "Input CGmap/ATCGmap files. Use STDIN if not specified", metavar="STRING")
+    parser.add_option("-o", dest="outfile",
+                      help= "CGmap, Output file name (gzipped if end with \'.gz\').", metavar="STRING")
     (options, args) = parser.parse_args()
-    
+    #
     if (options.index is None) :
         parser.print_help()
         exit(-1)
-
+    #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
             sys.stdout = gzip.open(options.outfile, 'wb')
         else :
             sys.stdout = open(options.outfile, 'w')
+        #
     #
     CGmapInIndex(options.index, options.infile, options.reverse)
+    #
 #
 
 # ===========================================
 if __name__ == "__main__":
     main()
-
+#
