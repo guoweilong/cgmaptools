@@ -503,7 +503,7 @@ import gzip
 
 
 def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
-    CHR = CHR.replace("chr", "").replace("CHR", "").replace("Chr", "")
+    #CHR = CHR.replace("chr", "").replace("CHR", "").replace("Chr", "") # to be consistent with ASM; 20171025 by Weilong
     ID = "."
     vague = False
     genotype = GN.replace('T/C', 'Y').replace('A/G', 'R')
@@ -678,7 +678,7 @@ def main():
             "      (aka SNVFromATCGmap)\n" \
             "Description: Predict the SNV from ATCGmap file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last update: 2017-08-24\n" \
+            "Last update: 2017-10-25\n" \
             "Output format example:\n" \
             "   #chr  nuc  pos    ATCG_watson  ATCG_crick  predicted_nuc  p_value\n" \
             "   chr1  G    4752   17,0,0,69    0,0,0,0     A,G            9.3e-07\n" \

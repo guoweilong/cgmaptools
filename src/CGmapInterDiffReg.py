@@ -109,18 +109,19 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
         # Coverage not valid
         if (NC_1 < minCov or NC_2 < minCov) or (NC_1 > maxCov or NC_2 > maxCov) or ((NmC_1+NmC_2)==0) :
             continue
-        # Check postion
+        # Check position
         pos = int(pos)
         if abs(pos-pre_pos) > minStep or abs(pos - start_pos) > maxStep:
             # check the old fragment
-            if len(lst_1) >= minNSite:
+            N_site = len(lst_1)
+            if N_site >= minNSite and (start_pos<pre_pos):
                 #[Tstat, PV] = ttest_1samp( [i-j for i, j in zip(lst_1, lst_2) ], 0 )
                 mean_1 = average(lst_1)
                 mean_2 = average(lst_2)
                 [Tstat, PV] = ttest_ind( lst_1, lst_2 )
-                N_site = len(lst_1)
                 print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
                        % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
+                #
             # start a new fragment
             lst_1 = [ float(methyl_1) ]
             lst_2 = [ float(methyl_2) ]
@@ -139,15 +140,18 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
         mean_2 = average(lst_2)
         [Tstat, PV] = ttest_ind( lst_1, lst_2 )
         N_site = len(lst_1)
-        print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
-               % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
+        if N_site >= minNSite and (start_pos < pre_pos) :
+            print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
+                % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
+            #
+        #
     #
     if IN is not sys.stdin:
         IN.close()
     #
 #
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools dmr [-i <CGmapInter>] [-m 5 -M 100] [-o output]\n" \
