@@ -120,11 +120,11 @@ from optparse import OptionParser
 #
 # ===========================================
 def main():
-    usage = "Usage: cgmaptools convert cgmap2wig [-i <CGmap>] [-w <wig>] [-c <INT> -b <float>]\n" \
-            "      (aka CGmapToWig)\n" \
-            "Description: Generate WIG file from CGmap.\n" \
+    usage = "Usage: cgmaptools convert bismark2cgmap [-i <CGmap>] [-w <wig>] [-c <INT> -b <float>]\n" \
+            "      (aka BismarkToCGmap.py)\n" \
+            "Description: Generate bismark output file to CGmap.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2017-08-18"
+            "Last Update: 2017-12-10"
     #
     parser = OptionParser(usage)
     #

@@ -634,6 +634,7 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
             except ValueError :
                 sys.stderr.write("\n[Error]:\n\t File [ %s ] may have wrong number of columns.\n" % infile)
                 exit(-1)
+            #
             # end_of_try
             [W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G] = [int(i) for i in [W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G]]
             [NUC, prob_pre, prob_nuc] = SNPfunc( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc)
@@ -643,6 +644,7 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
                 print "\t".join([chr, nuc, pos,
                                  "%d, %d, %d, %d"%(W_A, W_T, W_C, W_G), "%d, %d, %d, %d"%(C_A, C_T, C_C, C_G),
                                  NUC, "%.2e" % (1-prob_pre) ] )
+                #
                 if vcffile:
                     VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
                 #
@@ -663,6 +665,7 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
                 #
             #
         #
+    # ============
     # for
     if infile :
         IN.close()
@@ -747,10 +750,10 @@ def main():
     global binom_options
     binom_options = {"pv": 0.001,
                      "er": 0.05,
-                     'cov': 5}
-    binom_options['pv'] = float(options.binom_pv)
-    binom_options['er'] = float(options.binom_er)
-    binom_options['cov'] = int(options.binom_cov)
+                     "cov": 5}
+    binom_options["pv"] = float(options.binom_pv)
+    binom_options["er"] = float(options.binom_er)
+    binom_options["cov"] = int(options.binom_cov)
     #
     #p_value = float(options.p_value)
     #error_rate = float(options.error_rate)
