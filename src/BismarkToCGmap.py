@@ -50,6 +50,7 @@ variableStep chrom=chr1
 import gzip
 
 def BismarkCGmap (Bismark_fn, CGmap_fn):
+    # ================
     try:
         if Bismark_fn :
             if Bismark_fn.endswith(".gz") :
@@ -64,6 +65,7 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         print "\n[Error]:\n\t File cannot be open: ", Bismark_fn
         exit(-1)
     #
+    # ==================
     try:
         if CGmap_fn is not None:
             if CGmap_fn.endswith(".gz") :
@@ -86,7 +88,9 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         try :
             chr, pos, strand, NmC, NnC, pattern, trinuc = line.strip().split()
         except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % CGmap_fn)
+            print( "\n[Error]:\n\t Your input file [ %s ] has wrong number of columns." % CGmap_fn)
+            print( "\t You may check whether the input file is correct." )
+            print( "\t The input shall be something like \"*.CpG_report.txt.gz\"." )
             exit(-1)
         #
         if strand == "+" :
@@ -96,20 +100,24 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         #
         dinuc = trinuc[0:2]
         AllC = int(NmC) + int(NnC)
-        ratio = float(NmC)/AllC
-        CGmapF.write("%s\t%s\t%s\t%s\t%s\t%.2f\t%s\t%d\n" % (chr, nuc, pos, pattern, dinuc, ratio, NmC, AllC))
+        if AllC > 0 :
+            ratio = float(NmC)/AllC
+            CGmapF.write("%s\t%s\t%s\t%s\t%s\t%.2f\t%s\t%d\n" % (chr, nuc, pos, pattern, dinuc, ratio, NmC, AllC))
+        #
         line = BismarkF.readline()
+        #
     #
     # End for reading files
-    if CGmapF is not sys.stdout  :
+    if CGmapF is not sys.stdout :
         CGmapF.close()
     #
-    if BismarkF is not sys.stdin:
+    if BismarkF is not sys.stdin :
         BismarkF.close()
     #
 #
+#
 from optparse import OptionParser
-
+#
 # ===========================================
 def main():
     usage = "Usage: cgmaptools convert cgmap2wig [-i <CGmap>] [-w <wig>] [-c <INT> -b <float>]\n" \
@@ -117,7 +125,9 @@ def main():
             "Description: Generate WIG file from CGmap.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
             "Last Update: 2017-08-18"
+    #
     parser = OptionParser(usage)
+    #
     parser.add_option("-i", dest="Bismark", default=None, help="The output file of Bismark"
                             "Input file name end with .gz is considered as compressed, "
                             "use STDIN when not specified", metavar="FILE")
@@ -127,8 +137,10 @@ def main():
     (options, args) = parser.parse_args()
     #
     BismarkCGmap(options.Bismark, options.CGmap)
+    #
 #
 # ===========================================
 if __name__ == "__main__":
     main()
+#
 #
