@@ -805,8 +805,15 @@ int main(int argc, char **argv){
 	cmd.usage = "-b <BAM> -g <genome.fa> -o <prefix>\n"
 	        "        (aka CGmapFromBAM)\n" \
 			"  Description: Convert BAM file to CGmap/ATCGmap format.\n" \
+			"  Notice: \n" \
+			"    * For BS-Seeker2, CGmapTools seamlessly comparable with its BAM.\n" \
+			"    * For Bismark, CGmapTools comparable with single end mode; \n" \
+			"    *     and comparable with v0.8.2 and older version of bismarks for paired-end.\n" \
+			"    *     Bismark changed FLAG strategy since v0.8.3, which raise unexpected count of nucleotides.\n" \
+			"    * For BSmap, we can not guarantee generating right CGmap from our experience.\n" \
+			"    * For more information, please contact us. Contribution to improve comparability is welcome!\n" \
 			"  Contact: Guo, Weilong; guoweilong@126.com\n" \
-			"  Last update: 2016-12-07";
+			"  Last update: 2017-12-13";
 	command_option(&cmd, "-b", "--bam <arg>", "input bam file, should be sorted first", cmd_bam);
 	command_option(&cmd, "-g", "--genome <arg>", "genome file, fasta", cmd_genome);
 	command_option(&cmd, "-O", "--rmOverlap", "Removed overlapped region for paired-end library if specified.", cmd_RmOverlap);
