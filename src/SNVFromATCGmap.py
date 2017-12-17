@@ -541,7 +541,10 @@ def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
         INFO = INFO + ":GU=" + GU
     #
     if "," not in genotype :
-        GT = "1/1"
+        if ALT == "." :
+            GT  = "0/0"
+        else :
+            GT = "1/1"
     else:
         if "," in ALT :
             GT = "1/2"
