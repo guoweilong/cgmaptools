@@ -74,7 +74,7 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
                 exit(-1)
             #
         except IOError:
-            print "\n[Error]:\n\t File cannot be open: ", fn
+            print("\n[Error]:\n\t File cannot be open: %s" % fn)
             exit(-1)
         #
         line = IN.readline()
@@ -192,7 +192,7 @@ def main():
             "      (aka CGmapsMethInBins)\n" \
             "Description: Generate the methylation in Bins.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-07\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "   chr1    1       5000    0.0000\n" \
             "   chr1    5001    10000   0.0396\n" \

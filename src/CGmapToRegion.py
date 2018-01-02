@@ -55,7 +55,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
             CGMAP = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
+        print ("\n[Error]:\n\t File cannot be open: " % CGmap_fn)
         exit(-1)
     #
     try:
@@ -64,7 +64,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
         else :
             REGION = open(region_fn, 'r')
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", region_fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % region_fn)
         exit(-1)
     #
     line_c = CGMAP.readline()
@@ -102,9 +102,9 @@ def CGmapToRegion (CGmap_fn, region_fn):
             line_c = CGMAP.readline()
         elif key_c > key_r :
             if count > 0 :
-                print "%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC)
+                print ("%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
             else :
-                print "%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC)
+                print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
             #
             # init
             mC = 0
@@ -118,9 +118,9 @@ def CGmapToRegion (CGmap_fn, region_fn):
                 line_c = CGMAP.readline()
             elif int(pos_c) > int(pos_r2) :
                 if count > 0 :
-                    print "%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC)
+                    print ("%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
                 else :
-                    print "%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC)
+                    print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
                 #
                 # init
                 mC = 0
@@ -141,9 +141,9 @@ def CGmapToRegion (CGmap_fn, region_fn):
     # End for reading files
     #
     if count > 0 :
-        print "%s\t%s\t%s\t%.2f\t%d\t%.2f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC)
+        print ("%s\t%s\t%s\t%.2f\t%d\t%.2f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
     else :
-        print "%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC)
+        print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
     #
     REGION.close()
     if CGMAP is not sys.stdin:
@@ -161,7 +161,7 @@ def main():
             "      (aka CGmapToRegion)\n" \
             "Description: Calculated the methylation levels in regions in two ways.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2017-01-20\n" \
+            "Last Update: 2018-01-02\n" \
             "Format of Region file:\n" \
             "  #chr    start_pos  end_pos\n" \
             "   chr1   8275       8429\n" \

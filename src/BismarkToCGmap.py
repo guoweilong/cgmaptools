@@ -62,7 +62,7 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
             BismarkF = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", Bismark_fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % Bismark_fn )
         exit(-1)
     #
     # ==================
@@ -77,7 +77,7 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
             CGmapF = sys.stdout
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_fn )
         exit(-1)
     #
     cur_chr = ""
@@ -124,7 +124,7 @@ def main():
             "      (aka BismarkToCGmap.py)\n" \
             "Description: Generate bismark output file to CGmap.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2017-12-10"
+            "Last Update: 2018-01-02"
     #
     parser = OptionParser(usage)
     #

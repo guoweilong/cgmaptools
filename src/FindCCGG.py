@@ -31,7 +31,7 @@ import sys
 import re
 
 def error(msg):
-    print >> sys.stderr, 'ERROR: %s' % msg
+    sys.stderr.write( "ERROR: %s" % msg )
     exit(1)
 #
 
@@ -44,7 +44,7 @@ def read_fasta (fasta_file) :
     try :
         INPUT = (gzip.open if fasta_file.endswith('.gz') else open)(fasta_file)
     except IOError:
-        print "[Error] Cannot find Fasta file : %s !" % fasta_file
+        print ("[Error] Cannot find Fasta file : %s !" % fasta_file)
         exit(-1)
     sanitize = re.compile(r'[^ACTGN]')
     sanitize_seq_id = re.compile(r'[^A-Za-z0-9]')
@@ -115,7 +115,7 @@ def main():
             "      (aka FiindCCGG)\n" \
             "Description: Get the positions of all the C'CGG---CCG'G fragments.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2017-01-20\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "    chr1    4025    5652\n" \
             "    chr1    8274    8431"
@@ -123,13 +123,14 @@ def main():
     parser.add_option("-i", dest="infile",
                   help="Genome sequence file in Fasta format", metavar="FILE")
     parser.add_option("-o", dest="outfile",
-                  help="Name of the output file (standard output if not specified)." \
+                  help="Name of the output file (standard output if not specified). "
                        "Format: chr cCgg_pos ccGg_pos (0-base)\n", metavar="FILE")
     (options, args) = parser.parse_args()
     #
     if (options.infile is None) :
         print parser.print_help()
         exit(-1)
+    #
     FindCCGG (options.infile, options.outfile)
 #
 

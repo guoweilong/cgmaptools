@@ -97,7 +97,7 @@ def main():
             "      (aka CGmapSplitByChr)\n" \
             "Description: Split the files by each chromosomes. \n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-07"
+            "Last Update: 2018-01-02"
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmap", default=None,
                       help="Input file, CGmap or ATCGmap foramt, "

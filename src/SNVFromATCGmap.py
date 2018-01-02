@@ -626,7 +626,7 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
         VCF.write('##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">\n')
         VCF.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tNA00001\n")
     #
-    print "\t".join(["#chr", "nuc", "pos", "ATCG_watson", "ATCG_crick", "predicted_nuc", "p_value"] )
+    print ("\t".join(["#chr", "nuc", "pos", "ATCG_watson", "ATCG_crick", "predicted_nuc", "p_value"] ) )
     #
     for line in IN :
         if not line.strip() :
@@ -644,9 +644,9 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
             COV = sum([W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G])
             #
             if show_all :
-                print "\t".join([chr, nuc, pos,
+                print ("\t".join([chr, nuc, pos,
                                  "%d, %d, %d, %d"%(W_A, W_T, W_C, W_G), "%d, %d, %d, %d"%(C_A, C_T, C_C, C_G),
-                                 NUC, "%.2e" % (1-prob_pre) ] )
+                                 NUC, "%.2e" % (1-prob_pre) ] ) )
                 #
                 if vcffile:
                     VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
@@ -655,9 +655,9 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
                 #
                 if (NUC in AllCases) :
                     if (nuc not in AllCases[NUC]) :
-                        print "\t".join([chr, nuc, pos,
+                        print ("\t".join([chr, nuc, pos,
                                         "%d,%d,%d,%d"%(W_A, W_T, W_C, W_G), "%d,%d,%d,%d"%(C_A, C_T, C_C, C_G),
-                                         NUC, "%.1e" % (1-prob_pre) ] )
+                                         NUC, "%.1e" % (1-prob_pre) ] ) )
                         #
                         if vcffile :
                             VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
@@ -684,7 +684,7 @@ def main():
             "      (aka SNVFromATCGmap)\n" \
             "Description: Predict the SNV from ATCGmap file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last update: 2017-10-25\n" \
+            "Last update: 2018-01-02\n" \
             "Output format example:\n" \
             "   #chr  nuc  pos    ATCG_watson  ATCG_crick  predicted_nuc  p_value\n" \
             "   chr1  G    4752   17,0,0,69    0,0,0,0     A,G            9.3e-07\n" \
@@ -699,7 +699,7 @@ def main():
                       help="VCF format file for output",
                       metavar="FILE", default=None)
     parser.add_option("-a", "--all_nt", action="store_true", dest="showall", default = False,
-                      help = 'Show all sites with enough coverage (-l). Only show SNP sites if not specified.')
+                      help = 'Show all sites with an predictable genotype. Only show SNP sites if not specified.')
     parser.add_option("-o", dest="outfile", default=None,
                       help="STDOUT if not specified")
     parser.add_option("-m", "--mode", dest="mode",

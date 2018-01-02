@@ -69,7 +69,7 @@ def CGmapInterDiff (fn, MIN=0, MAX=100, method="chisq"):
                 IN = open(fn, 'r')
             #
         except IOError:
-            print "\n[Error]\n\tFile cannot be open: ", fn
+            print ("\n[Error]\n\tFile cannot be open: %s" % fn)
             exit(-1)
         #
     #
@@ -86,7 +86,7 @@ def CGmapInterDiff (fn, MIN=0, MAX=100, method="chisq"):
         else :
             pv = 1
         #
-        print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2e" % (chr, nuc, pos, pattern, dinuc, methyl_1, methyl_2, pv)
+        print ("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2e" % (chr, nuc, pos, pattern, dinuc, methyl_1, methyl_2, pv) )
     #
     if IN is not sys.stdin:
         IN.close()
@@ -127,7 +127,7 @@ def main():
         #
     #
     if options.method not in ["chisq", "fisher"] :
-        print "\n[Error]\n\tUnknown method : %s", options.method
+        print("\n[Error]\n\tUnknown method : %s" % options.method )
         exit(-1)
     #
     CGmapInterDiff(options.CGmapInter, int(options.min), int(options.max), options.method)

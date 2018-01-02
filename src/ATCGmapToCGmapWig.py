@@ -67,7 +67,7 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
             ATCGmap = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", ATCGmap_fn
+        print("\n[Error]:\n\t File cannot be open: %s" % ATCGmap_fn)
         exit(-1)
     #
     if (CGmap_fn is not None) :
@@ -85,7 +85,7 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
                 WIG = open(WIG_fn, 'w')
             #
         except IOError:
-            print "\n[Error]:\n\t File cannot be open: ", WIG_fn
+            print ("\n[Error]:\n\t File cannot be open: %s" % WIG_fn)
             exit(-1)
         #
     #
@@ -139,7 +139,7 @@ def main():
             "       (aka ATCGmapToCGmapWig)\n" \
             "Description: Generate CGmap or WIG from ATCGmap.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-07"
+            "Last Update: 2018-01-02"
     parser = OptionParser(usage)
     parser.add_option("-i", dest="ATCGmap", default=None,
                       help= "Input file name end with .ATCGmap or .ATCGmap.gz, "

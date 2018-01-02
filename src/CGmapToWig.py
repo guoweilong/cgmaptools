@@ -63,7 +63,7 @@ def CGmapToWig (CGmap_fn, WIG_fn, coverage=1, base=0):
             CGmap = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", CGmap_fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_fn)
         exit(-1)
     #
     try:
@@ -77,7 +77,7 @@ def CGmapToWig (CGmap_fn, WIG_fn, coverage=1, base=0):
             WIG = sys.stdout
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", WIG_fn
+        print ("\n[Error]:\n\t File cannot be open: %s " % WIG_fn )
         exit(-1)
     #
     cur_chr = ""

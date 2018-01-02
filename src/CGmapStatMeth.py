@@ -44,7 +44,7 @@ import datetime
 
 def logm(message):
     log_message = "[%s] %s" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message)
-    print log_message
+    print (log_message)
 #
 
 def GetQuant( methyl, NQuant = 5 ) :
@@ -63,7 +63,7 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
             IN = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
         exit(-1)
     #
     #print "Read in the file"
@@ -173,19 +173,18 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     #
     # -----------------
     # stat summary for BulkMethyl
-    print "\t".join(["MethStat", "context"] + context_lst)
-    print "\t".join(["mean_mC ", "global"] + ["%.4f"%i for i in mean_mC])
-    print "\t".join(["sd_mCbyChr", "global"] + ["%.4f"%i for i in sd_mC])
-    print "\t".join(["count_C ", "global"] + ["%d"%i for i in count_C])
-    print "\t".join(["contrib_mC ", "global"] + ["%.4f"%i for i in contrib_mC])
-    print "\t".join(["quant_mC ", "[0]"] + ["%d" % j[0] for j in quant_mC])
+    print ( "\t".join(["MethStat", "context"] + context_lst) )
+    print ( "\t".join(["mean_mC ", "global"] + ["%.4f"%i for i in mean_mC]) )
+    print ( "\t".join(["sd_mCbyChr", "global"] + ["%.4f"%i for i in sd_mC]) )
+    print ( "\t".join(["count_C ", "global"] + ["%d"%i for i in count_C]) )
+    print ( "\t".join(["contrib_mC ", "global"] + ["%.4f"%i for i in contrib_mC]) )
+    print ( "\t".join(["quant_mC ", "[0]"] + ["%d" % j[0] for j in quant_mC]) )
     for i in xrange(NQuant) :
-        print "\t".join(["quant_mC ", "(%.2f,%.2f]"%(float(i)/NQuant, float(i+1)/NQuant)]
-                        + ["%d"%(j[i+1]) for j in quant_mC])
+        print ("\t".join(["quant_mC ", "(%.2f,%.2f]"%(float(i)/NQuant, float(i+1)/NQuant)] + ["%d"%(j[i+1]) for j in quant_mC]) )
         #
     for chr in chr_lst :
-        print "\t".join(["mean_mC_byChr", chr] + ["%.4f"%(sum_mC_byChr[chr][i]/count_mC_byChr[chr][i])
-                                        if count_mC_byChr[chr][i]>0 else "NaN" for i in xrange( len(context_lst) ) ])
+        print ("\t".join(["mean_mC_byChr", chr] + ["%.4f"%(sum_mC_byChr[chr][i]/count_mC_byChr[chr][i])
+                                        if count_mC_byChr[chr][i]>0 else "NaN" for i in xrange( len(context_lst) ) ]) )
     #
     if filetype in ['png', 'eps', 'pdf'] :
         import matplotlib
@@ -254,7 +253,7 @@ def main():
             "      (aka CGmapStatMeth)\n" \
             "Description: Generate the bulk methylation.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-08\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "   MethStat        context C       CG      CHG	    CHH	    CA      CC      CT      CH      CW\n" \
             "   mean_mC         global  0.0798  0.3719  0.0465  0.0403  0.0891  0.0071  0.0241  0.0419  0.0559\n" \

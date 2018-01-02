@@ -55,13 +55,13 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
              INDEX = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", index
+        print ("\n[Error]:\n\t File cannot be open: %s" % index )
         exit(-1)
     #
     CGmap_lst = CGmap_list.split(",")
     tag_lst = tag_list.split(",")
     if tag_lst != "" and len(CGmap_lst) != len(tag_lst) :
-        print >> sys.stderr, "[Error]: lengths of two lists are not equal\n"
+        sys.stderr.write( "[Error]: lengths of two lists are not equal\n" )
         exit(-1)
     #
     N = len(CGmap_lst)
@@ -88,7 +88,7 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
                 INPUT = open(fn, 'r')
             #
         except IOError :
-            print "\n[Error]:\n\t File cannot be open: ", CGmap_lst[i]
+            print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_lst[i] )
             exit(-1)
         #
         # chr1    C       4654    CG      CG      0.846153846154  11      13
@@ -105,7 +105,7 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
     #
     # Write the output files
     if tag_lst != "" : # if not tag was specified, do not print the tag line
-        print "\t".join( ["chr", "pos"] + tag_lst)
+        print ("\t".join( ["chr", "pos"] + tag_lst))
     N_site = len(Site_lst)
     for i in xrange(N_site) :
         pos = Site_lst[i]
@@ -122,7 +122,7 @@ def main():
             "      (aka CGmapFillIndex)\n" \
             "Description: Fill methylation levels according to the Index file for CGmap files in list.\n" \
             "Contact: Guo, Weilong; guoweilong@126.com;\n" \
-            "Last Updated: 2016-12-07\n" \
+            "Last Updated: 2018-01-02\n" \
             "Index format Ex:\n" \
             "   chr10   100005504\n" \
             "Output format Ex:\n" \

@@ -57,7 +57,7 @@ def ATCGmapCovInBins (fn, step, filetype = 'png', prefix = '', title = '',
             IN = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
         exit(-1)
     #
     line = IN.readline()

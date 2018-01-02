@@ -48,7 +48,7 @@ def CGmapInIndex(index, CGmap, reverse) :
             INDEX = open(index, 'r')
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", index
+        print ("\n[Error]:\n\t File cannot be open: %s" % index)
         exit(-1)
     #
     # Initialization
@@ -69,11 +69,11 @@ def CGmapInIndex(index, CGmap, reverse) :
                 pos = "\t".join([tokens[0], tokens[2]])
                 if not reverse :
                     if pos in Site_lst :
-                        print line
+                        print(line)
                     #
                 else:
                     if pos not in Site_lst :
-                        print line
+                        print(line)
                     #
                 #
             #
@@ -82,7 +82,7 @@ def CGmapInIndex(index, CGmap, reverse) :
             IN.close()
         #
     except IOError :
-        print "\n[Error]:\n\t File cannot be open: ", CGmap
+        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap)
         exit(-1)
     #
 #

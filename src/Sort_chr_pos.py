@@ -44,7 +44,7 @@ import datetime
 
 def logm(message):
     log_message = "[%s] %s\n" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message)
-    print log_message
+    print(log_message)
 #
 
 def SortMap (fn, chr_col=1, pos_col=2):
@@ -99,7 +99,7 @@ from optparse import OptionParser
 def main():
     usage = "Usage: %prog [-i <input>] [-c 1] [-p 3] [-o output]\n" \
             "Author : Guo, Weilong; guoweilong@gmail.com; 2014-05-11\n" \
-            "Last Update: 2016-12-07\n" \
+            "Last Update: 2018-01-02\n" \
             "Description: Sort the input files by chromosome and position.\n" \
             "     The order of chromosomes would be :\n" \
             "     \"chr1 chr2 ... chr11 chr11_random ... chr21 ... chrM chrX chrY\""

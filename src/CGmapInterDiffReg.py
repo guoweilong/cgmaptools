@@ -85,7 +85,7 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
             else :
                 IN = open(fn, 'r')
         except IOError:
-            print "\n[Error]\n\tFile cannot be open: ", fn
+            print("\n[Error]\n\tFile cannot be open: " % fn )
             exit(-1)
     #
     pre_pos = 0
@@ -159,7 +159,7 @@ def main():
             "Description: \n" \
             "  Get the differentially methylated regions using dynamic fragment strategy.\n" \
             "Author:  Guo, Weilong; guoweilong@126.com; \n" \
-            "Last Updated: 2017-09-28\n" \
+            "Last Updated: 2018-01-02\n" \
             "Input Format, same as the output of CGmapIntersect.py:\n" \
             "   chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10\n" \
             "Output Format, Ex:\n" \

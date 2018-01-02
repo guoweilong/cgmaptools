@@ -44,7 +44,7 @@ Chr1    C       3549    CHH     CA      0.0     0       1
 import gzip
 
 def error(msg):
-    print >> sys.stderr, 'ERROR: %s' % msg
+    sys.stderr.write( "ERROR: %s" % msg )
     exit(1)
 
 genome=dict()
@@ -59,7 +59,7 @@ def read_genome (fasta_file) :
     try :
         INPUT = (gzip.open if fasta_file.endswith('.gz') else open)(fasta_file)
     except IOError:
-        print "[Error] Cannot find Fasta file : %s !" % fasta_file
+        print ("[Error] Cannot find Fasta file : %s !" % fasta_file)
         exit(-1)
     #
     chr = ""
@@ -71,20 +71,20 @@ def read_genome (fasta_file) :
                 seq_list=[]
             #
             chr = line[1:].strip()
-            print >> sys.stderr, "# Reading " + chr
+            sys.stderr.write( "# Reading " + chr )
         else:
             seq_list.append(line.strip().upper())
         #
     #
     if chr != "" and seq_list != [] :
-        genome[chr]="".join(seq_list)
+        genome[chr] = "".join(seq_list)
         seq_list=[]
     #
     INPUT.close()
-    print >> sys.stderr, "# Finished reading the genome"
+    sys.stderr.write("# Finished reading the genome")
     for chr in genome :
         genome_len[chr] = len(genome[chr])
-        print >> sys.stderr, "# %s\t%d" % (chr, genome_len[chr])
+        sys.stderr.write( "# %s\t%d" % (chr, genome_len[chr]) )
     #
 #
 bc_dict = {'A':'T', 'C':'G', 'G':'C', 'T':'A', 'N':'N',
@@ -117,7 +117,7 @@ def CGmapFillContext(CGmapF, genomeF, base=1) :
             IN = sys.stdin
         #
     except IOError :
-        print "\n[Error]:\n\t File cannot be open: ", CGmapF
+        print ("\n[Error]:\n\t File cannot be open: %s " % CGmapF )
         exit(-1)
     #
     # chr1    C       4654    CG      CG      0.84  11      13
@@ -156,9 +156,9 @@ def CGmapFillContext(CGmapF, genomeF, base=1) :
             except IndexError :
                 continue
             #
-            print "\t".join(tokens)
+            print ("\t".join(tokens) )
         else :
-            print "\t".join(tokens)
+            print ("\t".join(tokens) )
         #
     #
     IN.close()
@@ -175,17 +175,21 @@ def main():
             "             Other fields will not be affected.\n" \
             "             Can be applied to ATCGmap file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com; \n" \
-            "Last Update: 2016-12-07\n" \
+            "Last Update: 2018-01-02\n" \
             "Index Ex:\n" \
             "   Chr1    C       3541    -       -       0.0     0       1\n" \
             "Output Ex:\n" \
             "   Chr1    C       3541    CG      CG      0.0     0       1"
     #
     parser = OptionParser(usage)
-    parser.add_option("-i", dest="CGmap", help="Input CGmap file (CGmap or CGmap.gz)", metavar="STRING", default=None)
-    parser.add_option("-g", dest="genome", help="genome file, FASTA format (gzipped if end with \'.gz\')", metavar="STRING")
-    parser.add_option("-o", dest="outfile", help="Output file name (gzipped if end with \'.gz\')", metavar="STRING")
-    parser.add_option("-0", "--0-base", dest="base0", action="store_true", help="0-based genome if specified [Default: 1-based]", default=False)
+    parser.add_option("-i", dest="CGmap",
+                      help="Input CGmap file (CGmap or CGmap.gz)", metavar="STRING", default=None)
+    parser.add_option("-g", dest="genome",
+                      help="genome file, FASTA format (gzipped if end with \'.gz\')", metavar="STRING")
+    parser.add_option("-o", dest="outfile",
+                      help="Output file name (gzipped if end with \'.gz\')", metavar="STRING")
+    parser.add_option("-0", "--0-base", dest="base0", action="store_true",
+                      help="0-based genome if specified [Default: 1-based]", default=False)
     (options, args) = parser.parse_args()
     #
     if ( options.genome is None) :

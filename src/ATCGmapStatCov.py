@@ -38,7 +38,7 @@ def average(x):
 #
 def logm(message):
     log_message = "[%s] %s" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message)
-    print log_message
+    print(log_message)
 #
 def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     try:
@@ -52,7 +52,7 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
             IN = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn
+        print("\n[Error]:\n\t File cannot be open: %s" % fn)
         exit(-1)
     #
     line = IN.readline()
@@ -142,7 +142,7 @@ def main():
             "       (aka ATCGmapStatCov)\n" \
             "Description: Get the distribution of overall coverages.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com;\n" \
-            "Last Update: 2016-12-16\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "   OverAllCov      global  47.0395\n" \
             "   OverAllCov      chr1    45.3157\n" \

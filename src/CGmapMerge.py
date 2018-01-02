@@ -45,8 +45,8 @@ def MergeCGmap (fn1, fn2):
         else :
             IN_1 = open(fn1, 'r')
         #
-    except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn1
+    except IOError :
+        print("\n[Error]:\n\t File cannot be open: %s" % fn1)
         exit(-1)
     #
     try:
@@ -60,7 +60,7 @@ def MergeCGmap (fn1, fn2):
             IN_2 = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn2
+        print("\n[Error]:\n\t File cannot be open: %s" % fn2 )
         exit(-1)
     #
     line_1 = IN_1.readline()
@@ -94,7 +94,7 @@ def MergeCGmap (fn1, fn2):
                 NmC = int(NmC_1) + int(NmC_2)
                 NC = int(NC_1) + int(NC_2)
                 methyl = float(NmC)/NC
-                print "\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1, "%.2f" % methyl, "%d" % NmC, "%d" % NC])
+                print("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1, "%.2f" % methyl, "%d" % NmC, "%d" % NC]) )
                 line_1 = IN_1.readline()
                 line_2 = IN_2.readline()
             #
@@ -123,7 +123,7 @@ def main():
             "      (aka CGmapMerge)\n" \
             "Description: Merge two CGmap files together.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-07\n" \
+            "Last Update: 2018-01-02\n" \
             "Note: The two input CGmap files should be sorted in the same order first.\n"
     parser = OptionParser(usage)
     parser.add_option("-1", dest="CGmap_1",

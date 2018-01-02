@@ -31,7 +31,7 @@ import sys
 #import re
 
 def error(msg):
-    print >> sys.stderr, 'ERROR: %s' % msg
+    sys.stderr.write("ERROR: %s" % msg)
     exit(1)
 #
 from optparse import OptionParser
@@ -42,7 +42,7 @@ def main():
             "      (aka FragRegFromBED)\n" \
             "Description: Generate fragmented regions from BED file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2017-01-20\n" \
+            "Last Update: 2018-01-02\n" \
             "   Split input region into N bins, get fragments from 5' end and 3' end.\n" \
             "Input Ex:\n" \
             "   chr1   1000    2000   +\n"\
@@ -77,7 +77,7 @@ def main():
                 INPUT =  open(options.infile, 'r')
             #
         except IOError:
-            print "[Error] Cannot find input file : %s !" % options.infile
+            print("[Error] Cannot find input file : %s !" % options.infile )
             exit(-1)
         #
     #
@@ -128,15 +128,13 @@ def main():
             body_regions = [(Left+(Right-Left)*i/nbins) for i in xrange(nbins+1)]
             LeftEnd_regions = [ (Left-i) for i in FiveMerPos ]
             RightEnd_regions = [ (Right+i) for i in ThreeMerPos ]
-            print "\t".join([chr, strand]) + "\t" + \
-                  "\t".join( str(i) for i in (LeftEnd_regions + body_regions + RightEnd_regions) )
+            print("\t".join([chr, strand]) + "\t" + "\t".join( str(i) for i in (LeftEnd_regions + body_regions + RightEnd_regions) ) )
             #
         else :
             body_regions = [(Left+(Right-Left)*i/nbins) for i in xrange(nbins+1)]
             LeftEnd_regions = [ (Left-i) for i in ThreeMerPos ]
             RightEnd_regions = [ (Right+i) for i in FiveMerPos ]
-            print "\t".join([chr, strand]) + "\t" + \
-                  "\t".join(str(i) for i in (RightEnd_regions + body_regions[::-1] + LeftEnd_regions) )
+            print("\t".join([chr, strand]) + "\t" + "\t".join(str(i) for i in (RightEnd_regions + body_regions[::-1] + LeftEnd_regions) ) )
             #
         #
     #

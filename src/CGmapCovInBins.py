@@ -59,7 +59,7 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
             IN = sys.stdin
         #
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
         exit(-1)
     #
     line = IN.readline()
@@ -194,7 +194,7 @@ def main():
             "      (aka CGmapCovInBins)\n" \
             "Description: Generate the methylation-effective coverage in Bins.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com;\n" \
-            "Last Update: 2016-12-07\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "   chr1    1       5000    29.0000\n" \
             "   chr1    5001    10000   30.0396\n" \

@@ -60,7 +60,7 @@ def revcumsum(seq):
 #
 def logm(message):
     log_message = "[%s] %s" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), message)
-    print log_message
+    print(log_message)
 
 def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
     try:
@@ -72,7 +72,7 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
         else :
             IN = sys.stdin
     except IOError:
-        print "\n[Error]:\n\t File cannot be open: ", fn
+        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
         exit(-1)
     #
     line = IN.readline()
@@ -197,7 +197,7 @@ def main():
             "      (aka CGmapStatCov)\n" \
             "Description: Get the distribution of methylation-effective coverages.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-16\n" \
+            "Last Update: 2018-01-02\n" \
             "Output Ex:\n" \
             "   MethEffectCove  global  47.0395\n" \
             "   MethEffectCove  chr1    45.3157\n" \
