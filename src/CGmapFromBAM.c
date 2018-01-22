@@ -615,6 +615,7 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 	int rev_counts[5] = {0};
 	int current_tid = pileups->b->core.tid;
 	char *chrom_name = info->in->header->target_name[current_tid];
+	char * aln_qname = NULL;
 	if (current_tid != info->current_tid) {
 		load_chromosome(current_tid, info);
 		gzprintf(info->wiggle, "variableStep chrom=%s\n", chrom_name);
@@ -626,7 +627,7 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 		pl = pileups + i;
 		aln = pl->b;
 		if (RmOverlap) {
-			char * aln_qname = DICT_MALLOC(100*sizeof(char)); // Fixed Error here, should use dynamic space
+			aln_qname = DICT_MALLOC(100*sizeof(char)); // Fixed Error here, should use dynamic space
 			QnameClean(bam1_qname(aln), aln_qname);
 			//printf("DEBUG | %s\n", aln_qname);
 			if ( dict_get(Dict, aln_qname) == NULL ) {
@@ -644,6 +645,7 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 			} //else {
 			    //printf("DEBUG | Second: %s\n", aln_qname);
 			//}
+	        DICT_FREE(aln_qname); // avoid using too much memory
 		} else {
             // Redudent region A(2)
             if (!pl->indel){

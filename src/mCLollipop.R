@@ -91,7 +91,7 @@ Example: \
     Example: \
         chr1  213941196  213942363  hyper-DMR \
         chr1  213942363  213943530  hypo-DMR \
-    #   chr   left       right      region-description
+    #   chr   left       right      region-description \
 -annotation file (-a), refFlat Format:\
     To show the structure of genes/transcripts. One-line in annotation, one-track in figure. \
     Example: \
