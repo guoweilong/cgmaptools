@@ -343,6 +343,7 @@ dict_pair_t * dict_pair_new(char *key, void *val) {
   dict_pair_t *self;
   if (!(self = DICT_MALLOC(sizeof(dict_pair_t))))
     return NULL;
+  //printf("malloc pair\n");
   self->prev = NULL;
   self->next = NULL;
   self->key = key;
@@ -354,6 +355,7 @@ dict_t * dict_new() {
   dict_t *self;
   if (!(self = DICT_MALLOC(sizeof(dict_t))))
     return NULL;
+  //printf("malloc dict\n");
   self->head = NULL;
   self->tail = NULL;
   self->free = NULL;
@@ -365,17 +367,26 @@ void dict_destroy(dict_t *self) {
   dict_pair_t *curr = self->head;
   while (curr) {
     next = curr->next;
-    if (self->free) self->free(curr->key, curr->val);
+    if (self->free) {
+        self->free(curr->key, curr->val);
+        //printf("free 100\n");
+    }
     DICT_FREE(curr);
+    //printf("free pair\n");
     curr = next;
   }
   DICT_FREE(self);
+  //printf("free dict\n");
 }
 // Add a key-value pair to dict.
 dict_pair_t * dict_set(dict_t *self, char *key, void *val) {
   dict_pair_t *pair = dict_get(self, key);
   if (pair) {
     if (self->free) self->free(pair->key, pair->val);
+    /*if (self->free) {
+		free(pair->key);
+		free(pair->val);
+	}*/
     pair->val = val;
   } else {
     pair = dict_pair_new(key, val);
@@ -586,10 +597,10 @@ static inline void context_calling(const char *chrom_seq, int chrom_seq_length, 
 }
 
 // Get the clean qname of reads, by removing mate infor
-// "READXXXXCCAC#1" => "READXXXXCCAC" 
+// "READXXXXCCAC#1" => "READXXXXCCAC"
 static int QnameClean (char * qname, char * qname_clean) {
 	size_t qname_len = strlen(qname);
-	if (qname_len >= 3) { 
+	if (qname_len >= 3) {
 	    char ch = qname[qname_len-2];
 //		printf("DEBUG | Char=%c\n", ch);
 		if (ch == '.' || ch == '#' || ch == ':') {
@@ -604,6 +615,44 @@ static int QnameClean (char * qname, char * qname_clean) {
 	return 1;
 }
 
+// Seems not works good for linux
+// small space may not return to system in real time
+void FreeDictEle(char * key, void* value) {
+	//free(key);
+	free(value);
+}
+
+// Define a list of string point
+// A pool of 10000 string for string sequence names
+char * MEM[1000];
+char ** MEM_pointer;
+
+char ** InitStringList ( char ** p ) {
+	int i;
+	char ** q = p;
+	for(i=0; i<1000; i++) {
+		(*q) = DICT_MALLOC(50*sizeof(char));
+		q++;
+	}
+	MEM_pointer = p;
+	return p;
+}
+
+char * GetNextStringSpace (void) {
+	//printf("debug 0\n");
+	//printf("%d\n", MEM_pointer-MEM);
+	if(MEM_pointer >= (MEM+999)) {
+	    //printf("debug 1\n");
+	    MEM_pointer = MEM;
+	} else {
+	    //printf("debug 2\n");
+	    MEM_pointer++;
+	    //printf("debug 3\n");
+	}
+	//printf("%d\n", MEM_pointer-MEM);
+	return (*MEM_pointer);
+}
+
 // callback for bam_plbuf_init()
 static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *pileups, void *vinfo)
 {
@@ -615,27 +664,35 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 	int rev_counts[5] = {0};
 	int current_tid = pileups->b->core.tid;
 	char *chrom_name = info->in->header->target_name[current_tid];
-	char * aln_qname = NULL;
+	//char * aln_qname = NULL;
 	if (current_tid != info->current_tid) {
 		load_chromosome(current_tid, info);
 		gzprintf(info->wiggle, "variableStep chrom=%s\n", chrom_name);
 	}
 	dict_t * Dict = dict_new();
+	char * aln_qname ; // A pointer to dynamic space to store reads name
+	int nucleotide;
+	//Dict->free = FreeDictEle; // Point to function for free space of dict element
 	//printf("DEBUG | pileup_func: before <for>\n");
 	for (i = 0; i < n; i ++) {
-//		printf("DEBUG | == %d ==\n", i);
+        // printf("DEBUG | == %d ==\n", i);
 		pl = pileups + i;
 		aln = pl->b;
 		if (RmOverlap) {
-			aln_qname = DICT_MALLOC(100*sizeof(char)); // Fixed Error here, should use dynamic space
+			//printf("DEBUG 0\n");
+			//aln_qname = DICT_MALLOC(50*sizeof(char)); // Fixed Error here, should use dynamic space
+			aln_qname = GetNextStringSpace(); // Find the space for a string
+			//printf("GetSpace\n");
+			//printf("%s\n", bam1_qname(aln));
 			QnameClean(bam1_qname(aln), aln_qname);
-			//printf("DEBUG | %s\n", aln_qname);
+			//printf("%s\n", aln_qname);
+			//printf("DEBUG 1\n");
 			if ( dict_get(Dict, aln_qname) == NULL ) {
 			    //printf("DEBUG | First: %s\n", aln_qname);
-				dict_set(Dict, aln_qname, "");
+				dict_set(Dict, aln_qname, NULL);
 				// Redudent region A(1)
 				if (!pl->indel){
-					int nucleotide = NT_BAM_TO_IDX[bam1_seqi(bam1_seq(aln), pl->qpos)];
+					nucleotide = NT_BAM_TO_IDX[bam1_seqi(bam1_seq(aln), pl->qpos)];
 					if (bam1_strand(aln)){ // negative strand
 						rev_counts[nucleotide] ++;
 					} else {    // positive strand
@@ -645,11 +702,13 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 			} //else {
 			    //printf("DEBUG | Second: %s\n", aln_qname);
 			//}
-	        DICT_FREE(aln_qname); // avoid using too much memory
+			//printf("DEBUG 2\n");
+	        //DICT_FREE(aln_qname); // avoid using too much memory
 		} else {
             // Redudent region A(2)
+			//printf("DEBUG 3\n");
             if (!pl->indel){
-                int nucleotide = NT_BAM_TO_IDX[bam1_seqi(bam1_seq(aln), pl->qpos)];
+                nucleotide = NT_BAM_TO_IDX[bam1_seqi(bam1_seq(aln), pl->qpos)];
                 if (bam1_strand(aln)){ // negative strand
                     rev_counts[nucleotide] ++;
                 } else {    // positive strand
@@ -658,14 +717,31 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
             }
 		}
 	}
-//	printf("DEBUG | pileup_func: after <for>\n");
+    //
+	//printf("DEBUG | pileup_func: after <for>\n");
+    /*
+    dict_pair_t *curr = Dict->head;
+   	dict_pair_t *next;
+  	while (curr) {
+        	next = curr->next;
+        	//if (Dict->free) Dict->free(curr->key, curr->val);
+        	//printf("%s\n", curr->key);
+        	//DICT_FREE(curr->key);
+		curr->key = NULL;
+		DICT_FREE(curr->val);
+        	DICT_FREE(curr);
+        	curr = next;
+    }
+    DICT_FREE(Dict);
+	Dict = NULL;*/
+	//
 	dict_destroy(Dict);
 	char *context;
 	char subcontext[3] = {0};
 	char nuc;
 	context_calling(info->current_chrom_seq, info->current_chrom_length, pos,
                     &nuc, &context, subcontext);
-//	printf("DEBUG | pileup_func: after <context_call>\n");
+    //	printf("DEBUG | pileup_func: after <context_call>\n");
 	double meth_level = 0;
 	int meth_level_is_available = 0;
 	int meth_cytosines = 0;
@@ -776,7 +852,7 @@ int call_methylation(char *sorted_bam_filename,
 
 
 // ================  Main  ================= BEGIN
-// Functions for call back to parameter 
+// Functions for call back to parameter
 char BamFileName[1000];
 char GenomeFileName[1000] = "";
 char OutputPrefix[1000];
@@ -843,14 +919,15 @@ int main(int argc, char **argv){
 	    fprintf(stderr, "[Error] genome file is not specified.\n");
 	    exit(1);
 	}
-	
+
 	//printf("%s\t%s\t%s\n", BamFileName, GenomeFileName, OutputPrefix);
 	char ATCGmap_filename[1000], CGmap_filename[1000], wiggle_filename[1000];
 	sprintf(ATCGmap_filename, "%s.ATCGmap.gz", OutputPrefix);
 	sprintf(CGmap_filename,   "%s.CGmap.gz",   OutputPrefix);
 	sprintf(wiggle_filename,  "%s.wig.gz",     OutputPrefix);
+	InitStringList(MEM);
 	call_methylation(BamFileName, GenomeFileName, ATCGmap_filename, CGmap_filename, wiggle_filename);
-	
+
 	return 0;
 }
 // ================  Main  ================= END

@@ -64,12 +64,14 @@ parser <- OptionParser(usage = "cgmaptools fragreg [options]",
                        option_list=option_list, description = "      (aka mCFragRegView) \
 Description: Plot methylation dynamics of target and flanking region for multiple samples \
 Contact:     Zhu, Ping; pingzhu.work@gmail.com\
-Last update: 2017-09-16\
+Last update: 2018-02-12\
 Example: \
   FragRegView.R -i input -r 5 -o genebody.pdf \
 -Input File Format: \
   1st line is the header.\
-Each row contains methylation measurements of a sample. \
+  Each row contains methylation measurements of a sample. \
+  The user may need to use shell script to generate following format \
+ based on the results of \"cgmaptools mfg\". \
 Example: \
   Sample  Up1  Up2  ...  Region1  Region2 ...  Down1  Down2  ...\ 
   Sample1 0.1  0.1  ...  0.2      0.2     ...  0.3    0.3    ...\

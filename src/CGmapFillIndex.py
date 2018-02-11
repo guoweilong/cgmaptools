@@ -55,7 +55,7 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
              INDEX = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % index )
+        sys.stderr.write ("\n[Error]:\n\t File cannot be open: %s" % index )
         exit(-1)
     #
     CGmap_lst = CGmap_list.split(",")
@@ -156,7 +156,14 @@ def main():
             sys.stdout = open(options.outfile, 'w')
         #
     #
+    sys.stderr.write("The index file is : %s\n" % options.index)
+    sys.stderr.write("The CGmap list is : %s\n" % options.CGmap_list)
+    sys.stderr.write("The index list is : %s\n" % options.tag_list)
+    sys.stderr.write("The minimum coverage is : %s\n" % options.min_Cov)
+    sys.stderr.write("The maximum coverage is : %s\n" % options.max_Cov)
+    #
     CGmapFillIndex(options.index, options.CGmap_list, options.tag_list, int(options.min_Cov), int(options.max_Cov))
+    #
 #
 
 # ===========================================
