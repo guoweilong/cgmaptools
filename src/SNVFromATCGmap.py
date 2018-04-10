@@ -645,13 +645,13 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
             #
             if show_all :
                 print ("\t".join([chr, nuc, pos,
-                                 "%d, %d, %d, %d"%(W_A, W_T, W_C, W_G), "%d, %d, %d, %d"%(C_A, C_T, C_C, C_G),
-                                 NUC, "%.2e" % (1-prob_pre) ] ) )
+                                 "%d,%d,%d,%d"%(W_A, W_T, W_C, W_G), "%d,%d,%d,%d"%(C_A, C_T, C_C, C_G),
+                                 NUC, "%.1e" % (1-prob_pre) ] ) )
                 #
                 if vcffile:
                     VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
                 #
-            elif NUC != "-" :
+            elif (NUC != "-" or NUC != "N") :
                 #
                 if (NUC in AllCases) :
                     if (nuc not in AllCases[NUC]) :

@@ -39,7 +39,7 @@ if(!is.installed("optparse")){
 suppressPackageStartupMessages(library("optparse"))
 option_list <- list(
   make_option(c("-i", "--infile"), dest = "infile", default = "",
-              help="input file"),
+              help="input file, use STDIN if ommited, multiple-chr is not suggested"),
   make_option(c("-a", "--annotation"), dest = "annofile", default = "",
               help="[opt] annotation file name, refFlat format"),
   make_option(c("-o", "--outfile"), dest = "outfile", default = "",
@@ -47,11 +47,11 @@ option_list <- list(
   make_option(c("-f", "--format"), dest = "format", default = "pdf",
               help = "[opt] the format for output figure: pdf (default), png, eps"),
   make_option(c("-l", "--left"), dest = "left", default = "",
-              help = "[opt] Left-most position"),
+              help = "[opt] Left-most position, use the 1st position if omitted"),
   make_option(c("-r", "--right"), dest = "right", default = "",
-              help = "[opt] Right-most position"),
+              help = "[opt] Right-most position, use the last position of input if omitted"),
   make_option(c("-c", "--chr"), dest = "chr", default = "",
-              help = "[opt] chromosome name"),
+              help = "[opt] chromosome name, use the chr in 1st line of input file if omitted"),
   make_option(c("-s", "--site"), dest = "sitefile", default = "", 
               help = "[opt] file of site to be marked"),
   make_option(c("-b", "--bed"), dest = "bedfile", default = "", 
@@ -68,7 +68,7 @@ parser <- OptionParser(usage = "cgmaptools lollipop [options] file",
      option_list=option_list, description = "      (aka mCLollipop) \
 Description: Plot local mC level for multiple samples \
 Contact:     Guo, Weilong; guoweilong@126.com\
-Last Update: 2017-09-16 \
+Last Update: 2018-04-10 \
 Example: \
     mCLollipop [-i input] -o gene.png \
 -Input Format (-i)\
@@ -121,10 +121,16 @@ figure.format = arguments$format
 if( outfile == "") {
   outfile = paste( infile, figure.format, sep=".")
 }
+#
 # Read the input file
 T = read.table(infile, header=TRUE)
 N_Sample = ncol(T)-2
-mC = T[,c(-1,-2)]
+#
+chr=T[1,1]
+if(is.na(chr)){
+  chr=arguments$chr
+}
+mC = T[T[,1]==chr,c(-1,-2)]
 pos = t(T[,2])
 #
 if( arguments$left=="" || arguments$right=="" ) {
@@ -264,10 +270,7 @@ for ( k in c(1:N_Sample) ) {
 }
 # ==========================
 # Text information
-chr=T[1,1]  
-if(is.na(chr)){
-  chr=arguments$chr
-}
+
 # Text ex:  "chr2: 90,936-91,653"
 text( mean( c(LeftMost, RightMost) ), (N_Sample+1.75)*yscale, cex = 1.5,
       paste(chr, " : ", 

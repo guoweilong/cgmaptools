@@ -71,7 +71,7 @@ Example: \
   1st line is the header.\
   Each row contains methylation measurements of a sample. \
   The user may need to use shell script to generate following format \
- based on the results of \"cgmaptools mfg\". \
+  based on the results of \"cgmaptools mfg\". \
 Example: \
   Sample  Up1  Up2  ...  Region1  Region2 ...  Down1  Down2  ...\ 
   Sample1 0.1  0.1  ...  0.2      0.2     ...  0.3    0.3    ...\

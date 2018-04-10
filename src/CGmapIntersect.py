@@ -125,8 +125,10 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
                 #
                 if CheckCtx( pattern_1, dinuc_1, ctx) :
                     print ("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1,
-                                 "%.2f" % float(methyl_1), "%d" % int(NmC_1), "%d" % int(NC_1),
-                                 "%.2f" % float(methyl_2), "%d" % int(NmC_2), "%d" % int(NC_2)]) )
+                                 "%.2f" % float(methyl_1), NmC_1, NC_1,
+                                 "%.2f" % float(methyl_2), NmC_2, NC_2 ] ) )
+                               #  "%.2f" % float(methyl_1), "%d" % int(NmC_1), "%d" % int(NC_1),
+                               #  "%.2f" % float(methyl_2), "%d" % int(NmC_2), "%d" % int(NC_2)]) )
                 #
                 line_1 = IN_1.readline()
                 line_2 = IN_2.readline()
@@ -147,7 +149,7 @@ def main():
             "Description: \n" \
             "    Get the intersection of two CGmap files." \
             "Contact: Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-04-10\n" \
             "Output Format:\n" \
             "    Chr1  C  3541  CG  CG  0.8  4  5  0.4  4  10\n" \
             "When 1st CGmap file is:\n" \

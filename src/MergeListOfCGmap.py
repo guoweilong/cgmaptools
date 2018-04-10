@@ -173,11 +173,12 @@ def main():
             "      (aka MergeListOfCGmap)\n" \
             "Description: Merge multiple CGmap/ATCGmap files into one.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-12-07\n" \
-            "Note: Large memory is needed.\n"
+            "Last Update: 2018-04-10\n" \
+            "Note: Large memory is needed. \n" \
+            "      Split input by chromosome for merge will save some memory.\n"
     parser = OptionParser(usage)
     parser.add_option("-i", dest="infile_lst",
-                      help="List of input files; gzipped file ends with '.gz'", metavar="FILE")
+                      help="List of input files; gzipped file ends with '.gz'; seperated by comma without gap ", metavar="FILE")
     parser.add_option("-f", dest="format",
                       help="cgmap or atcgmap [Default: %default]", default = "cgmap", metavar="FILE")
     parser.add_option("-o", dest="outfile", default=None,

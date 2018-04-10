@@ -63,3 +63,10 @@ cd bin
   done
 cd ..
 
+echo ""
+echo "Installation is finished."
+echo ""
+echo "Please add the following line to your ~/.bash_profile, and source ~/.bash_profile before running cgmaptools."
+echo ""
+echo '    export PATH='`pwd`':$PATH'
+echo ""
