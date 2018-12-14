@@ -75,6 +75,13 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     sum_mC_byChr   = {}
     count_mC_byChr = {}
     NQuant = 5
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     quant_mC = [ [0]*(NQuant+1) for i in xrange(len(context_lst)) ]
     #
     # ==================
@@ -253,7 +260,7 @@ def main():
             "      (aka CGmapStatMeth)\n" \
             "Description: Generate the bulk methylation.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-05-02\n" \
             "Output Ex:\n" \
             "   MethStat        context C       CG      CHG	    CHH	    CA      CC      CT      CH      CW\n" \
             "   mean_mC         global  0.0798  0.3719  0.0465  0.0403  0.0891  0.0071  0.0241  0.0419  0.0559\n" \

@@ -47,6 +47,12 @@ def qbinom(p, size, prob, lower_tail = True):
     '''Binomial quantiles'''
     if not lower_tail :
         prob = 1 - prob
+    #    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
     #
     sum = 0
     for i in xrange(size) :
@@ -361,6 +367,13 @@ def PredictNT_bayes ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N" ):
     #global p_value
     #global error_rate
     #global dynamicP
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     global bayes_options
     p_value = bayes_options['pv']
     error_rate = bayes_options['er']
@@ -684,7 +697,7 @@ def main():
             "      (aka SNVFromATCGmap)\n" \
             "Description: Predict the SNV from ATCGmap file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last update: 2018-01-02\n" \
+            "Last update: 2018-05-02\n" \
             "Output format example:\n" \
             "   #chr  nuc  pos    ATCG_watson  ATCG_crick  predicted_nuc  p_value\n" \
             "   chr1  G    4752   17,0,0,69    0,0,0,0     A,G            9.3e-07\n" \

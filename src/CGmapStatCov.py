@@ -142,6 +142,13 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
         GlobalCovSum = 0
         print("MethEffectCov\tglobal\tNaN")
     #
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     ChrCov = [0] * len(ChrLst)
     for chr_idx in xrange(len(ChrLst)):
         ChrCov[chr_idx] = float(sum([i * j for i, j in ChrCovDict[chr_idx].items()])) / sum([i for i in ChrCovDict[chr_idx].values()])
@@ -186,8 +193,14 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
         plt.title('Cumulative Effective Coverage', fontsize=10)
         if prefix != "" :
             prefix = prefix + "."
+        #
         plt.savefig(prefix + "MethEffectCove." + filetype, format=filetype)
         plt.clf()
+        # ===
+
+        # ===
+    #
+#
 
 from optparse import OptionParser
 
@@ -197,7 +210,7 @@ def main():
             "      (aka CGmapStatCov)\n" \
             "Description: Get the distribution of methylation-effective coverages.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-05-02\n" \
             "Output Ex:\n" \
             "   MethEffectCove  global  47.0395\n" \
             "   MethEffectCove  chr1    45.3157\n" \

@@ -42,7 +42,7 @@ def main():
             "      (aka FragRegFromBED)\n" \
             "Description: Generate fragmented regions from BED file.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-05-02\n" \
             "   Split input region into N bins, get fragments from 5' end and 3' end.\n" \
             "Input Ex:\n" \
             "   chr1   1000    2000   +\n"\
@@ -87,6 +87,13 @@ def main():
         else :
             sys.stdout = open(options.outfile, 'w')
         #
+    #
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
     #
     # FiveMerEND
     if options.FiveMerEnd == "" :

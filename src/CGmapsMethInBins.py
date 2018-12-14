@@ -60,6 +60,13 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
         print("[Error]: tag list and file list are not same in lengths.")
         exit(-1)
     #
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     for fn_id in xrange( len(fn_lst) ) :
         fn = fn_lst[fn_id]
         try:
@@ -192,7 +199,7 @@ def main():
             "      (aka CGmapsMethInBins)\n" \
             "Description: Generate the methylation in Bins.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-05-02\n" \
             "Output Ex:\n" \
             "   chr1    1       5000    0.0000\n" \
             "   chr1    5001    10000   0.0396\n" \

@@ -33,6 +33,8 @@ import numpy as np
 import datetime
 
 from math import fsum
+
+
 def average(x):
     return fsum(x)/float(len(x)) if x else 0
 #
@@ -91,6 +93,13 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     GlobalCov = (float(sum([i*j for i,j in CovDict.items()]))/sum([i for i in CovDict.values()]))
     print("OverAllCov\tglobal\t%.4f" % GlobalCov  )
     ChrCov = [0] * len(ChrLst)
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     for chr_idx in xrange(len(ChrLst)):
         ChrCov[chr_idx] = float(sum([i * j for i, j in ChrCovDict[chr_idx].items()])) / sum([i for i in ChrCovDict[chr_idx].values()])
         print("OverAllCov\t%s\t%.4f" % (ChrLst[chr_idx], ChrCov[chr_idx] )   )
@@ -142,7 +151,7 @@ def main():
             "       (aka ATCGmapStatCov)\n" \
             "Description: Get the distribution of overall coverages.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com;\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-05-02\n" \
             "Output Ex:\n" \
             "   OverAllCov      global  47.0395\n" \
             "   OverAllCov      chr1    45.3157\n" \

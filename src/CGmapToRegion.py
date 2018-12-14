@@ -40,6 +40,7 @@ def Get_key (str) :
         chr = int(match.group(1))
     else :
         chr = str
+    #
     return [chr, str]
     #re.match(r"^chr(\d+)", "chr019_random").group(1)
 #
@@ -63,6 +64,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
             REGION = gzip.open(region_fn, 'rb')
         else :
             REGION = open(region_fn, 'r')
+        #
     except IOError:
         print ("\n[Error]:\n\t File cannot be open: %s" % region_fn)
         exit(-1)
@@ -89,6 +91,7 @@ def CGmapToRegion (CGmap_fn, region_fn):
         except ValueError :
             print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % CGmap_fn)
             exit(-1)
+        #
         try :
             chr_r, pos_r1, pos_r2 = line_r.strip().split()[0:3]
         except ValueError :
@@ -135,15 +138,20 @@ def CGmapToRegion (CGmap_fn, region_fn):
                     count = count + 1
                     NmC = NmC + int(NmC_c)
                     NC = NC + int(NC_c)
+                #
                 line_c = CGMAP.readline()
             #
         #
     # End for reading files
     #
-    if count > 0 :
-        print ("%s\t%s\t%s\t%.2f\t%d\t%.2f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
-    else :
-        print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
+    while line_r :
+        if count > 0 :
+            print ("%s\t%s\t%s\t%.2f\t%d\t%.2f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
+        else :
+            print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
+        #
+        # do the next
+        line_r = REGION.readline()
     #
     REGION.close()
     if CGMAP is not sys.stdin:
@@ -161,7 +169,7 @@ def main():
             "      (aka CGmapToRegion)\n" \
             "Description: Calculated the methylation levels in regions in two ways.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02\n" \
+            "Last Update: 2018-07-05\n" \
             "Format of Region file:\n" \
             "  #chr    start_pos  end_pos\n" \
             "   chr1   8275       8429\n" \

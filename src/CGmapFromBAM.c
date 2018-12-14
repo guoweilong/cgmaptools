@@ -491,6 +491,7 @@ void load_chromosome(int tid, infoholder_t *info){
 	if (info->current_chrom_seq != NULL) {
 		free(info->current_chrom_seq);
 	}
+      //printf("DEBUG | load_chr 1\n");
     char genome_filename[MAX_PATH] = {0};
     if (is_dir(info->genome_filename)) {
         sprintf(genome_filename,"%s/%s.fa", info->genome_filename, chrom_name);
@@ -498,12 +499,19 @@ void load_chromosome(int tid, infoholder_t *info){
         strcpy(genome_filename, info->genome_filename);
     }
 	faidx_t *genome_idx = fai_load(genome_filename);
+
+      	//printf("DEBUG | load_chr 2\n");
 	if (genome_idx == NULL) {
 		fprintf(stderr, "Fail to open index for genome file: %s\n", genome_filename);
 		exit(1);
 	}
+      	//printf("DEBUG | load_chr 2.5\n");
+      	//printf("DEBUG | %s | %s | %s \n", genome_idx, chrom_name, info->current_chrom_length );
 	info->current_chrom_seq = fai_fetch(genome_idx, chrom_name, &info->current_chrom_length);
+      	//printf("DEBUG | load_chr 2.6\n");
 	info->current_tid = tid;
+	
+      	//printf("DEBUG | load_chr 3\n");
 	if (info->current_chrom_seq == NULL) {
 		fprintf(stderr, "Failed to load chromosome: %s\n", chrom_name);
 		exit(1);
@@ -688,7 +696,7 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 			//printf("%s\n", aln_qname);
 			//printf("DEBUG 1\n");
 			if ( dict_get(Dict, aln_qname) == NULL ) {
-			    //printf("DEBUG | First: %s\n", aln_qname);
+			    	//printf("DEBUG | First: %s\n", aln_qname);
 				dict_set(Dict, aln_qname, NULL);
 				// Redudent region A(1)
 				if (!pl->indel){
@@ -741,7 +749,7 @@ static int pileup_func(uint32_t tid, uint32_t pos, int n, const bam_pileup1_t *p
 	char nuc;
 	context_calling(info->current_chrom_seq, info->current_chrom_length, pos,
                     &nuc, &context, subcontext);
-    //	printf("DEBUG | pileup_func: after <context_call>\n");
+    	//	printf("DEBUG | pileup_func: after <context_call>\n");
 	double meth_level = 0;
 	int meth_level_is_available = 0;
 	int meth_cytosines = 0;
@@ -938,6 +946,9 @@ int main(int argc, char **argv){
 $ ../bin/CGmapFromBAM
 open: No such file or directory
 Fail to open BAM file
+$ potential bugs
+If the input bam names is not in list of fasta genome
+related with fai_fetch function
 */
 
 

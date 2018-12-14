@@ -78,6 +78,13 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
     if index :
         INDEX.close()
     #
+    #
+    # works for python2 and python3
+    try:
+        xrange
+    except NameError:
+        xrange = range
+    #
     # Read all the CGmap files
     for i in xrange(N) :
         fn = CGmap_lst[i]
@@ -122,7 +129,7 @@ def main():
             "      (aka CGmapFillIndex)\n" \
             "Description: Fill methylation levels according to the Index file for CGmap files in list.\n" \
             "Contact: Guo, Weilong; guoweilong@126.com;\n" \
-            "Last Updated: 2018-01-02\n" \
+            "Last Updated: 2018-05-02\n" \
             "Index format Ex:\n" \
             "   chr10   100005504\n" \
             "Output format Ex:\n" \
