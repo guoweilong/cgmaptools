@@ -71,7 +71,7 @@ use Pod::Usage;
 =head1 AUTHOR
 
     Contact:     Zhu, Ping; pingzhu.work@gmail.com
-    Last update: 2016-12-07
+    Last update: 2019-04-23
 
 =cut
 
@@ -138,7 +138,11 @@ my %Ctype_support = (
 ( $fdr <= 1 and $fdr >= 0 ) or pod2usage("\nError: Adjusted p value should be range in [0,1].\n");
 
 ## Methylation data preparation for calling
-my $SNP_effective_linked;
+my $SNP_effective_linked = '';
+my $SNP_counts = 0;
+my $date = `date +%T`;
+chomp $date;
+print STDERR "[$date] Loading htSNPs ... \n";
 
 ## SNPs
 my $format_column = 8;
@@ -186,14 +190,25 @@ while(<IN>){
     my $snp_reference;
     my ( $start, $end ) = find_region_for_snp("$chr:$pos-$pos");
     my $region = "$chr:$start-$end";
+    if($start == 0 and $end == 0){
+        my $date = `date +%T`;
+        chomp $date;
+        print STDERR "[$date] Ignore: failed to link regions for htSNP $chr:$pos\n";
+        next;
+    }
     #print "$region\n";
 
     # find C sites on reference genome sequence
     my %Csites;
     findC_on_reference($region, \%Csites, $pos);
-
     my @csites = sort {$a<=>$b} keys %Csites;
     #print "@csites\n";
+    if(scalar(@csites) == 0){
+        my $date = `date +%T`;
+        chomp $date;
+        print STDERR "[$date] Ignore: failed to link Cytosines for htSNP $chr:$pos\n";
+        next;
+    }
 
     # methylation of linked sites
     my %c_met;
@@ -210,7 +225,8 @@ while(<IN>){
     if ( $mode eq "asr" ){
         my $this_SNP_prepare = asr_call_prepare($format_C, $pos, $allele1, $allele2);
         if ( $this_SNP_prepare ne "NA" ){
-            $SNP_effective_linked .= "$chr,$pos,$ref,$allele1,$allele2,$this_SNP_prepare\n";
+            $SNP_effective_linked .= "$chr,$pos,$ref,$allele1,$allele2,$min_cover,$max_cover,$this_SNP_prepare\n";
+            $SNP_counts ++;
         }
     } 
     # ass: Allele specific methylated site
@@ -221,16 +237,22 @@ while(<IN>){
             foreach (@C_sites){
                 $SNP_effective_linked .= "$chr,$pos,$ref,$allele1,$allele2,$_\n";
             }
+            $SNP_counts ++;
         }
     }
 }
 close IN;
 
 # effective linked C sites
-if (defined($SNP_effective_linked)){
+if ($SNP_effective_linked ne ''){
+    my $date = `date +%T`;
+    chomp $date;
+    print STDERR "[$date] In total, $SNP_counts htSNPs linked effective cytosines.\n";
     if ( $mode eq "asr" ){
+        print STDERR "[$date] Perform asr begin ...\n";
         asr_test( $SNP_effective_linked );
     } elsif ( $mode eq "ass" ){
+        print STDERR "[$date] Perform ass begin ...\n";
         ass_test( $SNP_effective_linked );
     }
 }
@@ -426,9 +448,9 @@ sub asr_test {
     my $Rcode = <<EOF;
     # avoid warning mesages glabally!
     options(warn=-1)
-    data <- read.csv(text="$linked_C_sites" , head=F, sep=",", stringsAsFactors=F, colClasses=c("character", "numeric", "character", "character","character", "character","character"))
+    data <- read.csv(text="$linked_C_sites" , head=F, sep=",", stringsAsFactors=F, colClasses=c("character", "numeric", "character", "character", "character", "numeric", "numeric", "character","character"))
 
-    names(data) <- c("Chr", "Pos", "Ref", "Allele1", "Allele2", "Allele1_linked_C", "Allele2_linked_C")
+    names(data) <- c("Chr", "Pos", "Ref", "Allele1", "Allele2", "Region_start", "Region_end", "Allele1_linked_C", "Allele2_linked_C")
     columnNum <- ncol(data) 
     data\$Allele1_linked_C_met <- sapply( data\$Allele1_linked_C, function(x){
         format(mean(as.numeric(unlist(strsplit( x, split="-")))), digits=2)
