@@ -113,6 +113,16 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                 continue
             #
         #
+        if preChr == "" :
+            preChr = chr
+        #
+        # check the position
+        while pos > posR :
+            print("%s\t%d\t%d\tna" % (chr, posL, posR))
+            mC_list.append(float('nan'))
+            posL += step
+            posR += step
+        #
         methyl = float(MC)/NC
         if  (NC>=coverage) or ((chr=="chrX" or chr=="chrY" or chr=="ChrX" or chr=="ChrY") and (NC>=coverageXY)):
             if chr != preChr :
@@ -203,7 +213,7 @@ def main():
             "      (aka CGmapMethInBins)\n" \
             "Description: Generate the methylation in Bins.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2016-10-26\n" \
+            "Last Update: 2019-04-26\n" \
             "Output Ex:\n" \
             "   chr1    1       5000    0.0000\n" \
             "   chr1    5001    10000   0.0396\n" \

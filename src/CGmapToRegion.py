@@ -168,8 +168,9 @@ def main():
     usage = "Usage: cgmaptools mtr [-i <CGmap>] -r <region> [-o <output>]\n" \
             "      (aka CGmapToRegion)\n" \
             "Description: Calculated the methylation levels in regions in two ways.\n" \
+            "Notice: The region file should be sorted and non-overlapped regions.\n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-07-05\n" \
+            "Last Update: 2019-03-24\n" \
             "Format of Region file:\n" \
             "  #chr    start_pos  end_pos\n" \
             "   chr1   8275       8429\n" \
