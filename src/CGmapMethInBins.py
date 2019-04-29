@@ -70,8 +70,8 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
     posL = 1
     posR = step
     preChr = ""
-    bin_list = []
-    mC_list = []
+    bin_list = [] # the list of methylation levels of each site within a bin
+    mC_list = [] # the list for average methylation in each bin
     chr_list = []
     chr_start_list = []
     chr_end_list = []
@@ -104,7 +104,7 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                     continue
                 #
             elif CTX == "CW" :
-                if dinuc not in ["CA", "CC"] :
+                if dinuc not in ["CA", "CT"] :
                     line = IN.readline()
                     continue
                 #
@@ -115,15 +115,11 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
         #
         if preChr == "" :
             preChr = chr
-        #
-        # check the position
-        while pos > posR :
-            print("%s\t%d\t%d\tna" % (chr, posL, posR))
-            mC_list.append(float('nan'))
-            posL += step
-            posR += step
+            chr_start_list.append( 0 )
+            chr_list.append( chr )
         #
         methyl = float(MC)/NC
+        #print NC, coverage
         if  (NC>=coverage) or ((chr=="chrX" or chr=="chrY" or chr=="ChrX" or chr=="ChrY") and (NC>=coverageXY)):
             if chr != preChr :
                 if bin_list == [] :
@@ -144,9 +140,8 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                 posR = step
                 preChr = chr
             #
-            if pos <= posR :
-                bin_list.append(methyl)
-            else :
+            #print line
+            while pos > posR :
                 if bin_list == [] :
                     print("%s\t%d\t%d\tna" % (preChr, posL, posR))
                     mC_list.append(float('nan'))
@@ -158,6 +153,8 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                 bin_list = []
                 posL = posR+1
                 posR += step
+            #
+            bin_list.append(methyl)
             #
         #
         line = IN.readline()
