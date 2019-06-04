@@ -276,6 +276,8 @@ else :
    # -- other utilities
    elif code1 == "findCCGG" :
       subprocess.call([DIR + "/bin/FindCCGG"]+ sys.argv[2:])
+   elif code1 == "combinestrands" :
+      subprocess.call([DIR + "/bin/CGmapCombineStrands"]+ sys.argv[2:])
    elif code1 == "bed2fragreg" :
       subprocess.call([DIR + "/bin/FragRegFromBED"]+ sys.argv[2:])
    else :
