@@ -119,7 +119,7 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
             chr_list.append( chr )
         #
         methyl = float(MC)/NC
-        #print NC, coverage
+        #
         if  (NC>=coverage) or ((chr=="chrX" or chr=="chrY" or chr=="ChrX" or chr=="ChrY") and (NC>=coverageXY)):
             if chr != preChr :
                 if bin_list == [] :
@@ -140,7 +140,6 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
                 posR = step
                 preChr = chr
             #
-            #print line
             while pos > posR :
                 if bin_list == [] :
                     print("%s\t%d\t%d\tna" % (preChr, posL, posR))
@@ -172,7 +171,6 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
     chr_end_list.append( len(mC_list) )
     if IN is not sys.stdin:
         IN.close()
-    #
     #
     if filetype in ['png', 'eps', 'pdf'] :
         import matplotlib

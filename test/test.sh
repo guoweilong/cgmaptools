@@ -76,7 +76,7 @@ cgmaptools mec bin -i WG.CGmap.gz -B 1000 -f png -p WG -t WG > WG.mec_bin.data
 
 cgmaptools mec stat -i WG.CGmap.gz -p WG -f png > WG.mec_stat.data
 
-cgmaptools lollipop -i matrix.CG.gz -a anno.refFlat -f pdf
+cgmaptools lollipop -i matrix.CG.gz -a anno.refFlat -f pdf -l 1000 -r 2000 -c chr1
 
 
 
@@ -89,4 +89,5 @@ cgmaptools tanghulu -r genome.fa -b WG.bam -l chr1:2000-2400 -t CG
 
 cgmaptools findCCGG -i genome.fa -o genome.ccgg
 
+cgmaptools convert bismark2cgmap -i ../test/bismark.dat -o output.CGmap
 
