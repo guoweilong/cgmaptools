@@ -59,10 +59,11 @@ def CGmapSplitByChr (CGmap_fn, output_prefix, output_suffix):
     line = CGmap.readline()
     tokens = line.strip().split()
     chr = tokens[0]
-    if output_suffix.endswith(".gz") :
-        OUT = gzip.open (output_prefix + "." + chr + "." + output_suffix, "wb")
+    output_fn = output_prefix + "." + chr + "." + output_suffix
+    if output_fn.endswith(".gz") :
+        OUT = gzip.open (output_fn, "wb")
     else :
-        OUT = open (output_prefix + "." + chr + "." + output_suffix, "w")
+        OUT = open (output_fn, "w")
     #
     cur_chr = chr
     while line:
@@ -97,7 +98,7 @@ def main():
             "      (aka CGmapSplitByChr)\n" \
             "Description: Split the files by each chromosomes. \n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2018-01-02"
+            "Last Update: 2019-10-25"
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmap", default=None,
                       help="Input file, CGmap or ATCGmap foramt, "
