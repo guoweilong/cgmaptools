@@ -811,7 +811,7 @@ int main(int argc, char **argv){
 	//
 	if ( strcmp(CGbzFN, "")==0 ) {
 		command_help(&cmd);
-		return 1;
+		return 0;
 	}
 	//
 	/* Test CGbzFile_Seek_Region */

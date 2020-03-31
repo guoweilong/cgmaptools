@@ -109,7 +109,7 @@ void exit_with_help( void )
 		"  -h  help\n"
 		"Tips: program will do binary search for each site in regions\n"
 		);
-	exit(1);
+	exit(0);
 }
 
 void ToUpperString(string &str)
@@ -311,7 +311,7 @@ int main(int argc, char* argv[])
 	//cout << "After Read Region file" << endl;
 	CGmapSelectByRegion(Genome);
 
-	return 1;
+	return 0;
 }
 
 

@@ -634,7 +634,7 @@ int main(int argc, char **argv){
 	//
 	if ( strcmp(ATCGmapFN, "")==0 ) {
 		command_help(&cmd);
-		return 1;
+		return 0;
 	}
 	//
 	ATCGmapFile_To_ATCGbzFile(ATCGmapFN, ATCGbzFN);

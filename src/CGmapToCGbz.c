@@ -563,7 +563,7 @@ int main(int argc, char **argv){
 	//
 	if ( strcmp(CGmapFN, "")==0 ) {
 		command_help(&cmd);
-		return 1;
+		return 0;
 	}
 	//
 	CGmapFile_To_CGbzFile(CGmapFN, CGbzFN);

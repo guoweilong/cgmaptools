@@ -645,7 +645,7 @@ int main(int argc, char **argv){
 	//printf("Debug 1\n");
 	if ( strcmp(CGbzFN, "")==0 ) {
 		command_help(&cmd);
-		return -1;
+		return 0;
 	}
 	//
 	CGbzFile_To_CGmapFile(CGbzFN, CGmapFN);
