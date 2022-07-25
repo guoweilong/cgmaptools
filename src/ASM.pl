@@ -570,6 +570,12 @@ sub findC_on_reference {
 
     # find reference nt on SNP site
     my $ref_nt_pos = $pos_tmp - $start_tmp;
+    ## modified:2022-07-25, potential position error when 
+    ## matching nt on reference sequence
+    if ($ref_nt_pos < 0 or $ref_nt_pos > (length($ref_seq)-1)){
+        return undef;
+    }
+    ##
     my $ref_nt = substr( $ref_seq, $ref_nt_pos, 1 );
     ${$Csites_tmp}{$pos_tmp} = $ref_nt;
 
