@@ -49,7 +49,7 @@ def ATCGmapCovInBins (fn, step, filetype = 'png', prefix = '', title = '',
     try:
         if fn :
             if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
+                IN = gzip.open(fn, 'rt',encoding='UTF-8')
             else :
                 IN = open(fn, 'r')
             #

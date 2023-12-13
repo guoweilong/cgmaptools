@@ -38,18 +38,16 @@ Chr1    C       3548    CHH     CC      0.0     0       1
 Chr1    C       3549    CHH     CA      0.0     0       1
 """
 
-try :
-    #from scipy.stats import ttest_1samp
+try:
     from scipy.stats import ttest_ind
-except ImportError :
+except ImportError:
     sys.stderr.write("[Error] Cannot import \"scipy\" package. Have you installed it?")
     exit(-1)
 #
 
-try :
-    #from numpy import mean
+try:
     from numpy import seterr
-except ImportError :
+except ImportError:
     sys.stderr.write("[Error] Cannot import \"numpy\" package. Have you installed it?")
     exit(-1)
 #
@@ -76,16 +74,16 @@ def average(x):
 #
 
 def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, minNSite = 2):
-    if fn is None :
+    if fn is None:
         IN = sys.stdin
-    else :
+    else:
         try:
-            if fn.endswith('.gz') :
-                IN = gzip.open(fn, 'rb')
-            else :
+            if fn.endswith('.gz'):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
         except IOError:
-            print("\n[Error]\n\tFile cannot be open: " % fn )
+            print(f'\n[Error]\n\tFile cannot be open: {fn}')
             exit(-1)
     #
     pre_pos = 0
@@ -96,18 +94,18 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
     pre_chr = ""
     #
     for line in IN:
-        if len(line) == 0 :
+        if len(line) == 0:
             continue
         #
         try:
             chr, nuc, pos, pattern, dinuc, methyl_1, NmC_1, NC_1, methyl_2, NmC_2, NC_2 = line.strip().split()
         except ValueError:
-            sys.stderr.write("An invalid line is skipped: %s" % line)
+            sys.stderr.write(f'An invalid line is skipped: {line}')
             continue
         #
         NmC_1, NC_1, NmC_2, NC_2 = [int(NmC_1), int(NC_1), int(NmC_2), int(NC_2)]
         # Coverage not valid
-        if (NC_1 < minCov or NC_2 < minCov) or (NC_1 > maxCov or NC_2 > maxCov) or ((NmC_1+NmC_2)==0) :
+        if (NC_1 < minCov or NC_2 < minCov) or (NC_1 > maxCov or NC_2 > maxCov) or ((NmC_1+NmC_2)==0):
             continue
         # Check position
         pos = int(pos)
@@ -118,31 +116,29 @@ def CGmapInterDiffRegion (fn, minCov=0, maxCov=100, minStep=100, maxStep=500, mi
                 #[Tstat, PV] = ttest_1samp( [i-j for i, j in zip(lst_1, lst_2) ], 0 )
                 mean_1 = average(lst_1)
                 mean_2 = average(lst_2)
-                [Tstat, PV] = ttest_ind( lst_1, lst_2 )
-                print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
-                       % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
+                [Tstat, PV] = ttest_ind(lst_1, lst_2)
+                print(f'{pre_chr}\t{start_pos}\t{pre_pos}\t{Tstat:.4f}\t{PV:.2e}\t{mean_1:.4f}\t{mean_2:.4f}\t{N_site}')
                 #
             # start a new fragment
-            lst_1 = [ float(methyl_1) ]
-            lst_2 = [ float(methyl_2) ]
+            lst_1 = [float(methyl_1)]
+            lst_2 = [float(methyl_2)]
             start_pos = pos
         else :
             # for the new fragment
-            lst_1.append( float(methyl_1) )
-            lst_2.append( float(methyl_2) )
+            lst_1.append(float(methyl_1))
+            lst_2.append(float(methyl_2))
         #
         pre_chr = chr
         pre_pos = pos
     # End-of-for
-    if len(lst_1) >=2 :
+    if len(lst_1) >=2:
         #[Tstat, PV] = ttest_1samp( [i-j for i, j in zip(lst_1, lst_2) ], [0])
         mean_1 = average(lst_1)
         mean_2 = average(lst_2)
-        [Tstat, PV] = ttest_ind( lst_1, lst_2 )
+        [Tstat, PV] = ttest_ind(lst_1, lst_2)
         N_site = len(lst_1)
-        if N_site >= minNSite and (start_pos < pre_pos) :
-            print( "%s\t%d\t%d\t%.4f\t%.2e\t%.4f\t%.4f\t%d"
-                % (pre_chr, start_pos, pre_pos, Tstat, PV, mean_1, mean_2, N_site) )
+        if N_site >= minNSite and (start_pos < pre_pos):
+            print(f'{pre_chr}\t{start_pos}\t{pre_pos}\t{Tstat:.4f}\t{PV:.2e}\t{mean_1:.4f}\t{mean_2:.4f}\t{N_site}')
             #
         #
     #
@@ -183,7 +179,7 @@ def main():
     #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
         else :
             sys.stdout = open(options.outfile, 'w')
         #

@@ -44,17 +44,17 @@ def logm(message):
 #
 def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     try:
-        if fn :
-            if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+        if fn:
+            if fn.endswith(".gz"):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
     except IOError:
-        print("\n[Error]:\n\t File cannot be open: %s" % fn)
+        print(f'\n[Error]:\n\t File cannot be open: {fn}')
         exit(-1)
     #
     line = IN.readline()
@@ -62,17 +62,17 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     ChrLst = []
     chr_idx = -1
     ChrCovDict = []
-    while line :
-        try :
+    while line:
+        try:
             chr, nuc, pos, pattern, dinuc, AW, TW, CW, GW, NW, AC, TC, CC, GC, NC, _ = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File {fn} may have wrong number of columns.')
             exit(-1)
         #
         COV = sum([int(i) for i in [AW, TW, CW, GW, NW, AC, TC, CC, GC, NC]])
-        if COV in CovDict :
+        if COV in CovDict:
             CovDict[COV] += 1
-        else :
+        else:
             CovDict[COV] = 1
         #
         if chr not in ChrLst :
@@ -81,7 +81,7 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
         #
         if COV in ChrCovDict[chr_idx]:
             ChrCovDict[chr_idx][COV] += 1
-        else :
+        else:
             ChrCovDict[chr_idx][COV] = 1
         #
         line = IN.readline()
@@ -91,7 +91,7 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
         IN.close()
     #
     GlobalCov = (float(sum([i*j for i,j in CovDict.items()]))/sum([i for i in CovDict.values()]))
-    print("OverAllCov\tglobal\t%.4f" % GlobalCov  )
+    print(f'OverAllCov\tglobal\t{GlobalCov:.4f}')
     ChrCov = [0] * len(ChrLst)
     #
     # works for python2 and python3
@@ -102,16 +102,17 @@ def ATCGmapStatCov (fn, filetype = 'png', prefix = '', fW=8.0, fH=1.0):
     #
     for chr_idx in xrange(len(ChrLst)):
         ChrCov[chr_idx] = float(sum([i * j for i, j in ChrCovDict[chr_idx].items()])) / sum([i for i in ChrCovDict[chr_idx].values()])
-        print("OverAllCov\t%s\t%.4f" % (ChrLst[chr_idx], ChrCov[chr_idx] )   )
+        #print("OverAllCov\t%s\t%.4f" % (ChrLst[chr_idx], ChrCov[chr_idx]))
+        print(f'OverAllCov\t{ChrLst[chr_idx]}\t{ChrCov[chr_idx]:.4f}')
     for cov in sorted(CovDict.keys()) :
-        print("CovAndCount\t%d\t%d" %(cov, CovDict[cov]) )
+        print(f'CovAndCount\t{cov}\t{CovDict[cov]}')
     #
     X = []
     Y = []
     for cov in sorted(CovDict.keys()):
         X.append(cov)
         Y.append(CovDict[cov])
-        print("CovAndCount\t%d\t%d" % (cov, CovDict[cov]))
+        print(f'CovAndCount\t{cov}\t{CovDict[cov]}')
     #
     if filetype in ['png', 'eps', 'pdf']:
         import matplotlib

@@ -88,7 +88,7 @@ void exit_with_help( void )
         "    The overlapping of regions would not be checked. \n"
 		"    A site might be considered multiple times.\n\n"
 		);
-	exit(0);
+	exit(1);
 }
 
 void ToUpperString(string &str)
@@ -410,7 +410,7 @@ int main(int argc, char* argv[])
 	ReadMethylomeFromCGmap ( Methylome );
 	//OutputMethylome ( Methylome, "output.tmp" );
 	AverageMethylInBins ( Methylome );
-	return 0;
+	return 1;
 }
 
 

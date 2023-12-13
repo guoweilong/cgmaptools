@@ -57,35 +57,35 @@ import gzip
 
 def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
     try:
-        if ATCGmap_fn :
-            if ATCGmap_fn.endswith(".gz") :
-                ATCGmap = gzip.open(ATCGmap_fn, "rb")
-            else :
+        if ATCGmap_fn:
+            if ATCGmap_fn.endswith(".gz"):
+                ATCGmap = gzip.open(ATCGmap_fn, "rt", encoding='UTF-8')
+            else:
                 ATCGmap = open(ATCGmap_fn, 'r')
             #
-        else :
+        else:
             ATCGmap = sys.stdin
         #
     except IOError:
-        print("\n[Error]:\n\t File cannot be open: %s" % ATCGmap_fn)
+        print(f'\n[Error]:\n\t File cannot be open: {ATCGmap_fn}')
         exit(-1)
     #
-    if (CGmap_fn is not None) :
-        if CGmap_fn.endswith('.gz') :
-            sys.stdout = gzip.open(CGmap_fn, 'wb')
-        else :
+    if (CGmap_fn is not None):
+        if CGmap_fn.endswith('.gz'):
+            sys.stdout = gzip.open(CGmap_fn, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(CGmap_fn, 'w')
         #
     #
     if (WIG_fn is not None):
         try:
             if WIG_fn.endswith(".gz") :
-                WIG = gzip.open(WIG_fn, "wb")
-            else :
+                WIG = gzip.open(WIG_fn, "wt", encoding='UTF-8')
+            else:
                 WIG = open(WIG_fn, 'w')
             #
         except IOError:
-            print ("\n[Error]:\n\t File cannot be open: %s" % WIG_fn)
+            print(f'\n[Error]:\n\t File cannot be open: {WIG_fn}')
             exit(-1)
         #
     #
@@ -94,28 +94,28 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
     line = ATCGmap.readline()
     #
     while line:
-        try :
+        try:
             chr, nuc, pos, pattern, dinuc, WA, WT, WC, WG, WN, CA, CT, CC, CG, CN, methyl = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % ATCGmap_fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {ATCGmap_fn} ] may have wrong number of columns.')
             exit(-1)
         #
-        if cur_chr != chr :
+        if cur_chr != chr:
             cur_chr = chr
-            if WIG_fn is not None :
-                WIG.write("variableStep chrom=" + chr + "\n")
+            if WIG_fn is not None:
+                WIG.write(f'variableStep chrom={chr}\n')
             #
         #
-        if methyl != "na" :
-            if nuc == "C" :
+        if methyl != "na":
+            if nuc == "C":
                 print("\t".join([chr, nuc, pos, pattern, dinuc, methyl, WC, "%d" % (int(WT)+int(WC)) ]))
-                if WIG_fn :
-                    WIG.write(pos + " " + methyl + "\n")
+                if WIG_fn:
+                    WIG.write(f'{pos}\t{methyl}\n')
                 #
             elif nuc == "G":
                 print("\t".join([chr, nuc, pos, pattern, dinuc, methyl, CG, "%d" % (int(CG)+int(CA)) ]))
                 if WIG_fn :
-                    WIG.write(pos + " -" + methyl + "\n") # Negative value for Minus strand
+                    WIG.write(f'{pos}\t-{methyl}\n')# Negative value for Minus strand
                 #
             #
         #
@@ -124,7 +124,7 @@ def ATCGmapToCGmapWig (ATCGmap_fn, CGmap_fn, WIG_fn):
     #
     # End for reading files
     #
-    if WIG_fn is not None :
+    if WIG_fn is not None:
         WIG.close()
     #
     if ATCGmap is not sys.stdin:
@@ -159,3 +159,4 @@ def main():
 if __name__ == "__main__":
     main()
 #
+

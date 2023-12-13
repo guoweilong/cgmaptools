@@ -56,7 +56,7 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
     chr_idx = {}
     meth_DB = []
     tag_lst = tag_lst_str.split(",")
-    if (len(tag_lst)!= len(fn_lst)) :
+    if (len(tag_lst)!= len(fn_lst)):
         print("[Error]: tag list and file list are not same in lengths.")
         exit(-1)
     #
@@ -67,21 +67,21 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
     except NameError:
         xrange = range
     #
-    for fn_id in xrange( len(fn_lst) ) :
+    for fn_id in xrange(len(fn_lst)):
         fn = fn_lst[fn_id]
         try:
-            if fn :
-                if fn.endswith(".gz") :
-                    IN = gzip.open(fn, 'rb')
+            if fn:
+                if fn.endswith(".gz"):
+                    IN = gzip.open(fn, 'rt', encoding='UTF-8')
                 else :
                     IN = open(fn, 'r')
                 #
-            else :
+            else:
                 print("[Error]:\n\t un-specified name")
                 exit(-1)
             #
         except IOError:
-            print("\n[Error]:\n\t File cannot be open: %s" % fn)
+            print(f'\n[Error]:\n\t File cannot be open: {fn}')
             exit(-1)
         #
         line = IN.readline()
@@ -91,11 +91,11 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
         bin_list = []
         #
         reg_id = 0
-        while line :
-            try :
+        while line:
+            try:
                 chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
-            except ValueError :
-                print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+            except ValueError:
+                print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
                 exit(-1)
             #
             if CTX not in ["", "C"]:
@@ -133,10 +133,10 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
                 chr_lst.append(chr)
                 meth_DB.append([])
             #
-            if  (NC>=coverage) or ((chr in ["chrX", "chrY", "ChrX", "ChrY"]) and (NC>=coverageXY)):
-                if chr != preChr : # new chr
-                    if preChr != "" :
-                        if reg_id >= len(meth_DB[ chr_idx[preChr] ]) :
+            if (NC >= coverage) or ((chr in ["chrX", "chrY", "ChrX", "ChrY"]) and (NC >= coverageXY)):
+                if chr != preChr: # new chr
+                    if preChr != "":
+                        if reg_id >= len(meth_DB[chr_idx[preChr]]):
                             meth_DB[chr_idx[preChr]].append([float('nan') for i in range(N_file)])
                         #
                         if bin_list != [] :
@@ -149,8 +149,8 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
                     preChr = chr
                     reg_id = 0
                 #
-                while posR < pos :
-                    if reg_id >= len(meth_DB[ chr_idx[preChr] ]) :
+                while posR < pos:
+                    if reg_id >= len(meth_DB[chr_idx[preChr]]):
                         meth_DB[chr_idx[preChr]].append([float('nan') for i in range(N_file)])
                     #
                     meth_DB[chr_idx[preChr]][reg_id][fn_id] = average(bin_list)
@@ -179,14 +179,14 @@ def CGmapMethylInBins (fn_lst_str, tag_lst_str, coverage, coverageXY, step, CTX 
         #
     #
     print("\t".join(["chr", "start", "end"] + tag_lst))
-    for chr_idx in xrange(len(chr_lst)) :
+    for chr_idx in xrange(len(chr_lst)):
         chr = chr_lst[chr_idx]
-        for reg_idx in xrange(len(meth_DB[chr_idx])) :
+        for reg_idx in xrange(len(meth_DB[chr_idx])):
             #print meth_DB
             meth_vec = meth_DB[chr_idx][reg_idx]
             #print meth_vec
             print("%s\t%d\t%d\t%s" % (chr, reg_idx*step+1, (reg_idx+1)*step,
-                                      '\t'.join([ ("%.2f"%meth) for meth in meth_vec]) ))
+                                      '\t'.join([ ("%.2f"%meth) for meth in meth_vec])))
             #
         #
     #
@@ -223,13 +223,13 @@ def main():
                       help="Coverage for chrX/Y should be half that of autosome for male [Default: same with -c]")
     #
     (options, args) = parser.parse_args()
-    if options.coverageXY is None :
+    if options.coverageXY is None:
         options.coverageXY = options.coverage
-    if options.TagLst is None :
+    if options.TagLst is None:
         options.TagLst = options.CGmapLst
     #
     CGmapMethylInBins(options.CGmapLst, options.TagLst, int(options.coverage), int(options.coverageXY),
-                      int(options.bin_size), options.context )
+                      int(options.bin_size), options.context)
     #
 #
 

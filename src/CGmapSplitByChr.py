@@ -43,39 +43,38 @@ import gzip
 #
 def CGmapSplitByChr (CGmap_fn, output_prefix, output_suffix):
     try:
-        if CGmap_fn :
-            if CGmap_fn.endswith(".gz") :
-                CGmap = gzip.open(CGmap_fn, "rb")
-            else :
+        if CGmap_fn:
+            if CGmap_fn.endswith(".gz"):
+                CGmap = gzip.open(CGmap_fn, "rt", encoding='UTF-8')
+            else:
                 CGmap = open(CGmap_fn, 'r')
             #
-        else :
+        else:
             CGmap = sys.stdin
         #
     except IOError:
-        sys.stderr.write( "[Error] file %s cannot be open." % CGmap_fn)
+        sys.stderr.write(f'[Error] file {CGmap_fn} cannot be open.')
         exit(-1)
     #
     line = CGmap.readline()
     tokens = line.strip().split()
     chr = tokens[0]
-    output_fn = output_prefix + "." + chr + "." + output_suffix
-    if output_fn.endswith(".gz") :
-        OUT = gzip.open (output_fn, "wb")
-    else :
-        OUT = open (output_fn, "w")
+    if output_suffix.endswith(".gz"):
+        OUT = gzip.open(output_prefix + "." + chr + "." + output_suffix, "wt", encoding='UTF-8')
+    else:
+        OUT = open(output_prefix + "." + chr + "." + output_suffix, "w")
     #
     cur_chr = chr
     while line:
         tokens = line.strip().split()
         chr = tokens[0]
-        if chr != cur_chr :
+        if chr != cur_chr:
             OUT.close()
             cur_chr = chr
-            if output_suffix.endswith(".gz") :
-                OUT = gzip.open (output_prefix + "." + chr + "." + output_suffix, "wb")
-            else :
-                OUT = open (output_prefix + "." + chr + "." + output_suffix, "w")
+            if output_suffix.endswith(".gz"):
+                OUT = gzip.open(output_prefix + "." + chr + "." + output_suffix, "wt", encoding='UTF-8')
+            else:
+                OUT = open(output_prefix + "." + chr + "." + output_suffix, "w")
             #
             OUT.write(line)
         else :
@@ -98,7 +97,7 @@ def main():
             "      (aka CGmapSplitByChr)\n" \
             "Description: Split the files by each chromosomes. \n" \
             "Contact:     Guo, Weilong; guoweilong@126.com\n" \
-            "Last Update: 2019-10-25"
+            "Last Update: 2018-01-02"
     parser = OptionParser(usage)
     parser.add_option("-i", dest="CGmap", default=None,
                       help="Input file, CGmap or ATCGmap foramt, "
@@ -112,7 +111,7 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    CGmapSplitByChr(options.CGmap, options.output_prefix, options.output_suffix )
+    CGmapSplitByChr(options.CGmap, options.output_prefix, options.output_suffix)
 #
 # ===========================================
 if __name__ == "__main__":

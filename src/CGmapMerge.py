@@ -41,18 +41,18 @@ import gzip
 def MergeCGmap (fn1, fn2):
     try:
         if fn1.endswith(".gz") :
-            IN_1 = gzip.open(fn1, 'rb')
+            IN_1 = gzip.open(fn1, 'rt', encoding='UTF-8')
         else :
             IN_1 = open(fn1, 'r')
         #
     except IOError :
-        print("\n[Error]:\n\t File cannot be open: %s" % fn1)
+        print(f'\n[Error]:\n\t File cannot be open: {fn1}')
         exit(-1)
     #
     try:
         if fn2 :
-            if fn2.endswith(".gz") :
-                IN_2 = gzip.open(fn2, 'rb')
+            if fn2.endswith(".gz"):
+                IN_2 = gzip.open(fn2, 'rt', encoding='UTF-8')
             else :
                 IN_2 = open(fn2, 'r')
             #
@@ -60,41 +60,41 @@ def MergeCGmap (fn1, fn2):
             IN_2 = sys.stdin
         #
     except IOError:
-        print("\n[Error]:\n\t File cannot be open: %s" % fn2 )
+        print(f'\n[Error]:\n\t File cannot be open: {fn2}')
         exit(-1)
     #
     line_1 = IN_1.readline()
     line_2 = IN_2.readline()
     chr_pre = ""
     #
-    while line_1 and line_2 :
+    while line_1 and line_2:
         chr_1, nuc_1, pos_1, pattern_1, dinuc_1, methyl_1, NmC_1, NC_1 = line_1.strip().split()
         chr_2, nuc_2, pos_2, pattern_2, dinuc_2, methyl_2, NmC_2, NC_2 = line_2.strip().split()
-        if chr_1 != chr_2 :
+        if chr_1 != chr_2:
             if chr_2 != chr_pre:
-                print line_1.strip()
+                print(line_1.strip())
                 line_1 = IN_1.readline()
-            elif chr_1 != chr_pre :
-                print line_2.strip()
+            elif chr_1 != chr_pre:
+                print(line_2.strip())
                 line_2 = IN_2.readline()
             #
         else : # chr_1 == chr_2
             chr_pre = chr_1
-            if int(pos_1) < int(pos_2) :
-                print line_1.strip()
+            if int(pos_1) < int(pos_2):
+                print(line_1.strip())
                 line_1 = IN_1.readline()
-            elif int(pos_1) > int(pos_2) :
-                print line_2.strip()
+            elif int(pos_1) > int(pos_2):
+                print(line_2.strip())
                 line_2 = IN_2.readline()
             else :
-                if nuc_1 != nuc_2 or pattern_1 != pattern_2 or dinuc_1 != dinuc_2 :
+                if nuc_1 != nuc_2 or pattern_1 != pattern_2 or dinuc_1 != dinuc_2:
                     sys.stderr.write("Warning: Inconsistent information:")
-                    sys.stderr.write("%s | %s" % (line_1, line_2) )
+                    sys.stderr.write(f'{line_1} | {line_2}')
                 #
                 NmC = int(NmC_1) + int(NmC_2)
                 NC = int(NC_1) + int(NC_2)
                 methyl = float(NmC)/NC
-                print("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1, "%.2f" % methyl, "%d" % NmC, "%d" % NC]) )
+                print("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1, "%.2f" % methyl, "%d" % NmC, "%d" % NC]))
                 line_1 = IN_1.readline()
                 line_2 = IN_2.readline()
             #
@@ -102,11 +102,11 @@ def MergeCGmap (fn1, fn2):
     #
     # End for reading files
     while line_1 :
-        print line_1.strip()
+        print(line_1.strip())
         line_1 = IN_1.readline()
     #
     while line_2 :
-        print line_2.strip()
+        print(line_2.strip())
         line_2 = IN_2.readline()
     #
     IN_1.close()
@@ -136,14 +136,14 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    if (options.CGmap_1 is None) :
+    if (options.CGmap_1 is None):
         parser.print_help()
         exit(-1)
     #
-    if (options.outfile is not None) :
-        if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
-        else :
+    if (options.outfile is not None):
+        if options.outfile.endswith('.gz'):
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(options.outfile, 'w')
         #
     #

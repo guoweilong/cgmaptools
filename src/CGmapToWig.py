@@ -53,57 +53,57 @@ def CGmapToWig (CGmap_fn, WIG_fn, coverage=1, base=0):
     base = float(base)
     coverage = int(coverage)
     try:
-        if CGmap_fn :
-            if CGmap_fn.endswith(".gz") :
-                CGmap = gzip.open(CGmap_fn, "rb")
-            else :
+        if CGmap_fn:
+            if CGmap_fn.endswith(".gz"):
+                CGmap = gzip.open(CGmap_fn, "rt", encoding='UTF-8')
+            else:
                 CGmap = open(CGmap_fn, 'r')
             #
-        else :
+        else:
             CGmap = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_fn)
+        print(f'\n[Error]:\n\t File cannot be open: {CGmap_fn}')
         exit(-1)
     #
     try:
         if WIG_fn is not None:
-            if WIG_fn.endswith(".gz") :
-                WIG = gzip.open(WIG_fn, "wb")
-            else :
+            if WIG_fn.endswith(".gz"):
+                WIG = gzip.open(WIG_fn, "wt", encoding='UTF-8')
+            else:
                 WIG = open(WIG_fn, 'w')
             #
-        else :
+        else:
             WIG = sys.stdout
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s " % WIG_fn )
+        print(f'\n[Error]:\n\t File cannot be open: {WIG_fn}')
         exit(-1)
     #
     cur_chr = ""
     line = CGmap.readline()
     while line:
-        try :
+        try:
             chr, nuc, pos, pattern, dinuc, methyl, un_C, all_C = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % CGmap_fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {CGmap_fn} ] may have wrong number of columns.')
             exit(-1)
         #
-        if cur_chr != chr :
+        if cur_chr != chr:
             cur_chr = chr
-            WIG.write("variableStep chrom=" + chr + "\n")
-        if methyl != "na" and int(all_C) >= coverage :
+            WIG.write(f'variableStep chrom={chr}\n')
+        if methyl != "na" and int(all_C) >= coverage:
             methyl=float(methyl)+base
-            if nuc == "C" :
-                WIG.write("%s\t%.2f\n" % (pos, methyl) )
+            if nuc == "C":
+                WIG.write(f'{pos}\t{methyl:.2f}\n')
             elif nuc == "G":
-                WIG.write("%s\t-%.2f\n" % (pos, methyl) ) # Negative value for Minus strand
+                WIG.write(f'{pos}\t-{methyl:.2f}\n')# Negative value for Minus strand
             #
         #
         line = CGmap.readline()
     #
     # End for reading files
-    if WIG is not sys.stdout  :
+    if WIG is not sys.stdout:
         WIG.close()
     #
     if CGmap is not sys.stdin:
@@ -137,7 +137,7 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    CGmapToWig(options.CGmap, options.WIG, options.coverage, options.base )
+    CGmapToWig(options.CGmap, options.WIG, options.coverage, options.base)
     #
 #
 # ===========================================

@@ -45,64 +45,63 @@ def MergeListOfATCGmap (fn_lst):
     ATCGmap_lst = fn_lst.split(",")
     #
     Methylome = {}
-    for fn in ATCGmap_lst :
-        try :
-            if fn.endswith('.gz') :
-                IN = gzip.open(fn, 'rb')
-            else :
+    for fn in ATCGmap_lst:
+        try:
+            if fn.endswith('.gz'):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        except IOError :
-            print("\n[Error]:\n\t File cannot be open: %s" % fn )
+        except IOError:
+            print(f'\n[Error]:\n\t File cannot be open: {fn}')
             exit(-1)
         #
-        for line in IN :
-            try :
+        for line in IN:
+            try:
                 chr, nuc, pos, pattern, dinuc, WA, WT, WC, WG, WN, CA, CT, CC, CG, CN, methyl = line.strip().split()
-            except ValueError :
-                print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+            except ValueError:
+                print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
                 exit(-1)
             #
             index = chr + "\t" + pos
             [WA, WT, WC, WG, WN, CA, CT, CC, CG, CN] = [int(WA), int(WT), int(WC), int(WG), int(WN), int(CA), int(CT), int(CC), int(CG), int(CN)]
-            if index not in Methylome :
-                Methylome[index] = [ "\t".join([nuc, pattern, dinuc]), [WA, WT, WC, WG, WN, CA, CT, CC, CG, CN] ]
-            else :
-                Methylome[index][1] = [i+j for i,j in zip(Methylome[index][1], [int(WA), int(WT), int(WC), int(WG), int(WN), int(CA), int(CT), int(CC), int(CG), int(CN)]) ]
+            if index not in Methylome:
+                Methylome[index] = ["\t".join([nuc, pattern, dinuc]), [WA, WT, WC, WG, WN, CA, CT, CC, CG, CN]]
+            else:
+                Methylome[index][1] = [i+j for i,j in zip(Methylome[index][1], [int(WA), int(WT), int(WC), int(WG), int(WN), int(CA), int(CT), int(CC), int(CG), int(CN)])]
             #
         #
         IN.close()
     #
-    def Get_key (str) :
+    def Get_key (str):
         # This function is linked to the one in CGmapToRegion.py
         tokens = str.split()
         match = re.match(r"^chr(\d+)", tokens[0], re.I)
         #chr = int(match.group(1)) if match else tokens[0]
-        if match :
+        if match:
             chr = int(match.group(1))
-        else :
+        else:
             chr = tokens[0]
         #
         pos = int(tokens[1])
         return [chr, tokens[0], pos]
         #re.match(r"^chr(\d+)", "chr019_random").group(1)
     #
-    for index in sorted(Methylome.keys(), key=lambda l: Get_key(l)) :
+    for index in sorted(Methylome.keys(), key=lambda l: Get_key(l)):
         [chr, pos] = index.split("\t")
         [nuc, pattern, dinuc] = Methylome[index][0].split()
         [WA, WT, WC, WG, WN, CA, CT, CC, CG, CN] = Methylome[index][1]
         methyl = 'na'
-        if nuc == "C" :
-            if WT+WC>0 :
+        if nuc == "C":
+            if WT+WC>0:
                 methyl = "%.2f" % (float(WC)/(WT+WC))
             #
-        elif nuc == "G" :
-            if CA+CG>0 :
+        elif nuc == "G":
+            if CA+CG>0:
                 methyl = "%.2f" % (float(CG)/(CA+CG))
             #
         #
-        print("%s\t%c\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s" %
-              (chr, nuc, pos, pattern, dinuc, WA, WT, WC, WG, WN, CA, CT, CC, CG, CN, methyl) )
+        print(f'{chr}\t{nuc}\t{pos}\t{pattern}\t{dinuc}\t{WA}\t{WT}\t{WC}\t{WG}\t{WN}\t{CA}\t{CT}\t{CC}\t{CG}\t{CN}\t{methyl}')
         #
     #
 #
@@ -113,45 +112,45 @@ def MergeListOfCGmap (fn_lst):
     Methylome = {}
     for fn in CGmap_lst :
         try :
-            if fn.endswith('.gz') :
-                IN = gzip.open(fn, 'rb')
+            if fn.endswith('.gz'):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
             else :
                 IN = open(fn, 'r')
             #
         except IOError :
-            print("\n[Error]:\n\t File cannot be open: %s" % fn )
+            print(f'\n[Error]:\n\t File cannot be open: {fn}')
             exit(-1)
         #
         for line in IN :
             try :
                 chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
             except ValueError :
-                print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+                print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
                 exit(-1)
             #
             index = chr + "\t" + pos
             [MC, NC] = [int(MC), int(NC)]
-            if index not in Methylome :
-                Methylome[index] = [ "\t".join([nuc, pattern, dinuc]), [MC, NC] ]
-            else :
-                Methylome[index][1] = [i+j for i,j in zip(Methylome[index][1], [int(MC), int(NC)]) ]
+            if index not in Methylome:
+                Methylome[index] = ["\t".join([nuc, pattern, dinuc]), [MC, NC]]
+            else:
+                Methylome[index][1] = [i+j for i,j in zip(Methylome[index][1], [int(MC), int(NC)])]
             #
         #
         IN.close()
     #
-    def Get_key (str) :
+    def Get_key (str):
         # This function is linked to the one in CGmapToRegion.py
         tokens = str.split()
         match = re.match(r"^chr(\d+)", tokens[0], re.I)
-        if match :
+        if match:
             chr = int(match.group(1))
-        else :
+        else:
             chr = tokens[0]
         #
         pos = int(tokens[1])
         return [chr, tokens[0], pos]
     #
-    for index in sorted(Methylome.keys(), key=lambda l: Get_key(l)) :
+    for index in sorted(Methylome.keys(), key=lambda l: Get_key(l)):
         [chr, pos] = index.split("\t")
         [nuc, pattern, dinuc] = Methylome[index][0].split()
         [MC, NC] = Methylome[index][1]
@@ -159,7 +158,7 @@ def MergeListOfCGmap (fn_lst):
         if NC>0 :
             methyl = "%.2f" % (float(MC)/NC)
         #
-        print("%s\t%c\t%s\t%s\t%s\t%s\t%d\t%d" %  (chr, nuc, pos, pattern, dinuc, methyl, MC, NC) )
+        print(f'{chr}\t{nuc}\t{pos}\t{pattern}\t{dinuc}\t{methyl}\t{MC}\t{NC}')
         #
     #
 #
@@ -186,20 +185,20 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    if (options.infile_lst is None) :
+    if (options.infile_lst is None):
         parser.print_help()
         exit(-1)
     #
-    if (options.outfile is not None) :
-        if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
-        else :
+    if (options.outfile is not None):
+        if options.outfile.endswith('.gz'):
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(options.outfile, 'w')
         #
     #
-    if options.format == "cgmap" :
+    if options.format == "cgmap":
         MergeListOfCGmap(options.infile_lst)
-    else :
+    else:
         MergeListOfATCGmap(options.infile_lst)
     #
 #

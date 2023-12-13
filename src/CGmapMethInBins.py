@@ -53,17 +53,17 @@ def NanMin(x):
 def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', prefix="", title="",
                        fH=4.0, fW=8.0):
     try:
-        if fn :
-            if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+        if fn:
+            if fn.endswith(".gz"):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
+        print(f'\n[Error]:\n\t File cannot be open: {fn}')
         exit(-1)
     #
     line = IN.readline()
@@ -76,77 +76,78 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
     chr_start_list = []
     chr_end_list = []
     #
-    while line :
-        try :
+    while line:
+        try:
             chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
             exit(-1)
         #
         pos = int(pos)
         MC = int(MC)
         NC = int(NC)
         # check if line could be filtered by context
-        if CTX not in ["", "C"] :
-            if CTX in ["CG", "CHG", "CHH"] :
-                if pattern != CTX :
+        if CTX not in ["", "C"]:
+            if CTX in ["CG", "CHG", "CHH"]:
+                if pattern != CTX:
                     line = IN.readline()
                     continue
                 #
-            elif CTX in ["CA", "CC", "CT"] :
-                if dinuc != CTX :
+            elif CTX in ["CA", "CC", "CT"]:
+                if dinuc != CTX:
                     line = IN.readline()
                     continue
                 #
-            elif CTX == "CH" :
-                if dinuc not in ["CHG", "CHH"] :
+            elif CTX == "CH":
+                if dinuc not in ["CHG", "CHH"]:
                     line = IN.readline()
                     continue
                 #
-            elif CTX == "CW" :
-                if dinuc not in ["CA", "CT"] :
+            elif CTX == "CW":
+                if dinuc not in ["CA", "CT"]:
                     line = IN.readline()
                     continue
                 #
-            else :
+            else:
                 line = IN.readline()
                 continue
             #
         #
-        if preChr == "" :
+        if preChr == "":
             preChr = chr
-            chr_start_list.append( 0 )
-            chr_list.append( chr )
+            chr_start_list.append(0)
+            chr_list.append(chr)
         #
         methyl = float(MC)/NC
-        #
-        if  (NC>=coverage) or ((chr=="chrX" or chr=="chrY" or chr=="ChrX" or chr=="ChrY") and (NC>=coverageXY)):
-            if chr != preChr :
-                if bin_list == [] :
-                    if preChr != "" :
-                        print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+        #print NC, coverage
+        if (NC>=coverage) or ((chr=="chrX" or chr=="chrY" or chr=="ChrX" or chr=="ChrY") and (NC>=coverageXY)):
+            if chr != preChr:
+                if bin_list == []:
+                    if preChr != "":
+                        print(f'{preChr}\t{posL}\t{posR}\tna')
                         mC_list.append(float('nan'))
                     #
-                else :
-                    chr_end_list.append( len(mC_list) )
+                else:
+                    chr_end_list.append(len(mC_list))
                     mean_mC = average(bin_list)
-                    print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_mC ))
+                    print(f'{preChr}\t{posL}\t{posR}\t{mean_mC:.4f}')
                     mC_list.append(mean_mC)
                     bin_list = []
                 #
-                chr_list.append( chr )
-                chr_start_list.append( len(mC_list) )
+                chr_list.append(chr)
+                chr_start_list.append(len(mC_list))
                 posL = 1
                 posR = step
                 preChr = chr
             #
-            while pos > posR :
-                if bin_list == [] :
-                    print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+            #print line
+            while pos > posR:
+                if bin_list == []:
+                    print(f'{preChr}\t{posL}\t{posR}\tna')
                     mC_list.append(float('nan'))
                 else :
                     mean_mC = average(bin_list)
-                    print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_mC ))
+                    print(f'{preChr}\t{posL}\t{posR}\t{mean_mC:.4f}')
                     mC_list.append(mean_mC)
                 #
                 bin_list = []
@@ -160,19 +161,20 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
     #
     if bin_list == []:
         if preChr != "":
-            print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+            print(f'{preChr}\t{posL}\t{posR}\tna')
             mC_list.append(float('nan'))
         #
     else:
         mean_mC = average(bin_list)
-        print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_mC))
+        print(f'{preChr}\t{posL}\t{posR}\t{mean_mC:.4f}')
         mC_list.append(mean_mC)
     #
-    chr_end_list.append( len(mC_list) )
+    chr_end_list.append(len(mC_list))
     if IN is not sys.stdin:
         IN.close()
     #
-    if filetype in ['png', 'eps', 'pdf'] :
+    #
+    if filetype in ['png', 'eps', 'pdf']:
         import matplotlib
         # Force matplotlib to not use any Xwindows backend.
         matplotlib.use('Agg')
@@ -181,19 +183,19 @@ def CGmapMethylInBins (fn, coverage, coverageXY, step, CTX, filetype = 'png', pr
         import matplotlib.pyplot as plt
         from matplotlib.pyplot import cm
         # ===
-        chr_mid_list  = [ (s+e)/2 for s,e in zip(chr_start_list, chr_end_list)]
+        chr_mid_list = [(s+e)/2 for s,e in zip(chr_start_list, chr_end_list)]
         plt.figure(figsize=(fW, fH))
         MaxMC = NanMax(mC_list) * 1.1 + NanMin(mC_list)
         plt.ylim([0, MaxMC])
         plt.plot(range(0, len(mC_list), 1), mC_list, 'b-')
-        for x in chr_start_list[1:] :
-            plt.plot( [x, x], [-MaxMC, MaxMC], 'k-' )
+        for x in chr_start_list[1:]:
+            plt.plot([x, x], [-MaxMC, MaxMC], 'k-')
         #
         plt.xticks(chr_mid_list, chr_list, rotation=25)
         plt.ylabel("Average methylation level")
         plt.title(title)
         #
-        if prefix != "" :
+        if prefix != "":
             prefix = prefix + "."
         #
         plt.savefig(prefix + "MethInBins."+filetype, format=filetype)

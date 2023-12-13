@@ -63,7 +63,7 @@ void exit_with_help( void )
         "Output to STDOUT in ATCGmap format\n"
         "Tips: Two input files should have the same order of chromosomes\n"
 		);
-	exit(0);
+	exit(1);
 }
 
 void parse_command_line(int argc, char **argv)

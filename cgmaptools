@@ -6,6 +6,7 @@
     Copyright (C) Weilong Guo & Ping Zhu
     Contact: Weilong Guo <guoweilong@126.com>
              Ping Zhu <pingzhu.work@gmail.com>
+             Lingfeng Miao <miaolingfeng@cau.edu.cn>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,8 +45,8 @@ import subprocess
 argv_len = len(sys.argv)
 
 def PrintVersion() :
-   print("Version:  0.1.2")
-   print("Updated on: Dec. 14th, 2018")
+   print("Version:  0.1.3")
+   print("Updated on: May. 14th, 2022")
 #
 
 if (argv_len) == 1  or sys.argv[1] in ["-h", "-H", "--help"]:
@@ -92,6 +93,7 @@ if (argv_len) == 1  or sys.argv[1] in ["-h", "-H", "--help"]:
    print("Authors:")
    print("  GUO, Weilong; guoweilong@126.com;  http://guoweilong.github.io")
    print("  ZHU, Ping; pingzhu.work@gmail.com; http://perry-zhu.github.io")
+   print("  Miao, Lingfeng; miaolingfeng@cau.edu.cn; http://miaolingfeng.github.io")
    print("")
 else :
    code1 = sys.argv[1]

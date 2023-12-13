@@ -43,24 +43,24 @@ Chr1    C       3549    CHH     CA      0.0     0       1
 
 import gzip
 
-def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
+def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200):
     try:
-        if index :
-            if index.endswith('.gz') :
-                INDEX = gzip.open(index, 'rb')
-            else :
+        if index:
+            if index.endswith('.gz'):
+                INDEX = gzip.open(index, 'rt', encoding='UTF-8')
+            else:
                 INDEX = open(index, 'r')
             #
         else :
              INDEX = sys.stdin
         #
     except IOError:
-        sys.stderr.write ("\n[Error]:\n\t File cannot be open: %s" % index )
+        sys.stderr.write (f'\n[Error]:\n\t File cannot be open: {index}')
         exit(-1)
     #
     CGmap_lst = CGmap_list.split(",")
     tag_lst = tag_list.split(",")
-    if tag_lst != "" and len(CGmap_lst) != len(tag_lst) :
+    if tag_lst != "" and len(CGmap_lst) != len(tag_lst):
         sys.stderr.write( "[Error]: lengths of two lists are not equal\n" )
         exit(-1)
     #
@@ -69,13 +69,13 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
     # Initialization
     Site = dict()
     Site_lst = []
-    for line in INDEX :
+    for line in INDEX:
         # chr10   100005504
         pos = line.strip()
         Site[pos] = ["nan"]*N
         Site_lst.append(pos)
     #
-    if index :
+    if index:
         INDEX.close()
     #
     #
@@ -86,37 +86,37 @@ def CGmapFillIndex(index, CGmap_list, tag_list, min_cov=1, max_cov=200) :
         xrange = range
     #
     # Read all the CGmap files
-    for i in xrange(N) :
+    for i in xrange(N):
         fn = CGmap_lst[i]
-        try :
-            if fn.endswith('.gz') :
-                INPUT = gzip.open(fn, 'rb')
+        try:
+            if fn.endswith('.gz'):
+                INPUT = gzip.open(fn, 'rt', encoding='UTF-8')
             else :
                 INPUT = open(fn, 'r')
             #
-        except IOError :
-            print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_lst[i] )
+        except IOError:
+            print (f'\n[Error]:\n\t File cannot be open: {CGmap_list[i]}')
             exit(-1)
         #
         # chr1    C       4654    CG      CG      0.846153846154  11      13
         tokens = []
-        for line in INPUT :
+        for line in INPUT:
             tokens = line.strip().split()
             pos = "\t".join([tokens[0], tokens[2]])
             cov = int(tokens[7])
-            if (pos in Site) and (min_cov <= cov <= max_cov) :
+            if (pos in Site) and (min_cov <= cov <= max_cov):
                 Site[pos][i] = "%.2f" % float(tokens[5])
             #
         #
         INPUT.close()
     #
     # Write the output files
-    if tag_lst != "" : # if not tag was specified, do not print the tag line
+    if tag_lst != "": # if not tag was specified, do not print the tag line
         print ("\t".join( ["chr", "pos"] + tag_lst))
     N_site = len(Site_lst)
-    for i in xrange(N_site) :
+    for i in xrange(N_site):
         pos = Site_lst[i]
-        print "\t".join( [pos] + Site[pos] )
+        print("\t".join([pos] + Site[pos]))
     #
 #
 
@@ -158,16 +158,16 @@ def main():
     #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
         else :
             sys.stdout = open(options.outfile, 'w')
         #
     #
-    sys.stderr.write("The index file is : %s\n" % options.index)
-    sys.stderr.write("The CGmap list is : %s\n" % options.CGmap_list)
-    sys.stderr.write("The index list is : %s\n" % options.tag_list)
-    sys.stderr.write("The minimum coverage is : %s\n" % options.min_Cov)
-    sys.stderr.write("The maximum coverage is : %s\n" % options.max_Cov)
+    sys.stderr.write(f'The index file is : {options.index}\n')
+    sys.stderr.write(f'The CGmap list is : {options.CGmap_list}\n')
+    sys.stderr.write(f'The index list is : {options.tag_list}\n')
+    sys.stderr.write(f'The minimum coverage is : {options.min_Cov}\n')
+    sys.stderr.write(f'The maximum coverage is : {options.max_Cov}\n')
     #
     CGmapFillIndex(options.index, options.CGmap_list, options.tag_list, int(options.min_Cov), int(options.max_Cov))
     #

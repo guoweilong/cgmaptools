@@ -1,4 +1,4 @@
-prefix=/Users/weilongguo/Documents/program/cgmaptools/src/zlib-1.2.8
+prefix=/data2/user2/miaolf/bin/cgmaptools_for_python3/include/zlib-1.2.8
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 sharedlibdir=${libdir}

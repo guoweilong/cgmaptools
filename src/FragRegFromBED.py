@@ -31,7 +31,7 @@ import sys
 #import re
 
 def error(msg):
-    sys.stderr.write("ERROR: %s" % msg)
+    sys.stderr.write(f'ERROR: {msg}')
     exit(1)
 #
 from optparse import OptionParser
@@ -67,24 +67,24 @@ def main():
                       help="To standard output if omitted. Compressed output if end with .gz")
     (options, args) = parser.parse_args()
     #
-    if (options.infile is None) :
+    if (options.infile is None):
         INPUT = sys.stdin
-    else :
-        try :
-            if options.infile.endswith('.gz') :
-                INPUT =  gzip.open(options.infile, 'rb')
-            else :
+    else:
+        try:
+            if options.infile.endswith('.gz'):
+                INPUT =  gzip.open(options.infile, 'rt', encoding='UTF-8')
+            else:
                 INPUT =  open(options.infile, 'r')
             #
         except IOError:
-            print("[Error] Cannot find input file : %s !" % options.infile )
+            print(f'[Error] Cannot find input file : {options.infile} !')
             exit(-1)
         #
     #
-    if (options.outfile is not None) :
-        if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
-        else :
+    if (options.outfile is not None):
+        if options.outfile.endswith('.gz'):
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(options.outfile, 'w')
         #
     #
@@ -96,21 +96,21 @@ def main():
         xrange = range
     #
     # FiveMerEND
-    if options.FiveMerEnd == "" :
+    if options.FiveMerEnd == "":
         FiveMerLst=[]
-    else :
+    else:
         FiveMerLst=[int(i) for i in options.FiveMerEnd.split(",")]
     #
     FiveMerPos = []
     pos_tmp = 0
-    for i in FiveMerLst[::-1] :
+    for i in FiveMerLst[::-1]:
         pos_tmp += i
         FiveMerPos = [pos_tmp] + FiveMerPos
     #
     # ThreeMerEND
-    if options.ThreeMerEnd == "" :
+    if options.ThreeMerEnd == "":
         ThreeMerLst=[]
-    else :
+    else:
         ThreeMerLst=[int(i) for i in options.ThreeMerEnd.split(",")]
     #
     ThreeMerPos = []
@@ -123,29 +123,29 @@ def main():
     # print the header line
     print("\t".join(["#chr", "chr"] + ["U%d" %(i+1) for i in range(len(FiveMerLst))]
            + ["R%d" % (i + 1) for i in range(nbins)]
-           + ["D%d" % (i + 1) for i in range(len(ThreeMerLst))] + ['End'] ) )
+           + ["D%d" % (i + 1) for i in range(len(ThreeMerLst))] + ['End']))
     # Example for BED line
     # chr6    -       33661860        33669093
-    for line in INPUT :
+    for line in INPUT:
         #print line.strip().split()
         [chr, Left, Right, strand]=line.strip().split()
         Left = int(Left)
         Right = int(Right)
-        if strand == '+' :
+        if strand == '+':
             body_regions = [(Left+(Right-Left)*i/nbins) for i in xrange(nbins+1)]
-            LeftEnd_regions = [ (Left-i) for i in FiveMerPos ]
-            RightEnd_regions = [ (Right+i) for i in ThreeMerPos ]
-            print("\t".join([chr, strand]) + "\t" + "\t".join( str(i) for i in (LeftEnd_regions + body_regions + RightEnd_regions) ) )
+            LeftEnd_regions = [(Left-i) for i in FiveMerPos]
+            RightEnd_regions = [(Right+i) for i in ThreeMerPos]
+            print("\t".join([chr, strand]) + "\t" + "\t".join(str(int((i+abs(i))/2)) for i in (LeftEnd_regions + body_regions + RightEnd_regions)))
             #
-        else :
+        else:
             body_regions = [(Left+(Right-Left)*i/nbins) for i in xrange(nbins+1)]
-            LeftEnd_regions = [ (Left-i) for i in ThreeMerPos ]
-            RightEnd_regions = [ (Right+i) for i in FiveMerPos ]
-            print("\t".join([chr, strand]) + "\t" + "\t".join(str(i) for i in (RightEnd_regions + body_regions[::-1] + LeftEnd_regions) ) )
+            LeftEnd_regions = [(Left-i) for i in ThreeMerPos]
+            RightEnd_regions = [(Right+i) for i in FiveMerPos]
+            print("\t".join([chr, strand]) + "\t" + "\t".join(str(int((i+abs(i))/2)) for i in (RightEnd_regions + body_regions[::-1] + LeftEnd_regions)))
             #
         #
     #
-    if options.infile is not None :
+    if options.infile is not None:
         INPUT.close()
     #
 #

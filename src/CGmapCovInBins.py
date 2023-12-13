@@ -49,17 +49,17 @@ def NanMin(x):
 #
 def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH = 4.0, fW = 8.0):
     try:
-        if fn :
-            if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+        if fn:
+            if fn.endswith(".gz"):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
+        print(f'\n[Error]:\n\t File cannot be open: {fn}')
         exit(-1)
     #
     line = IN.readline()
@@ -72,11 +72,11 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
     chr_start_list = []
     chr_end_list = []
     #
-    while line :
-        try :
+    while line:
+        try:
             chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
             exit(-1)
         #
         pos = int(pos)
@@ -108,34 +108,34 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
                 continue
             #
         #
-        if chr != preChr :
+        if chr != preChr:
             if bin_list == [] :
-                if preChr != "" :
-                    print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+                if preChr != "":
+                    print(f'{preChr}\t{posL}\t{posR}\tna')
                     cov_list.append(float('nan'))
                 #
-            else :
+            else:
                 chr_end_list.append(len(cov_list))
                 mean_cov = average(bin_list)
-                print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_cov ))
+                print(f'{preChr}\t{posL}\t{posR}\t{mean_cov:.4f}')
                 cov_list.append(mean_cov)
                 bin_list = []
             #
-            chr_list.append( chr )
-            chr_start_list.append( len(cov_list) )
+            chr_list.append(chr)
+            chr_start_list.append(len(cov_list))
             posL = 1
             posR = step
             preChr = chr
         #
-        if pos <= posR :
-            bin_list.append( float(NC) )
-        else :
-            if bin_list == [] :
-                print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+        if pos <= posR:
+            bin_list.append(float(NC))
+        else:
+            if bin_list == []:
+                print(f'{preChr}\t{posL}\t{posR}\tna')
                 cov_list.append(float('nan'))
-            else :
+            else:
                 mean_cov = average(bin_list)
-                print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_cov))
+                print(f'{preChr}\t{posL}\t{posR}\t{mean_cov:.4f}')
                 cov_list.append(mean_cov)
             #
             bin_list = []
@@ -147,19 +147,19 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
     #
     if bin_list == []:
         if preChr != "":
-            print("%s\t%d\t%d\tna" % (preChr, posL, posR))
+            print(f'{preChr}\t{posL}\t{posR}\tna')
             cov_list.append(float('nan'))
         #
     else:
         mean_cov = average(bin_list)
-        print("%s\t%d\t%d\t%.4f" % (preChr, posL, posR, mean_cov))
+        print(f'{preChr}\t{posL}\t{posR}\t{mean_cov:.4f}')
         cov_list.append(mean_cov)
     #
-    chr_end_list.append( len(cov_list) )
+    chr_end_list.append(len(cov_list))
     if IN is not sys.stdin:
         IN.close()
     #
-    if filetype in ['png', 'eps', 'pdf'] :
+    if filetype in ['png', 'eps', 'pdf']:
         import matplotlib
         # Force matplotlib to not use any Xwindows backend.
         matplotlib.use('Agg')
@@ -167,7 +167,7 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
         plt.rcdefaults()
         import matplotlib.pyplot as plt
         # ===
-        chr_mid_list  = [ (s+e)/2 for s,e in zip(chr_start_list, chr_end_list)]
+        chr_mid_list  = [(s+e)/2 for s,e in zip(chr_start_list, chr_end_list)]
         plt.figure(figsize=(fW, fH))
         MaxCOV = NanMax(cov_list) * 1.1 + NanMin(cov_list)
         plt.ylim([0, MaxCOV])
@@ -179,7 +179,7 @@ def CGmapCovInBins (fn, step, CTX, filetype = 'png', prefix = '', title = '', fH
         plt.ylabel("Methylaiton effective coverage")
         plt.title(title)
         #
-        if prefix != "" :
+        if prefix != "":
             prefix = prefix + "."
         plt.savefig(prefix + "MethEffeCovInBins."+filetype, format=filetype)
         plt.clf()
@@ -230,7 +230,7 @@ def main():
     (options, args) = parser.parse_args()
     #
     CGmapCovInBins(options.CGmap, int(options.bin_size), options.context, options.FigType, options.prefix, options.title,
-                   float(options.fig_height), float(options.fig_width) )
+                   float(options.fig_height), float(options.fig_width))
     #
 #
 
