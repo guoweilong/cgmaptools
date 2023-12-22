@@ -98,7 +98,7 @@ void exit_with_help( void )
         "   total_sum_mC    13.0    8.0     5.0     2.0\n"
         "   total_sum_NO    30      30      30      10\n"
 		);
-	exit(0);
+	exit(1);
 }
 
 void ToUpperString(string &str)
@@ -575,7 +575,7 @@ int main(int argc, char* argv[])
 	//OutputMethylome ( Methylome, "output.tmp" );
 	AverageMethylInFragmentedRegion ( Methylome );
 	//cerr << "Finished" << endl;
-	return 0;
+	return 1;
 }
 
 

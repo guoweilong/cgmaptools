@@ -51,36 +51,36 @@ def SortMap (fn, chr_col=1, pos_col=2):
     chr_col_index = int(chr_col) - 1
     pos_col_index = int(pos_col) - 1
     try:
-        if fn :
-            if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+        if fn:
+            if fn.endswith(".gz"):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
     except IOError:
-        sys.stderr.write("[Error] File cannot be open: %s\n" % fn)
+        sys.stderr.write(f'[Error] File cannot be open: {fn}\n')
         exit(-1)
     #
-    lines = [ line.strip() for line in IN.readlines()]
-    if fn :
+    lines = [line.strip() for line in IN.readlines()]
+    if fn:
         IN.close()
     #
-    def Get_key (str) :
+    def Get_key (str):
         # This function is linked to the one in CGmapToRegion.py
         tokens = str.split('\t')
         match = re.match(r"^chr(\d+)", tokens[chr_col_index], re.I)
         #chr = int(match.group(1)) if match else tokens[0]
-        if match :
+        if match:
             chr = int(match.group(1))
-        else :
+        else:
             chr = tokens[chr_col_index]
         #
-        try :
+        try:
             pos = int(tokens[pos_col_index])
-        except ValueError :
+        except ValueError:
             sys.stderr.write("[Error] wrong content for position column.\n")
             exit(-1)
         #
@@ -89,8 +89,8 @@ def SortMap (fn, chr_col=1, pos_col=2):
     #
     lines.sort(key=lambda l: Get_key(l))
     #
-    for i in lines :
-        print("%s" % i)
+    for i in lines:
+        print(f'{i}')
     #
 #
 from optparse import OptionParser
@@ -119,10 +119,10 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    if (options.outfile is not None) :
-        if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
-        else :
+    if (options.outfile is not None):
+        if options.outfile.endswith('.gz'):
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(options.outfile, 'w')
         #
     #

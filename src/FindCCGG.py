@@ -31,20 +31,23 @@ import sys
 import re
 
 def error(msg):
-    sys.stderr.write( "ERROR: %s" % msg )
+    sys.stderr.write( f'ERROR: {msg}')
     exit(1)
 #
 
-def read_fasta (fasta_file) :
+def read_fasta (fasta_file):
     """
         Iterates over all sequences in a fasta file. One at a time,
         without reading the whole file into the main memory.
     """
     #
-    try :
-        INPUT = (gzip.open if fasta_file.endswith('.gz') else open)(fasta_file)
+    try:
+        if fasta_file.endswith(".gz"):
+            INPUT = gzip.open(fasta_file, "rt", encoding='UTF-8')
+        else:
+            INPUT = open(fasta_file, 'r')
     except IOError:
-        print ("[Error] Cannot find Fasta file : %s !" % fasta_file)
+        print (f'[Error] Cannot find Fasta file : {fasta_file} !')
         exit(-1)
     sanitize = re.compile(r'[^ACTGN]')
     sanitize_seq_id = re.compile(r'[^A-Za-z0-9]')
@@ -53,7 +56,7 @@ def read_fasta (fasta_file) :
     chrome_id = None
     seen_ids = set()
     #
-    for line in INPUT :
+    for line in INPUT:
         if line[0] == '>':
             if chrome_id is not None:
                 yield chrome_id, ''.join(chrome_seq)
@@ -81,13 +84,13 @@ def FindCCGG ( FastaFn, outputFn ):
     #
     total_chr = 0
     len_chr = dict()
-    if outputFn :
-        if outputFn.endswith("gz") :
-            OUT = gzip.open(outputFn, 'wb')
-        else :
+    if outputFn:
+        if outputFn.endswith("gz"):
+            OUT = gzip.open(outputFn, 'wt', encoding='UTF-8')
+        else:
             OUT = open(outputFn, 'w')
         #
-    else :
+    else:
         OUT = sys.stdout
     #
     for chr, seq in read_fasta(FastaFn):
@@ -127,8 +130,8 @@ def main():
                        "Format: chr cCgg_pos ccGg_pos (0-base)\n", metavar="FILE")
     (options, args) = parser.parse_args()
     #
-    if (options.infile is None) :
-        print parser.print_help()
+    if (options.infile is None):
+        print(parser.print_help())
         exit(-1)
     #
     FindCCGG (options.infile, options.outfile)

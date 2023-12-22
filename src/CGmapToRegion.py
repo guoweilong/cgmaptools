@@ -33,12 +33,12 @@ import re
 import gzip
 
 #
-def Get_key (str) :
+def Get_key (str):
     # This function should be consistent with the one in Sort_chr_pos.py
     match = re.match(r"^chr(\d+)", str, re.I)
-    if match :
+    if match:
         chr = int(match.group(1))
-    else :
+    else:
         chr = str
     #
     return [chr, str]
@@ -46,9 +46,9 @@ def Get_key (str) :
 #
 def CGmapToRegion (CGmap_fn, region_fn):
     try:
-        if CGmap_fn :
-            if CGmap_fn.endswith(".gz") :
-                CGMAP = gzip.open(CGmap_fn, 'rb')
+        if CGmap_fn:
+            if CGmap_fn.endswith(".gz"):
+                CGMAP = gzip.open(CGmap_fn, 'rt', encoding='UTF-8')
             else :
                 CGMAP = open(CGmap_fn, 'r')
             #
@@ -56,17 +56,17 @@ def CGmapToRegion (CGmap_fn, region_fn):
             CGMAP = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: " % CGmap_fn)
+        print(f'\n[Error]:\n\t File cannot be open: {CGmap_fn}')
         exit(-1)
     #
     try:
-        if region_fn.endswith(".gz") :
-            REGION = gzip.open(region_fn, 'rb')
-        else :
+        if region_fn.endswith(".gz"):
+            REGION = gzip.open(region_fn, 'rt', encoding='UTF-8')
+        else:
             REGION = open(region_fn, 'r')
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % region_fn)
+        print(f'\n[Error]:\n\t File cannot be open: {region_fn}')
         exit(-1)
     #
     line_c = CGMAP.readline()
@@ -77,37 +77,37 @@ def CGmapToRegion (CGmap_fn, region_fn):
     NmC = 0
     NC = 0
     #
-    try :
+    try:
         chr_r, pos_r1, pos_r2 = line_r.strip().split()[0:3]
-    except ValueError :
-        print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % region_fn)
+    except ValueError:
+        print(f'\n[Error]:\n\t File [ {region_fn} ] may have wrong number of columns.')
         exit(-1)
     #
-    while line_c and line_r :
+    while line_c and line_r:
         #print "\t"+line_c, "\t"+line_r
         #print "========"
-        try :
+        try:
             chr_c, nuc_c, pos_c, pattern_c, dinuc_c, methyl_c, NmC_c, NC_c = line_c.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % CGmap_fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {CGmap_fn} ] may have wrong number of columns.')
             exit(-1)
         #
-        try :
+        try:
             chr_r, pos_r1, pos_r2 = line_r.strip().split()[0:3]
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % region_fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {region_fn} ] may have wrong number of columns.')
             exit(-1)
         #
         #print chr_r, pos_r1, pos_r2
         key_c = Get_key(chr_c)
         key_r = Get_key(chr_r)
-        if key_c < key_r :
+        if key_c < key_r:
             line_c = CGMAP.readline()
-        elif key_c > key_r :
-            if count > 0 :
-                print ("%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
-            else :
-                print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
+        elif key_c > key_r:
+            if count > 0:
+                print(f'{chr_r}\t{pos_r1}\t{pos_r2}\t{mC/count:.4f}\t{count}\t{float(NmC)/NC:.4f}\t{NC}')
+            else:
+                print(f'{chr_r}\t{pos_r1}\t{pos_r2}\tNA\t{count}\tNA\t{NC}')
             #
             # init
             mC = 0
@@ -116,14 +116,14 @@ def CGmapToRegion (CGmap_fn, region_fn):
             NC = 0
             # do the next
             line_r = REGION.readline()
-        else : # chr_c == chr_r
-            if int(pos_c) < int(pos_r1) :
+        else: # chr_c == chr_r
+            if int(pos_c) < int(pos_r1):
                 line_c = CGMAP.readline()
-            elif int(pos_c) > int(pos_r2) :
-                if count > 0 :
-                    print ("%s\t%s\t%s\t%.4f\t%d\t%.4f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
-                else :
-                    print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
+            elif int(pos_c) > int(pos_r2):
+                if count > 0:
+                    print(f'{chr_r}\t{pos_r1}\t{pos_r2}\t{mC/count:.4f}\t{count}\t{float(NmC)/NC:.4f}\t{NC}')
+                else:
+                    print(f'{chr_r}\t{pos_r1}\t{pos_r2}\tNA\t{count}\tNA\t{NC}')
                 #
                 # init
                 mC = 0
@@ -131,10 +131,10 @@ def CGmapToRegion (CGmap_fn, region_fn):
                 NmC = 0
                 NC = 0
                 line_r = REGION.readline()
-            else : # pos_r1 <= chr_c <= pos_r2
+            else: # pos_r1 <= chr_c <= pos_r2
                 NC_c = int(NC_c)
-                if NC_c > 0 :
-                    mC = mC + ( float(NmC_c) / NC_c )
+                if NC_c > 0:
+                    mC = mC + (float(NmC_c) / NC_c)
                     count = count + 1
                     NmC = NmC + int(NmC_c)
                     NC = NC + int(NC_c)
@@ -144,11 +144,11 @@ def CGmapToRegion (CGmap_fn, region_fn):
         #
     # End for reading files
     #
-    while line_r :
-        if count > 0 :
-            print ("%s\t%s\t%s\t%.2f\t%d\t%.2f\t%d" % (chr_r, pos_r1, pos_r2, mC/count, count, float(NmC)/NC, NC) )
-        else :
-            print ("%s\t%s\t%s\tNA\t%d\tNA\t%d" % (chr_r, pos_r1, pos_r2, count, NC) )
+    while line_r:
+        if count > 0:
+            print(f'{chr_r}\t{pos_r1}\t{pos_r2}\t{mC/count:.2f}\t{count}\t{float(NmC)/NC:.2f}\t{NC}')
+        else:
+            print(f'{chr_r}\t{pos_r1}\t{pos_r2}\tNA\t{count}\tNA\t{NC}')
         #
         # do the next
         line_r = REGION.readline()
@@ -192,14 +192,14 @@ def main():
     #
     (options, args) = parser.parse_args()
     #
-    if (options.regionFile is None) :
+    if (options.regionFile is None):
         parser.print_help()
         exit(-1)
     #
     if (options.outfile is not None) :
-        if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
-        else :
+        if options.outfile.endswith('.gz'):
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
+        else:
             sys.stdout = open(options.outfile, 'w')
         #
     #

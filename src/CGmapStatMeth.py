@@ -53,17 +53,17 @@ def GetQuant( methyl, NQuant = 5 ) :
 
 def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", fH=4.0, fW=8.0):
     try:
-        if fn :
+        if fn:
             if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
+        print(f'\n[Error]:\n\t File cannot be open: {fn}')
         exit(-1)
     #
     #print "Read in the file"
@@ -82,26 +82,26 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     except NameError:
         xrange = range
     #
-    quant_mC = [ [0]*(NQuant+1) for i in xrange(len(context_lst)) ]
+    quant_mC = [[0]*(NQuant+1) for i in xrange(len(context_lst))]
     #
     # ==================
     # Read in file by line
-    while line :
-        try :
+    while line:
+        try:
             chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
-        except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+        except ValueError:
+            print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
             exit(-1)
         #
         MC = int(MC)
         NC = int(NC)
-        if NC < coverage or NC <= 0 :
+        if NC < coverage or NC <= 0:
             line = IN.readline()
             continue
         methyl = float(MC)/NC
-        if chr not in chr_lst :
+        if chr not in chr_lst:
             chr_lst.append(chr)
-            sum_mC_byChr[chr]   = [0.0] * len(context_lst)
+            sum_mC_byChr[chr] = [0.0] * len(context_lst)
             count_mC_byChr[chr] = [0] * len(context_lst)
         #
         qt = GetQuant(methyl)
@@ -109,7 +109,7 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
         sum_mC_byChr[chr][context_idx['C']] += methyl
         count_mC_byChr[chr][context_idx['C']] += 1
         quant_mC[context_idx['C']][qt] += 1
-        if pattern == "CG" :
+        if pattern == "CG":
             sum_mC_byChr[chr][context_idx['CG']] += methyl
             count_mC_byChr[chr][context_idx['CG']] += 1
             quant_mC[context_idx['CG']][qt] += 1
@@ -117,16 +117,16 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
             sum_mC_byChr[chr][context_idx['CH']] += methyl
             count_mC_byChr[chr][context_idx['CH']] += 1
             quant_mC[context_idx['CH']][qt] += 1
-            if pattern == "CHG" :
+            if pattern == "CHG":
                 sum_mC_byChr[chr][context_idx['CHG']] += methyl
                 count_mC_byChr[chr][context_idx['CHG']] += 1
                 quant_mC[context_idx['CHG']][qt] += 1
-            elif pattern == "CHH" :
+            elif pattern == "CHH":
                 sum_mC_byChr[chr][context_idx['CHH']] += methyl
                 count_mC_byChr[chr][context_idx['CHH']] += 1
                 quant_mC[context_idx['CHH']][qt] += 1
             #
-            if dinuc == "CA" :
+            if dinuc == "CA":
                 sum_mC_byChr[chr][context_idx['CA']] += methyl
                 count_mC_byChr[chr][context_idx['CA']] += 1
                 quant_mC[context_idx['CA']][qt] += 1
@@ -134,11 +134,11 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
                 sum_mC_byChr[chr][context_idx['CW']] += methyl
                 count_mC_byChr[chr][context_idx['CW']] += 1
                 quant_mC[context_idx['CW']][qt] += 1
-            elif dinuc == "CC" :
+            elif dinuc == "CC":
                 sum_mC_byChr[chr][context_idx['CC']] += methyl
                 count_mC_byChr[chr][context_idx['CC']] += 1
                 quant_mC[context_idx['CC']][qt] += 1
-            elif dinuc == "CT" :
+            elif dinuc == "CT":
                 sum_mC_byChr[chr][context_idx['CT']] += methyl
                 count_mC_byChr[chr][context_idx['CT']] += 1
                 quant_mC[context_idx['CT']][qt] += 1
@@ -159,41 +159,41 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
     mean_mC = [0.0] * len(context_lst)
     count_C = [0] * len(context_lst)
     sd_mC = [np.NaN] * len(context_lst)
-    for i in xrange( len(context_lst) ) :
+    for i in xrange(len(context_lst)):
         Denominator = sum([count_mC_byChr[chr][i] for chr in count_mC_byChr])
-        if Denominator not in [0, float('nan')] :
+        if Denominator not in [0, float('nan')]:
             mean_mC[i] = sum([sum_mC_byChr[chr][i] for chr in sum_mC_byChr])/Denominator
-        else :
+        else:
             mean_mC[i] = float('nan')
         #
-        if len(chr_lst) > 2 :
-            sd_mC[i] = np.std( [ sum_mC_byChr[chr][i]/count_mC_byChr[chr][i] if count_mC_byChr[chr][i]>0 else np.NaN
-                                 for chr in sum_mC_byChr ] )
-        count_C[i] = sum( count_mC_byChr[chr][i] for chr in chr_lst)
+        if len(chr_lst) > 2:
+            sd_mC[i] = np.std([sum_mC_byChr[chr][i]/count_mC_byChr[chr][i] if count_mC_byChr[chr][i]>0 else np.NaN
+                                 for chr in sum_mC_byChr])
+        count_C[i] = sum(count_mC_byChr[chr][i] for chr in chr_lst)
     #
     contrib_mC = [i*j for i,j in zip(mean_mC, count_C)]
     contrib_mC_sum = contrib_mC[0]
-    if contrib_mC_sum not in [0, float('nan')] :
+    if contrib_mC_sum not in [0, float('nan')]:
         contrib_mC = [i/contrib_mC_sum for i in contrib_mC]
-    else :
+    else:
         contrib_mC = [float('nan') for i in contrib_mC]
     #
     # -----------------
     # stat summary for BulkMethyl
-    print ( "\t".join(["MethStat", "context"] + context_lst) )
-    print ( "\t".join(["mean_mC ", "global"] + ["%.4f"%i for i in mean_mC]) )
-    print ( "\t".join(["sd_mCbyChr", "global"] + ["%.4f"%i for i in sd_mC]) )
-    print ( "\t".join(["count_C ", "global"] + ["%d"%i for i in count_C]) )
-    print ( "\t".join(["contrib_mC ", "global"] + ["%.4f"%i for i in contrib_mC]) )
-    print ( "\t".join(["quant_mC ", "[0]"] + ["%d" % j[0] for j in quant_mC]) )
-    for i in xrange(NQuant) :
-        print ("\t".join(["quant_mC ", "(%.2f,%.2f]"%(float(i)/NQuant, float(i+1)/NQuant)] + ["%d"%(j[i+1]) for j in quant_mC]) )
+    print("\t".join(["MethStat", "context"] + context_lst))
+    print("\t".join(["mean_mC ", "global"] + ["%.4f"%i for i in mean_mC]))
+    print("\t".join(["sd_mCbyChr", "global"] + ["%.4f"%i for i in sd_mC]))
+    print("\t".join(["count_C ", "global"] + ["%d"%i for i in count_C]))
+    print("\t".join(["contrib_mC ", "global"] + ["%.4f"%i for i in contrib_mC]))
+    print("\t".join(["quant_mC ", "[0]"] + ["%d" % j[0] for j in quant_mC]))
+    for i in xrange(NQuant):
+        print("\t".join(["quant_mC ", "(%.2f,%.2f]"%(float(i)/NQuant, float(i+1)/NQuant)] + ["%d"%(j[i+1]) for j in quant_mC]))
         #
-    for chr in chr_lst :
-        print ("\t".join(["mean_mC_byChr", chr] + ["%.4f"%(sum_mC_byChr[chr][i]/count_mC_byChr[chr][i])
-                                        if count_mC_byChr[chr][i]>0 else "NaN" for i in xrange( len(context_lst) ) ]) )
+    for chr in chr_lst:
+        print("\t".join(["mean_mC_byChr", chr] + ["%.4f"%(sum_mC_byChr[chr][i]/count_mC_byChr[chr][i])
+                                        if count_mC_byChr[chr][i]>0 else "NaN" for i in xrange(len(context_lst))]))
     #
-    if filetype in ['png', 'eps', 'pdf'] :
+    if filetype in ['png', 'eps', 'pdf']:
         import matplotlib
         # Force matplotlib to not use any Xwindows backend.
         matplotlib.use('Agg')
@@ -211,21 +211,21 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
         plt.ylim([0,1])
         plt.title(title)
         #plt.legend()
-        if prefix != "" :
+        if prefix != "":
             prefix = prefix + "."
         plt.savefig(prefix + "BulkMeth."+filetype, format=filetype)
         plt.clf()
         # ===
         plt.figure(figsize=(fW, fH))
         NContext = len(context_lst)
-        for i in xrange( NContext ) :
+        for i in xrange(NContext):
             plt.subplot(1, NContext, i+1)
             y_pos = np.arange(NQuant+1)
             plt.barh(y_pos, quant_mC[i], align = 'center', alpha = 0.6,
                 color = plt.cm.rainbow(1.0-float(i)/NContext), linewidth = 0 )
             plt.autoscale(enable=True, axis='x')
             plt.xticks([])
-            if i == 0 :
+            if i == 0:
                 plt.yticks(y_pos, ['[0]'] + ["(%.2f, %.2f]"%(float(j)/NQuant, float(j+1)/NQuant) for j in xrange(NQuant)])
             else :
                 plt.yticks(y_pos,[])
@@ -237,14 +237,14 @@ def CGmapStatMeth (fn, coverage = 10, filetype = "png", prefix = "", title="", f
         # ===
         plt.figure(figsize=(fW, fH*0.8))
         j = 1
-        for CONTEXT in [ ["CG", "CHG", "CHH"], ["CG", "CW", "CC"], ["CG", "CA", "CC", "CT"]] :
+        for CONTEXT in [["CG", "CHG", "CHH"], ["CG", "CW", "CC"], ["CG", "CA", "CC", "CT"]]:
             plt.subplot(1, 3, j)
             Freq = [contrib_mC[context_idx[i]] for i in CONTEXT]
             FreqSum = sum(Freq)
             Freq = [i/FreqSum for i in Freq]
             #print Freq
             ColPanel = [plt.cm.rainbow(1.0 - float(context_idx[i]) / NContext, alpha = 0.6) for i in CONTEXT]
-            plt.pie(Freq, labels = CONTEXT, startangle=90, colors = ColPanel )
+            plt.pie(Freq, labels = CONTEXT, startangle=90, colors = ColPanel)
             j = j + 1
         #
         plt.savefig(prefix + "MethContri."+filetype, format=filetype)

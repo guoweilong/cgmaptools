@@ -71,25 +71,25 @@ def CheckCtx(context, dinuc, option_ctx) :
 def CGmapIntersect (fn1, fn2, ctx = ""):
     try:
         if fn1.endswith('.gz') :
-            IN_1 = gzip.open(fn1, 'rb')
+            IN_1 = gzip.open(fn1, 'rt',encoding='UTF-8')
         else :
             IN_1 = open(fn1, 'r')
     except IOError:
-        sys.stderr.write("[Error] File %s cannot be open." % fn1)
+        sys.stderr.write(f'[Error] File {fn1} cannot be open')
         exit(-1)
     #
     try:
         if fn2 :
             if fn2.endswith('.gz') :
-                IN_2 = gzip.open(fn2, 'rb')
+                IN_2 = gzip.open(fn2, 'rt',encoding='UTF-8')
             else :
                 IN_2 = open(fn2, 'r')
         else :
             IN_2 = sys.stdin
     except IOError:
-        sys.stderr.write("[Error] File %s cannot be open." % fn2)
+        sys.stderr.write(f'[Error] File {fn2} cannot be open')
         exit(-1)
-    #
+
     line_1 = IN_1.readline()
     line_2 = IN_2.readline()
     #
@@ -97,7 +97,7 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
         try :
             chr_1, nuc_1, pos_1, pattern_1, dinuc_1, methyl_1, NmC_1, NC_1 = line_1.strip().split()
         except ValueError :
-            sys.stderr.write("[Error] File [ %s ] may have wrong number of columns." % fn1)
+            sys.stderr.write(f'[Error] File {fn1} may have wrong number of columns')
             #exit(-1)
             line_1 = IN_1.readline()
             continue
@@ -105,7 +105,7 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
         try :
             chr_2, nuc_2, pos_2, pattern_2, dinuc_2, methyl_2, NmC_2, NC_2 = line_2.strip().split()
         except ValueError :
-            sys.stderr.write("[Error] File [ %s ] may have wrong number of columns." % fn2)
+            sys.stderr.write(f'[Error] File {fn1} may have wrong number of columns')
             line_2 = IN_2.readline()
             continue
         #
@@ -121,15 +121,12 @@ def CGmapIntersect (fn1, fn2, ctx = ""):
             else :
                 if nuc_1 != nuc_2 or pattern_1 != pattern_2 or dinuc_1 != dinuc_2 :
                     sys.stderr.write("[Warning] Inconsistent information:")
-                    sys.stderr.write("%s | %s" % (line_1, line_2) )
+                    sys.stderr.write(f'{line_1} | {line_2}')
                 #
                 if CheckCtx( pattern_1, dinuc_1, ctx) :
-                    print ("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1,
-                                 "%.2f" % float(methyl_1), NmC_1, NC_1,
-                                 "%.2f" % float(methyl_2), NmC_2, NC_2 ] ) )
-                               #  "%.2f" % float(methyl_1), "%d" % int(NmC_1), "%d" % int(NC_1),
-                               #  "%.2f" % float(methyl_2), "%d" % int(NmC_2), "%d" % int(NC_2)]) )
-                #
+                    print("\t".join([chr_1, nuc_1, pos_1, pattern_1, dinuc_1,
+                                   "%.2f" % float(methyl_1), NmC_1, NC_1,
+                                   "%.2f" % float(methyl_2), NmC_2, NC_2]))
                 line_1 = IN_1.readline()
                 line_2 = IN_2.readline()
             #
@@ -173,7 +170,7 @@ def main():
     #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
+            sys.stdout = gzip.open(options.outfile, 'wt',encoding='UTF-8')
         else :
             sys.stdout = open(options.outfile, 'w')
         #

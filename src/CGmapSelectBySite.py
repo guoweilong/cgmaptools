@@ -40,20 +40,20 @@ Chr1    C       3549    CHH     CA      0.0     0       1
 
 import gzip
 
-def CGmapInIndex(index, CGmap, reverse) :
+def CGmapInIndex(index, CGmap, reverse):
     try:
-        if index.endswith(".gz") :
-            INDEX = gzip.open(index, 'rb')
-        else :
+        if index.endswith(".gz"):
+            INDEX = gzip.open(index, 'rt', encoding='UTF-8')
+        else:
             INDEX = open(index, 'r')
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % index)
+        print(f'\n[Error]:\n\t File cannot be open: {index}')
         exit(-1)
     #
     # Initialization
     Site_lst = []
-    for line in INDEX :
+    for line in INDEX:
         # chr10   100005504
         pos = line.strip()
         Site_lst.append(pos)
@@ -61,28 +61,34 @@ def CGmapInIndex(index, CGmap, reverse) :
     INDEX.close()
     #
     # chr1    C       4654    CG      CG      0.846153846154  11      13
-    try :
-        with (gzip.open(CGmap, 'rb') if CGmap.endswith(".gz") else open(CGmap, 'r')  )  if CGmap else sys.stdin as IN:
-            for line in IN :
-                line = line.strip()
-                tokens = line.split()
-                pos = "\t".join([tokens[0], tokens[2]])
-                if not reverse :
-                    if pos in Site_lst :
-                        print(line)
-                    #
-                else:
-                    if pos not in Site_lst :
-                        print(line)
+    try:
+        if CGmap:
+            if CGmap.endswith(".gz"):
+                IN = gzip.open(CGmap, 'rt', encoding='UTF-8')
+            else:
+                IN = open(CGmap, 'r')
+        else:
+            IN = sys.stdin
+        #with (gzip.open(CGmap, 'rb') if CGmap.endswith(".gz") else open(CGmap, 'r')  )  if CGmap else sys.stdin as IN:
+        for line in IN:
+            line = line.strip()
+            tokens = line.split()
+            pos = "\t".join([tokens[0], tokens[2]])
+            if not reverse:
+                if pos in Site_lst:
+                    print(line)
+                #
+            else:
+                if pos not in Site_lst:
+                    print(line)
                     #
                 #
             #
-        #
-        if CGmap :
+        if CGmap:
             IN.close()
         #
-    except IOError :
-        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap)
+    except IOError:
+        print(f'\n[Error]:\n\t File cannot be open: {CGmap}')
         exit(-1)
     #
 #
@@ -101,23 +107,23 @@ def main():
     #
     parser = OptionParser(usage)
     parser.add_option("-i", dest="index",
-                      help= "Name of Index file required "
+                      help="Name of Index file required "
                             "(gzipped if end with \'.gz\').", metavar="FILE")
     parser.add_option("-r", action="store_true", dest="reverse",
-                      help= "reverse selected, remove site in index if specified", default = False)
+                      help="reverse selected, remove site in index if specified", default=False)
     parser.add_option("-f", dest="infile",
-                      help= "Input CGmap/ATCGmap files. Use STDIN if not specified", metavar="STRING")
+                      help="Input CGmap/ATCGmap files. Use STDIN if not specified", metavar="STRING")
     parser.add_option("-o", dest="outfile",
-                      help= "CGmap, Output file name (gzipped if end with \'.gz\').", metavar="STRING")
+                      help="CGmap, Output file name (gzipped if end with \'.gz\').", metavar="STRING")
     (options, args) = parser.parse_args()
     #
-    if (options.index is None) :
+    if (options.index is None):
         parser.print_help()
         exit(-1)
     #
-    if (options.outfile is not None) :
+    if (options.outfile is not None):
         if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
         else :
             sys.stdout = open(options.outfile, 'w')
         #

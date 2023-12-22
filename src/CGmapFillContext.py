@@ -44,7 +44,7 @@ Chr1    C       3549    CHH     CA      0.0     0       1
 import gzip
 
 def error(msg):
-    sys.stderr.write( "ERROR: %s" % msg )
+    sys.stderr.write(f'ERROR: {msg}')
     exit(1)
 
 genome=dict()
@@ -56,109 +56,112 @@ def read_genome (fasta_file) :
         without reading the whole file into the main memory.
     """
     #
-    try :
-        INPUT = (gzip.open if fasta_file.endswith('.gz') else open)(fasta_file)
+    try:
+        if fasta_file.endswith('.gz'):
+            INPUT = gzip.open(fasta_file, 'rt', encoding='UTF-8')
+        else:
+            INPUT = open(fasta_file, "r")
     except IOError:
-        print ("[Error] Cannot find Fasta file : %s !" % fasta_file)
+        print(f'[Error] Cannot find Fasta file : {fasta_file} !')
         exit(-1)
     #
     chr = ""
     seq_list = []
     for line in INPUT :
         if line[0] == '>':
-            if chr != "" and seq_list != [] :
-                genome[chr]="".join(seq_list)
-                seq_list=[]
+            if chr != "" and seq_list != []:
+                genome[chr] = "".join(seq_list)
+                seq_list = []
             #
             chr = line[1:].strip()
-            sys.stderr.write( "# Reading " + chr )
+            sys.stderr.write(f'#Reading {chr}\n')
         else:
             seq_list.append(line.strip().upper())
         #
     #
-    if chr != "" and seq_list != [] :
+    if chr != "" and seq_list != []:
         genome[chr] = "".join(seq_list)
-        seq_list=[]
+        seq_list = []
     #
     INPUT.close()
     sys.stderr.write("# Finished reading the genome")
     for chr in genome :
         genome_len[chr] = len(genome[chr])
-        sys.stderr.write( "# %s\t%d" % (chr, genome_len[chr]) )
+        sys.stderr.write(f'# {chr}\t{genome_len[chr]}\n')
     #
 #
 bc_dict = {'A':'T', 'C':'G', 'G':'C', 'T':'A', 'N':'N',
            'a':'t', 'c':'g', 'g':'c', 't':'a', 'n':'n'}
 #
 def bc ( ch ) :
-    if ch in bc_dict :
+    if ch in bc_dict:
         return bc_dict[ch]
-    else :
+    else:
         return ch
     #
 #
 
-def AntisenseRead ( read ) :
-    read="".join([ bc(i) for i in read])
+def AntisenseRead ( read ):
+    read="".join([bc(i) for i in read])
     return read[::-1]
 #
 
 def CGmapFillContext(CGmapF, genomeF, base=1) :
     read_genome(genomeF)
     # Read all the CGmap files
-    try :
-        if CGmapF :
-            if CGmapF.endswith('.gz') :
-                IN = gzip.open(CGmapF, 'rb')
-            else :
+    try:
+        if CGmapF:
+            if CGmapF.endswith('.gz'):
+                IN = gzip.open(CGmapF, 'rt', encoding='UTF-8')
+            else:
                 IN = open(CGmapF, 'r')
             #
-        else :
+        else:
             IN = sys.stdin
         #
-    except IOError :
-        print ("\n[Error]:\n\t File cannot be open: %s " % CGmapF )
+    except IOError:
+        print(f'\n[Error]:\n\t File cannot be open: {CGmapF} ')
         exit(-1)
     #
     # chr1    C       4654    CG      CG      0.84  11      13
     tokens = []
-    for line in IN :
+    for line in IN:
         tokens = line.strip().split()
         chr = tokens[0]
         nuc = tokens[1]
         pos = int(tokens[2]) - base
-        if 2< pos < genome_len[chr] :
-            if nuc == "C" :
+        if 2< pos < genome_len[chr]:
+            if nuc == "C":
                 trimer=genome[chr][pos:(pos+3)]
-            elif nuc == "G" :
+            elif nuc == "G":
                 trimer=AntisenseRead(genome[chr][(pos-2):(pos+1)])
-            else :
+            else:
                 continue
                 # warning : not CGmap file
             #
             #print trimer
             dimer=trimer[0:2]
             #print trimer + "\t" + dimer
-            if trimer[0] != "C" :
-                sys.stderr.write( "# [warning] Wrong NUC: %s\t%s\t%s\t%s\n" % (chr, nuc, pos, trimer) )
+            if trimer[0] != "C":
+                sys.stderr.write(f'# [warning] Wrong NUC: {chr}\t{nuc}\t{pos}\t{trimer}\n')
                 continue
             #
-            try :
-                if dimer == "CG" :
+            try:
+                if dimer == "CG":
                     pattern = "CG"
-                elif trimer[2] == "G" :
+                elif trimer[2] == "G":
                     pattern = "CHG"
-                else :
+                else:
                     pattern = "CHH"
                 #
                 tokens[3] = pattern
                 tokens[4] = dimer
-            except IndexError :
+            except IndexError:
                 continue
             #
-            print ("\t".join(tokens) )
+            print("\t".join(tokens))
         else :
-            print ("\t".join(tokens) )
+            print("\t".join(tokens))
         #
     #
     IN.close()
@@ -198,7 +201,7 @@ def main():
     #
     if (options.outfile is not None) :
         if options.outfile.endswith('.gz') :
-            sys.stdout = gzip.open(options.outfile, 'wb')
+            sys.stdout = gzip.open(options.outfile, 'wt', encoding='UTF-8')
         else :
             sys.stdout = open(options.outfile, 'w')
         #

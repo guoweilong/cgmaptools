@@ -52,32 +52,32 @@ import gzip
 def BismarkCGmap (Bismark_fn, CGmap_fn):
     # ================
     try:
-        if Bismark_fn :
-            if Bismark_fn.endswith(".gz") :
-                BismarkF = gzip.open(Bismark_fn, "rb")
-            else :
+        if Bismark_fn:
+            if Bismark_fn.endswith(".gz"):
+                BismarkF = gzip.open(Bismark_fn, "rt", encoding='UTF-8')
+            else:
                 BismarkF = open(Bismark_fn, 'r')
             #
-        else :
+        else:
             BismarkF = sys.stdin
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % Bismark_fn )
+        print(f'\n[Error]:\n\t File cannot be open: {Bismark_fn}')
         exit(-1)
     #
     # ==================
     try:
         if CGmap_fn is not None:
-            if CGmap_fn.endswith(".gz") :
-                CGmapF = gzip.open(CGmap_fn, "wb")
-            else :
+            if CGmap_fn.endswith(".gz"):
+                CGmapF = gzip.open(CGmap_fn, "wt", encoding='UTF-8')
+            else:
                 CGmapF = open(CGmap_fn, 'w')
             #
-        else :
+        else:
             CGmapF = sys.stdout
         #
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % CGmap_fn )
+        print(f'\n[Error]:\n\t File cannot be open: {CGmap_fn}')
         exit(-1)
     #
     cur_chr = ""
@@ -88,30 +88,30 @@ def BismarkCGmap (Bismark_fn, CGmap_fn):
         try :
             chr, pos, strand, NmC, NnC, pattern, trinuc = line.strip().split()
         except ValueError :
-            print( "\n[Error]:\n\t Your input file [ %s ] has wrong number of columns." % CGmap_fn)
-            print( "\t You may check whether the input file is correct." )
-            print( "\t The input shall be something like \"*.CpG_report.txt.gz\"." )
+            print(f'\n[Error]:\n\t Your input file [ {CGmap_fn} ] has wrong number of columns.')
+            print(f'\t You may check whether the input file is correct.')
+            print(f'\t The input shall be something like \"*.CpG_report.txt.gz\".')
             exit(-1)
         #
-        if strand == "+" :
+        if strand == "+":
             nuc = "C"
-        else :
+        else:
             nuc = "G"
         #
         dinuc = trinuc[0:2]
         AllC = int(NmC) + int(NnC)
-        if AllC > 0 :
+        if AllC > 0:
             ratio = float(NmC)/AllC
-            CGmapF.write("%s\t%s\t%s\t%s\t%s\t%.2f\t%s\t%d\n" % (chr, nuc, pos, pattern, dinuc, ratio, NmC, AllC))
+            CGmapF.write(f'{chr}\t{nuc}\t{pos}\t{pattern}\t{dinuc}\t{ratio:.2f}\t{NmC}\t{AllC}\n')
         #
         line = BismarkF.readline()
         #
     #
     # End for reading files
-    if CGmapF is not sys.stdout :
+    if CGmapF is not sys.stdout:
         CGmapF.close()
     #
-    if BismarkF is not sys.stdin :
+    if BismarkF is not sys.stdin:
         BismarkF.close()
     #
 #

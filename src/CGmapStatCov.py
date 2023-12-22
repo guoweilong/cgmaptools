@@ -64,15 +64,15 @@ def logm(message):
 
 def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
     try:
-        if fn :
-            if fn.endswith(".gz") :
-                IN = gzip.open(fn, 'rb')
-            else :
+        if fn:
+            if fn.endswith(".gz"):
+                IN = gzip.open(fn, 'rt', encoding='UTF-8')
+            else:
                 IN = open(fn, 'r')
-        else :
+        else:
             IN = sys.stdin
     except IOError:
-        print ("\n[Error]:\n\t File cannot be open: %s" % fn)
+        print(f'\n[Error]:\n\t File cannot be open: {fn}')
         exit(-1)
     #
     line = IN.readline()
@@ -80,11 +80,11 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
     ChrLst = []
     chr_idx = -1
     ChrCovDict = []
-    while line :
-        try :
+    while line:
+        try:
             chr, nuc, pos, pattern, dinuc, methyl, MC, NC = line.strip().split()
         except ValueError :
-            print("\n[Error]:\n\t File [ %s ] may have wrong number of columns." % fn)
+            print(f'\n[Error]:\n\t File [ {fn} ] may have wrong number of columns.')
             exit(-1)
         #
         # check if line could be filtered by context
@@ -115,12 +115,12 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
             #
         #
         NC = int(NC)
-        if NC in CovDict :
+        if NC in CovDict:
             CovDict[NC] += 1
         else :
             CovDict[NC] = 1
         #
-        if chr not in ChrLst :
+        if chr not in ChrLst:
             ChrLst.append(chr)
             ChrCovDict.append({})
         #
@@ -135,9 +135,9 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
         IN.close()
     #
     GlobalCovSum = sum([i for i in CovDict.values()])
-    if GlobalCovSum > 0 :
+    if GlobalCovSum > 0:
         GlobalCov = (float(sum([i*j for i,j in CovDict.items()]))/GlobalCovSum)
-        print("MethEffectCov\tglobal\t%.4f" % GlobalCov)
+        print(f'MethEffectCov\tglobal\t{GlobalCov:.4f}')
     else :
         GlobalCovSum = 0
         print("MethEffectCov\tglobal\tNaN")
@@ -152,13 +152,13 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
     ChrCov = [0] * len(ChrLst)
     for chr_idx in xrange(len(ChrLst)):
         ChrCov[chr_idx] = float(sum([i * j for i, j in ChrCovDict[chr_idx].items()])) / sum([i for i in ChrCovDict[chr_idx].values()])
-        print("MethEffectCov\t%s\t%.4f" % (ChrLst[chr_idx], ChrCov[chr_idx]))
+        print(f'MethEffectCov\t{ChrLst[chr_idx]}\t{ChrCov[chr_idx]:.4f}')
     X = []
     Y = []
-    for cov in sorted(CovDict.keys()) :
+    for cov in sorted(CovDict.keys()):
         X.append(cov)
         Y.append(CovDict[cov])
-        print("CovAndCount\t%d\t%d" %(cov, CovDict[cov]) )
+        print(f'CovAndCount\t{cov}\t{CovDict[cov]}')
     #
     if filetype in ['png', 'eps', 'pdf']:
         import matplotlib
@@ -191,7 +191,7 @@ def CGmapStatCov (fn, CTX, filetype = 'png', prefix = '', fH=1.0, fW=11.0):
         ax.set_xscale("log")
         ax.set_yscale("log")
         plt.title('Cumulative Effective Coverage', fontsize=10)
-        if prefix != "" :
+        if prefix != "":
             prefix = prefix + "."
         #
         plt.savefig(prefix + "MethEffectCove." + filetype, format=filetype)

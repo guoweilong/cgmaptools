@@ -55,21 +55,21 @@ def qbinom(p, size, prob, lower_tail = True):
         xrange = range
     #
     sum = 0
-    for i in xrange(size) :
+    for i in xrange(size):
         p_binom = dbinom(size, i, prob)
         if (sum + p_binom > p) :
-            if not lower_tail :
+            if not lower_tail:
                 return size - i
-            else :
+            else:
                 return i
             #
-        else :
+        else:
             sum += p_binom
         #
     #
-    if not lower_tail :
+    if not lower_tail:
         return 0
-    else :
+    else:
         return size
     #
 #
@@ -78,15 +78,15 @@ def qbinom(p, size, prob, lower_tail = True):
 Dict_qbnom = dict()
 #
 # Note : Error will raise if X is too large, for example: >1000
-def GetQbnom(p_value, X, prob, low_tail=False) :
-    if p_value >=1 :
+def GetQbnom(p_value, X, prob, low_tail=False):
+    if p_value >=1:
         return 0
-    elif p_value == 0 :
+    elif p_value == 0:
         return X+1
     #
-    if X > 1000 :
+    if X > 1000:
         X = 1000
-    if X not in Dict_qbnom :
+    if X not in Dict_qbnom:
         Dict_qbnom[X] = qbinom(p_value, X, prob, low_tail)
     #
     return Dict_qbnom[X]
@@ -215,43 +215,43 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
     D_lst = []
     # Step 2: Get the LIMIT_W and LIMIT_C
     LIMIT_W = GetQbnom(p_value, SUM_W, error_rate, False)
-    if SUM_W >= least_cov :
+    if SUM_W >= least_cov:
         WVS = [VW[0], VW[1], VW[2]+VW[1], VW[3]]
         WD_lst = [i for i in range(len(WVS)) if WVS[i] >= LIMIT_W]
     #
     LIMIT_C = GetQbnom(p_value, SUM_C, error_rate, False)
-    if SUM_C >= least_cov :
+    if SUM_C >= least_cov:
         CVS = [VC[0], VC[1], VC[2], VC[3]+VC[0]]
         CD_lst = [i for i in range(len(CVS)) if CVS[i] >= LIMIT_C]
     #
     # Step 3 : Get the intersection
-    if WD_lst != [] :
-        if CD_lst != [] :
-            D_lst = [ i for i in WD_lst if i in CD_lst ]
-        else :
+    if WD_lst != []:
+        if CD_lst != []:
+            D_lst = [i for i in WD_lst if i in CD_lst]
+        else:
             D_lst = WD_lst
-            if 1 in D_lst :
+            if 1 in D_lst:
                 D_lst.remove(1) # remove T
                 D_lst.append(5) # add T/C
             #
-            if 2 in D_lst and W_C < LIMIT_W :
+            if 2 in D_lst and W_C < LIMIT_W:
                 D_lst.remove(2)
             #
-            if (2 in D_lst) and (5 in D_lst) and len(D_lst)>2 :
+            if (2 in D_lst) and (5 in D_lst) and len(D_lst)>2:
                 D_lst.remove(5)
             #
         #
-    else :
-        if CD_lst != [] :
+    else:
+        if CD_lst != []:
             D_lst = CD_lst
-            if 0 in D_lst :
+            if 0 in D_lst:
                 D_lst.remove(0) # remove A
                 D_lst.append(6) # add A/G
             #
-            if 3 in D_lst and C_G < LIMIT_C :
+            if 3 in D_lst and C_G < LIMIT_C:
                 D_lst.remove(3)
             #
-            if (3 in D_lst) and (4 in D_lst) and len(D_lst)>2 :
+            if (3 in D_lst) and (4 in D_lst) and len(D_lst)>2:
                 D_lst.remove(6)
             #
         else :
@@ -296,17 +296,17 @@ def PredictNT_binom ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N"):
     #
     #
     nuc_prob = 0
-    if D_lst == [] :
+    if D_lst == []:
         return [nuc, 1-p_value, 1-p_value]
-    else :
+    else:
         GENO = ",".join([RevDict[i] for i in D_lst])
         if GENO not in AllCases:
-            sys.stderr.write("[Warning] %s not found in genotypes\n" % GENO)
+            sys.stderr.write(f'[Warning] {GENO} not found in genotypes\n')
             return [nuc, 1-p_value, 1-p_value]
         #
         if nuc in UniqCases[GENO]:
             nuc_prob = (1-p_value)/len(UniqCases[GENO])
-        else :
+        else:
             nuc_prob = p_value/(10-len(UniqCases[GENO]))
         #
         return [GENO, 1-p_value, nuc_prob]
@@ -354,8 +354,8 @@ LogPriorProb = [0, 1, 1, 1,  # A
 
 import math
 
-def CovToPv (Cov) : # for --bayes-dynamicP
-    if Cov < 22 :
+def CovToPv (Cov): # for --bayes-dynamicP
+    if Cov < 22:
         return math.exp((Cov-22)/10)
     #
     return 0.99
@@ -467,12 +467,12 @@ def PredictNT_bayes ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N" ):
                         C_A*Factor_Ac[i] + C_T*Factor_Tc[i] + C_C*Factor_Cc[i] + C_G*Factor_Gc[i]
     #
     # ==================================================
-    sum_log_pstP = sum( 2**i for i in log_pstP )
-    if sum_log_pstP == 0 :
+    sum_log_pstP = sum(2**i for i in log_pstP)
+    if sum_log_pstP == 0:
         sys.stderr.write("[warning] line was skipped.\n")
         return [nuc, 1, 0]
     #
-    pstP = [2**i/sum_log_pstP for i in log_pstP ]
+    pstP = [2**i/sum_log_pstP for i in log_pstP]
     VagueSet_pstP = [ pstP[4]+pstP[5]+pstP[7], # Y = TT | TC | CC
                       pstP[0]+pstP[3]+pstP[9], # R = AA | AG | GG
                       pstP[1]+pstP[2], # AY = AT | AC
@@ -490,18 +490,18 @@ def PredictNT_bayes ( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc="N" ):
     VagueFactor = [0.93] * 2 + [0.975] * 8
     V_pstP = [i*j for i,j in zip(VagueSet_pstP, VagueFactor)]
     #
-    [Prob, geno] = max(zip(pstP, ClearSet) + zip(V_pstP, VagueSet) )
-    if nuc in ["A", "T", "C", "G"] :
+    [Prob, geno] = max(list(zip(pstP, ClearSet)) + list(zip(V_pstP, VagueSet)))
+    if nuc in ["A", "T", "C", "G"]:
         prob_nuc = pstP[ClearSetIndex[nuc*2]]
-    else :
+    else:
         prob_nuc = 1.0
     #
-    if dynamicP :
+    if dynamicP:
         p_value = CovToPv(COV)
     #
-    if Prob >= (1-p_value) :
+    if Prob >= (1-p_value):
         return [GenotypeCode[geno], Prob, prob_nuc]
-    else :
+    else:
         return [nuc, prob_nuc, prob_nuc]
     #
     # Prob: probability for predicted nuc
@@ -521,45 +521,45 @@ def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
     vague = False
     genotype = GN.replace('T/C', 'Y').replace('A/G', 'R')
     ALT_lst = genotype.split(",")
-    if 'R' in ALT_lst :
+    if 'R' in ALT_lst:
         vague = True
         GU='A/G'
-    elif 'Y' in ALT_lst :
+    elif 'Y' in ALT_lst:
         vague = True
         GU='T/C'
     #
     ALT_lst.remove(REF) if REF in ALT_lst else None
     #print ALT_lst
     ALT = ",".join(ALT_lst)
-    if ALT == "" :
+    if ALT == "":
         ALT = "."
     #
     #print ALTerror_rate
     if prob_pre <1:
         QUAL = int(- math.log10(1 - prob_pre) * 10)
-    else :
+    else:
         QUAL = 99
     #
     if REF in AllCases[GN]:  # no mutation
         GQ = 99  # log10 (0) be very large
     else:
-        if (1 - prob_nuc - prob_pre) > 0 :
+        if (1 - prob_nuc - prob_pre) > 0:
             GQ = int(- math.log10((1 - prob_nuc - prob_pre) / (1 - prob_nuc)) * 10)
-        else :
+        else:
             GQ = 99
         #
     #
     INFO = ":".join(["NS=1", "DP=%s" % DP])
-    if vague :
+    if vague:
         INFO = INFO + ":GU=" + GU
     #
-    if "," not in genotype :
-        if ALT == "." :
+    if "," not in genotype:
+        if ALT == ".":
             GT  = "0/0"
         else :
             GT = "1/1"
     else:
-        if "," in ALT :
+        if "," in ALT:
             GT = "1/2"
         else :
             GT = "0/1"
@@ -572,7 +572,7 @@ def VCF_line (CHR, POS, REF, GN, DP, prob_pre, prob_nuc, FILTER = "PASS"):
     # GQ: conditional genotype quality, encoded as a phred quality -10log10 P(genotype call is wrong,
     #       conditioned on the sites' being variant) (Integer)
     #
-    if '/' in GN and REF in AllCases[GN] :
+    if '/' in GN and REF in AllCases[GN]:
         FILTER = "Vague"
     #
     GENOME = ":".join(["%s"%GT, "%d"%GQ, "%d"%DP])
@@ -585,44 +585,44 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
     # global error_rate
     #
     # Decide the source of input
-    if infile :
-        if infile.endswith(".gz") :
-            IN = gzip.open(infile, 'rb')
-        else :
+    if infile:
+        if infile.endswith(".gz"):
+            IN = gzip.open(infile, 'rt', encoding='UTF-8')
+        else:
             IN = open(infile, 'r')
         #
-    else :
+    else:
         IN = sys.stdin
     #
     # Decide the mode for calling SNP
-    if mode == "binom" :
+    if mode == "binom":
         SNPfunc = PredictNT_binom
         global binom_options
         sys.stderr.write("# BinomWC mode\n")
         sys.stderr.write("# options: p value = %f\n" % binom_options["pv"])
         sys.stderr.write("# options: error rate = %f\n" % binom_options["er"])
         sys.stderr.write("# options: checkpoint coveraeg = %d\n" % binom_options["cov"])
-    elif mode =="bayes" :
+    elif mode =="bayes":
         SNPfunc = PredictNT_bayes
         global bayes_options
         sys.stderr.write("# BayesWC mode\n")
-        if bayes_options["dynamicP"] :
-            sys.stderr.write("# options: use dynamic p-values for different coverages\n" )
-        else :
+        if bayes_options["dynamicP"]:
+            sys.stderr.write("# options: use dynamic p-values for different coverages\n")
+        else:
             sys.stderr.write("# options: p value = %f\n" % bayes_options["pv"])
         #
         sys.stderr.write("# options: error rate = %f\n" % bayes_options["er"])
-    else :
+    else:
         sys.stderr.write("[Error] Wrong mode specified.\n")
         return None
     #
     #
     # VCF format
     VCF = None
-    if vcffile :
-        if vcffile.endswith(".gz") :
-            VCF = gzip.open(vcffile, 'wb')
-        else :
+    if vcffile:
+        if vcffile.endswith(".gz"):
+            VCF = gzip.open(vcffile, 'wt', encoding='UTF-8')
+        else:
             VCF = open(vcffile, 'w')
         #
         VCF.write("##fileformat=VCFv4.2\n")
@@ -639,16 +639,16 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
         VCF.write('##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">\n')
         VCF.write("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tNA00001\n")
     #
-    print ("\t".join(["#chr", "nuc", "pos", "ATCG_watson", "ATCG_crick", "predicted_nuc", "p_value"] ) )
+    print ("\t".join(["#chr", "nuc", "pos", "ATCG_watson", "ATCG_crick", "predicted_nuc", "p_value"]))
     #
-    for line in IN :
-        if not line.strip() :
+    for line in IN:
+        if not line.strip():
             continue
-        else :
-            try :
+        else:
+            try:
                 chr, nuc, pos, pattern, dinuc, W_A, W_T, W_C, W_G, W_N, C_A, C_T, C_C, C_G, C_N, methyl = line.strip().split()
-            except ValueError :
-                sys.stderr.write("\n[Error]:\n\t File [ %s ] may have wrong number of columns.\n" % infile)
+            except ValueError:
+                sys.stderr.write(f'\n[Error]:\n\t File [ {infile} ] may have wrong number of columns.\n')
                 exit(-1)
             #
             # end_of_try
@@ -656,34 +656,34 @@ def SNVFromATCGmap (infile, vcffile, show_all, mode="binom"):
             [NUC, prob_pre, prob_nuc] = SNPfunc( W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G, nuc)
             COV = sum([W_A, W_T, W_C, W_G, C_A, C_T, C_C, C_G])
             #
-            if show_all :
-                print ("\t".join([chr, nuc, pos,
+            if show_all:
+                print("\t".join([chr, nuc, pos,
                                  "%d,%d,%d,%d"%(W_A, W_T, W_C, W_G), "%d,%d,%d,%d"%(C_A, C_T, C_C, C_G),
-                                 NUC, "%.1e" % (1-prob_pre) ] ) )
+                                 NUC, "%.1e" % (1-prob_pre)]))
                 #
                 if vcffile:
-                    VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
+                    VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n")
                 #
-            elif (NUC != "-" or NUC != "N") :
+            elif (NUC != "-" or NUC != "N"):
                 #
-                if (NUC in AllCases) :
-                    if (nuc not in AllCases[NUC]) :
+                if (NUC in AllCases):
+                    if (nuc not in AllCases[NUC]):
                         print ("\t".join([chr, nuc, pos,
                                         "%d,%d,%d,%d"%(W_A, W_T, W_C, W_G), "%d,%d,%d,%d"%(C_A, C_T, C_C, C_G),
-                                         NUC, "%.1e" % (1-prob_pre) ] ) )
+                                         NUC, "%.1e" % (1-prob_pre)]))
                         #
-                        if vcffile :
-                            VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n" )
+                        if vcffile:
+                            VCF.write(VCF_line(chr, pos, nuc, NUC, COV, prob_nuc, prob_nuc) + "\n")
                         #
                     #
                 else :
-                    sys.stderr.write( "[Warning] %s not found in genotypes\n" %  NUC )
+                    sys.stderr.write(f'[Warning] {NUC} not found in genotypes\n')
                 #
             #
         #
     # ============
     # for
-    if infile :
+    if infile:
         IN.close()
     #
 #
@@ -744,7 +744,7 @@ def main():
     (options, args) = parser.parse_args()
     #
     #
-    if (options.outfile is not None) :
+    if (options.outfile is not None):
         sys.stdout = open(options.outfile, 'w')
     #
     #global p_value
